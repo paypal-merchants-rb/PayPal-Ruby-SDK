@@ -1,0 +1,14 @@
+
+source "https://rubygems.org"
+
+if File.exists? "../paypal-sdk-rest.gemspec"
+  gem 'paypal-sdk-core', :git => "https://github.com/paypal/sdk-core-ruby.git"
+  gem 'paypal-sdk-rest', :path => ".."
+else
+  gem 'paypal-sdk-rest'
+end
+
+gem 'multi_json'
+gem 'coderay'
+gem 'sinatra'
+gem 'haml'

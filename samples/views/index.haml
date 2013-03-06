@@ -1,0 +1,97 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=ISO-8859-1", "http-equiv" => "Content-Type"}/
+    %title PayPal Rest API Samples
+    :css
+      .imagelink {
+      	padding: 5px 0px 5px 28px;
+      }
+
+      .execute {
+      	background: url('images/play_button.png') no-repeat left top;
+      }
+
+      .source {
+      	background: url('images/edt-format-source-button.png') no-repeat left
+      		top;
+      }
+  %body
+    %center
+      %h3 PayPal REST API Samples
+    %br/
+    %br/
+    %table{:cellspacing => "5", :width => "85%"}
+      %tbody
+        %tr{:valign => "top"}
+          %td Payment with a credit card
+          %td
+          %td{:width => "30%"}
+            %a.execute.imagelink{:href => "payment/create_with_credit_card"} Execute
+          %td
+          %td{:width => "30%"}
+            %a.source.imagelink{:href => "payment/create_with_credit_card.html"} Source
+        %tr
+          %td Payment with a PayPal Account
+          %td
+          %td
+            %a.execute.imagelink{:href => "payment/create_with_paypal"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payment/create_with_paypal.html"} Source
+        %tr
+          %td Get Payment Details
+          %td
+          %td
+            %a.execute.imagelink{:href => "payment/find"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payment/find.html"} Source
+        %tr
+          %td Get Payment History
+          %td
+          %td
+            %a.execute.imagelink{:href => "payment/all"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payment/all.html"} Source
+        %tr
+          %td Get Sale Details
+          %td
+          %td
+            %a.execute.imagelink{:href => "sale/find"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "sale/find.html"} Source
+        %tr
+          %td Refund a Payment
+          %td
+          %td
+            %a.execute.imagelink{:href => "sale/refund"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "sale/refund.html"} Source
+        %tr
+          %td Save a credit card
+          %td
+          %td
+            %a.execute.imagelink{:href => "credit_card/create"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "credit_card/create.html"} Source
+        %tr
+          %td Get credit card Details
+          %td
+          %td
+            %a.execute.imagelink{:href => "credit_card/find"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "credit_card/find.html"} Source
+        %tr
+          %td Payment with saved credit card
+          %td
+          %td
+            %a.execute.imagelink{:href => "payment/create_with_credit_card_token"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payment/create_with_credit_card_token.html"} Source
