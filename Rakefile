@@ -6,9 +6,4 @@ task :rspec do
   system(cmd) || raise("#{cmd} failed")
 end
 
-desc "View samples"
-task :samples do
-  system("cd samples/spec/dummy && bundle exec rails server")
-end
-
 task :default => :rspec
