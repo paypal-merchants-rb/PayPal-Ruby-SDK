@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = PayPal::SDK::REST::VERSION
   gem.authors       = ["PayPal"]
   gem.email         = ["DL-PP-Platform-Ruby-SDK@ebay.com"]
-  gem.summary       = %q{PayPal Adaptive REST SDK}
+  gem.summary       = %q{PayPal REST SDK}
   gem.description   = %q{The PayPal REST SDK provides Ruby APIs to create, process and manage payment.}
   gem.homepage      = "https://developer.paypal.com"
 
