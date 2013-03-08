@@ -1,6 +1,6 @@
 # REST SDK
 
-The PayPal REST SDK provides Ruby APIs to create, process and manage rest.
+The PayPal REST SDK provides Ruby APIs to create, process and manage payment.
 
 ## Installation
 
