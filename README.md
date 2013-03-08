@@ -117,9 +117,8 @@ end
 # Fetch Payment
 payment = Payment.find("PAY-57363176S1057143SKE2HO3A")
 
-# Get List of REST
+# Get List of Payments
 payment_history = Payment.all( :count => 10 )
-
 payment_history.payments
 ```
 
