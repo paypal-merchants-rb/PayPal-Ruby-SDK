@@ -63,22 +63,11 @@ Without configuration file:
 
 ```ruby
 PayPal::SDK::REST.set_config(
+  :mode => "sandbox", # "sandbox" or "live"
   :client_id => "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
   :client_secret => "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
-  :mode => "sandbox", # "sandbox" or "live"
   :ssl_options => { } )
 ```
-
-Override configuration:
-
-```ruby
-# Class level
-Payment.set_config( :client_id => "123" )
-
-# Object level
-payment.set_config( :client_id => "123" )
-```
-
 
 ## Create Payment
 
@@ -87,9 +76,9 @@ require 'paypal-sdk-rest'
 include PayPal::SDK::REST
 
 PayPal::SDK::REST.set_config(
+  :mode => "sandbox", # "sandbox" or "live"
   :client_id => "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
-  :client_secret => "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
-  :mode => "sandbox" )
+  :client_secret => "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM")
 
 # Build Payment object
 @payment = Payment.new({
@@ -117,7 +106,7 @@ PayPal::SDK::REST.set_config(
       :currency => "USD" },
     :description => "This is the payment transaction description." }]})
 
-# Make API call & get response
+# Create Payment and return the status(true or false)
 if @payment.create
   @payment.id     # Payment Id
 else
@@ -125,7 +114,7 @@ else
 end
 ```
 
-## Get Payment
+## Get Payment details
 
 ```ruby
 # Fetch Payment
@@ -138,6 +127,8 @@ payment_history.payments
 
 ## Execute Payment
 
+Only for [Payment](https://github.com/paypal/rest-api-sdk-ruby/blob/master/samples/payment/create_with_paypal.rb) with `payment_method` as `"paypal"`
+
 ```ruby
 payment = Payment.find("PAY-57363176S1057143SKE2HO3A")
 
@@ -146,4 +137,3 @@ if payment.execute( :payer_id => "DUFRQ8GWYMJXC" )
 else
   payment.error # Error Hash
 end
-```
