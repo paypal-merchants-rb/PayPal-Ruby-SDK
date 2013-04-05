@@ -101,6 +101,13 @@ PayPal::SDK::REST.set_config(
           :postal_code => "43210",
           :country_code => "US" }}}]},
   :transactions => [{
+    :item_list => {
+      :items => [{
+        :name => "item",
+        :sku => "item",
+        :price => "1",
+        :currency => "USD",
+        :quantity => 1 }]},
     :amount => {
       :total => "1.00",
       :currency => "USD" },

@@ -35,6 +35,15 @@ include PayPal::SDK::Core::Logging
   # is fulfilling it
   :transactions => [{
 
+    # Item List
+    :item_list => {
+      :items => [{
+        :name => "item",
+        :sku => "item",
+        :price => "1",
+        :currency => "USD",
+        :quantity => 1 }]},
+
     # ###Amount
     # Let's you specify a payment amount.
     :amount => {
