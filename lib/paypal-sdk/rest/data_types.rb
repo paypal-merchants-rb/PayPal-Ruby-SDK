@@ -1,15 +1,10 @@
-# Stub objects for REST
-# Auto generated code
-
-require 'uuidtools'
-
 require 'paypal-sdk-core'
+require 'uuidtools'
 
 module PayPal::SDK
   module REST
     module DataTypes
-
-      class DataType < Core::API::DataTypes::Base
+      class Base < Core::API::DataTypes::Base
         attr_accessor :error
         attr_writer   :header, :request_id
 
@@ -38,377 +33,353 @@ module PayPal::SDK
         end
       end
 
-      class Resource < DataType
-      end
+      class Payment < Base
 
-      class EnumType < Core::API::DataTypes::Enum
-      end
-
-      class Refund < Resource
         def self.load_members
           object_of :id, String
-          object_of :create_time, String
-          object_of :update_time, String
+          object_of :create_time, DateTime
+          object_of :update_time, DateTime
+          object_of :intent, String
+          object_of :payer, Payer
+          array_of  :transactions, Transaction
           object_of :state, String
-          object_of :amount, Amount
-          object_of :sale_id, String
-          object_of :capture_id, String
-          object_of :parent_payment, String
-          object_of :description, String
-          array_of :links, Link
+          object_of :redirect_urls, RedirectUrls
+          array_of  :links, Links
         end
 
         include RequestDataType
 
-        class << self
-          def find(refundid)
-            raise ArgumentError.new("refundid required") if refundid.to_s.strip.empty?
-            url = sprintf("v1/payments/refund/%s", refundid.to_s.strip)
-            response = api.get(url)
-            new(response)
-          end
-        end
+            def create()
+              path = "v1/payments/payment"
+              response = api.post(path, self.to_hash, http_header)
+              self.merge!(response)
+              success?
+            end
+
+            class << self
+              def find(resource_id)
+                raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+                path = "v1/payments/payment/#{resource_id}"
+                self.new(api.get(path))
+              end
+            end
+
+            def execute(payment_execution)
+              payment_execution = PaymentExecution.new(payment_execution) unless payment_execution.is_a? PaymentExecution
+              path = "v1/payments/payment/#{self.id}/execute"
+              response = api.post(path, payment_execution.to_hash, http_header)
+              self.merge!(response)
+              success?
+            end
+
+            class << self
+              def all(options = {})
+                path = "v1/payments/payment"
+                PaymentHistory.new(api.get(path, options))
+              end
+            end
+
       end
+      class Payer < Base
 
-
-
-      class Resource < DataType
         def self.load_members
+          object_of :payment_method, String
+          array_of  :funding_instruments, FundingInstrument
+          object_of :payer_info, PayerInfo
         end
+
       end
+      class FundingInstrument < Base
 
-
-
-      class Amount < Resource
         def self.load_members
-          object_of :total, String
-          object_of :currency, String
-          object_of :details, AmountDetails
+          object_of :credit_card, CreditCard
+          object_of :credit_card_token, CreditCardToken
         end
+
       end
+      class CreditCard < Base
 
-
-
-      class AmountDetails < Resource
         def self.load_members
-          object_of :subtotal, String
-          object_of :tax, String
-          object_of :shipping, String
-          object_of :fee, String
+          object_of :id, String
+          object_of :number, String
+          object_of :type, String
+          object_of :expire_month, Integer
+          object_of :expire_year, Integer
+          object_of :cvv2, Integer
+          object_of :first_name, String
+          object_of :last_name, String
+          object_of :billing_address, Address
+          object_of :payer_id, String
+          object_of :state, String
+          object_of :valid_until, String
+          array_of  :links, Links
         end
+
+        include RequestDataType
+
+            class << self
+              def find(resource_id)
+                raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+                path = "v1/vault/credit-card/#{resource_id}"
+                self.new(api.get(path))
+              end
+            end
+
+            def create()
+              path = "v1/vault/credit-card"
+              response = api.post(path, self.to_hash, http_header)
+              self.merge!(response)
+              success?
+            end
+
       end
+      class Address < Base
 
+        def self.load_members
+          object_of :line1, String
+          object_of :line2, String
+          object_of :city, String
+          object_of :country_code, String
+          object_of :postal_code, String
+          object_of :state, String
+          object_of :phone, String
+        end
 
+      end
+      class Links < Base
 
-      class Link < Resource
         def self.load_members
           object_of :href, String
           object_of :rel, String
+          object_of :targetSchema, HyperSchema
           object_of :method, String
+          object_of :enctype, String
+          object_of :schema, HyperSchema
         end
+
       end
+      class HyperSchema < Base
 
-
-
-      class Payment < Resource
         def self.load_members
-          object_of :id, String
-          object_of :create_time, String
-          object_of :update_time, String
-          object_of :state, String
-          object_of :intent, String
-          object_of :payer, Payer
-          array_of :transactions, Transaction
-          object_of :redirect_urls, RedirectUrls
-          array_of :links, Link
+          array_of  :links, Links
+          object_of :fragmentResolution, String
+          object_of :readonly, Boolean
+          object_of :contentEncoding, String
+          object_of :pathStart, String
+          object_of :mediaType, String
         end
 
-        include RequestDataType
-
-        class << self
-          def all(options = {})
-            url = "v1/payments/payment"
-            response = api.get(url, options)
-            PaymentHistory.new(response)
-          end
-        end
-
-        def create()
-          url = "v1/payments/payment"
-          response = api.post(url, self.to_hash, self.http_header)
-          self.merge!(response)
-          success?
-        end
-
-        class << self
-          def find(paymentid)
-            raise ArgumentError.new("paymentid required") if paymentid.to_s.strip.empty?
-            url = sprintf("v1/payments/payment/%s", paymentid.to_s.strip)
-            response = api.get(url)
-            new(response)
-          end
-        end
-
-        def execute(payment_execution)
-          raise ArgumentError.new("id required") if self.id.to_s.strip.empty?
-          url = sprintf("v1/payments/payment/%s/execute", self.id.to_s.strip)
-          payment_execution = PaymentExecution.new(payment_execution) unless payment_execution.is_a? PaymentExecution
-          response = api.post(url, payment_execution.to_hash, payment_execution.http_header)
-          self.merge!(response)
-          success?
-        end
       end
+      class CreditCardToken < Base
 
-
-
-      class Payer < Resource
         def self.load_members
-          object_of :payment_method, String
-          object_of :payer_info, PayerInfo
-          array_of :funding_instruments, FundingInstrument
+          object_of :credit_card_id, String
+          object_of :payer_id, String
         end
+
       end
+      class PayerInfo < Base
 
-
-
-      class PayerInfo < Resource
         def self.load_members
           object_of :email, String
           object_of :first_name, String
           object_of :last_name, String
           object_of :payer_id, String
+          object_of :phone, String
           object_of :shipping_address, Address
-          object_of :phone, String
         end
+
       end
+      class Transaction < Base
 
-
-
-      class Address < Resource
-        def self.load_members
-          object_of :line1, String
-          object_of :line2, String
-          object_of :city, String
-          object_of :state, String
-          object_of :postal_code, String
-          object_of :country_code, String
-          object_of :type, String
-          object_of :phone, String
-        end
-      end
-
-
-
-      class FundingInstrument < Resource
-        def self.load_members
-          object_of :credit_card, CreditCard
-          object_of :credit_card_token, CreditCardToken
-        end
-      end
-
-
-
-      class CreditCard < Resource
-        def self.load_members
-          object_of :id, String
-          object_of :valid_until, String
-          object_of :state, String
-          object_of :payer_id, String
-          object_of :type, String
-          object_of :number, String
-          object_of :expire_month, String
-          object_of :expire_year, String
-          object_of :cvv2, String
-          object_of :first_name, String
-          object_of :last_name, String
-          object_of :billing_address, Address
-          array_of :links, Link
-        end
-
-        include RequestDataType
-
-        def create()
-          url = "v1/vault/credit-card"
-          response = api.post(url, self.to_hash, self.http_header)
-          self.merge!(response)
-          success?
-        end
-
-        class << self
-          def find(creditcardid)
-            raise ArgumentError.new("creditcardid required") if creditcardid.to_s.strip.empty?
-            url = sprintf("v1/vault/credit-card/%s", creditcardid.to_s.strip)
-            response = api.get(url)
-            new(response)
-          end
-        end
-      end
-
-
-
-      class CreditCardToken < Resource
-        def self.load_members
-          object_of :credit_card_id, String
-          object_of :payer_id, String
-        end
-      end
-
-
-
-      class Transaction < Resource
         def self.load_members
           object_of :amount, Amount
           object_of :payee, Payee
           object_of :description, String
           object_of :item_list, ItemList
-          array_of :related_resources, SubTransaction
+          array_of  :related_resources, RelatedResources
+          array_of  :transactions, Transaction
         end
+
       end
+      class Amount < Base
 
-
-
-      class Payee < Resource
         def self.load_members
-          object_of :merchant_id, String
+          object_of :currency, String
+          object_of :total, String
+          object_of :details, Details
+        end
+
+      end
+      class Details < Base
+
+        def self.load_members
+          object_of :shipping, String
+          object_of :subtotal, String
+          object_of :tax, String
+          object_of :fee, String
+        end
+
+      end
+      class Payee < Base
+
+        def self.load_members
           object_of :email, String
+          object_of :merchant_id, String
           object_of :phone, String
         end
+
       end
+      class Item < Base
 
-
-
-      class ItemList < Resource
         def self.load_members
-          array_of :items, Item
-          object_of :shipping_address, ShippingAddress
-        end
-      end
-
-
-
-      class Item < Resource
-        def self.load_members
+          object_of :quantity, String
           object_of :name, String
-          object_of :sku, String
           object_of :price, String
           object_of :currency, String
-          object_of :quantity, String
+          object_of :sku, String
         end
+
       end
-
-
-
       class ShippingAddress < Address
+
         def self.load_members
           object_of :recipient_name, String
         end
+
       end
+      class ItemList < Base
 
+        def self.load_members
+          array_of  :items, Item
+          object_of :shipping_address, ShippingAddress
+        end
 
+      end
+      class RelatedResources < Base
 
-      class SubTransaction < Resource
         def self.load_members
           object_of :sale, Sale
           object_of :authorization, Authorization
-          object_of :refund, Refund
           object_of :capture, Capture
+          object_of :refund, Refund
         end
+
       end
+      class Sale < Base
 
-
-
-      class Sale < Resource
         def self.load_members
           object_of :id, String
-          object_of :create_time, String
-          object_of :update_time, String
-          object_of :state, String
+          object_of :create_time, DateTime
+          object_of :update_time, DateTime
           object_of :amount, Amount
+          object_of :state, String
           object_of :parent_payment, String
-          array_of :links, Link
+          array_of  :links, Links
         end
 
         include RequestDataType
 
-        class << self
-          def find(saleid)
-            raise ArgumentError.new("saleid required") if saleid.to_s.strip.empty?
-            url = sprintf("v1/payments/sale/%s", saleid.to_s.strip)
-            response = api.get(url)
-            new(response)
-          end
-        end
+            class << self
+              def find(resource_id)
+                raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+                path = "v1/payments/sale/#{resource_id}"
+                self.new(api.get(path))
+              end
+            end
 
-        def refund(refund)
-          raise ArgumentError.new("id required") if self.id.to_s.strip.empty?
-          url = sprintf("v1/payments/sale/%s/refund", self.id.to_s.strip)
-          refund = Refund.new(refund) unless refund.is_a? Refund
-          response = api.post(url, refund.to_hash, refund.http_header)
-          Refund.new(response)
-        end
+            def refund(refund)
+              refund = Refund.new(refund) unless refund.is_a? Refund
+              path = "v1/payments/sale/#{self.id}/refund"
+              response = api.post(path, refund.to_hash, http_header)
+              Refund.new(response)
+            end
+
       end
+      class Authorization < Base
 
-
-
-      class Authorization < Resource
         def self.load_members
           object_of :id, String
-          object_of :create_time, String
-          object_of :update_time, String
-          object_of :state, String
           object_of :amount, Amount
+          object_of :state, String
           object_of :parent_payment, String
-          array_of :links, Link
+          array_of  :links, Links
         end
+
       end
+      class Capture < Base
 
-
-
-      class Capture < Resource
         def self.load_members
           object_of :id, String
-          object_of :create_time, String
-          object_of :update_time, String
-          object_of :state, String
           object_of :amount, Amount
-          object_of :parent_payment, String
+          object_of :state, String
           object_of :authorization_id, String
+          object_of :parent_payment, String
           object_of :description, String
-          array_of :links, Link
+          array_of  :links, Links
         end
+
       end
+      class Refund < Base
 
+        def self.load_members
+          object_of :id, String
+          object_of :create_time, DateTime
+          object_of :update_time, DateTime
+          object_of :amount, Amount
+          object_of :state, String
+          object_of :sale_id, String
+          object_of :capture_id, String
+          object_of :parent_payment, String
+          object_of :description, String
+          array_of  :links, Links
+        end
 
+        include RequestDataType
 
-      class RedirectUrls < Resource
+            class << self
+              def find(resource_id)
+                raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+                path = "v1/payments/refund/#{resource_id}"
+                self.new(api.get(path))
+              end
+            end
+
+      end
+      class RedirectUrls < Base
+
         def self.load_members
           object_of :return_url, String
           object_of :cancel_url, String
         end
+
       end
+      class PaymentHistory < Base
 
-
-
-      class PaymentExecution < Resource
         def self.load_members
-          object_of :payer_id, String
-          array_of :transactions, Amount
-        end
-      end
-
-
-
-      class PaymentHistory < Resource
-        def self.load_members
-          array_of :payments, Payment
+          array_of  :payments, Payment
           object_of :count, Integer
           object_of :next_id, String
         end
+
       end
+      class PaymentExecution < Base
 
+        def self.load_members
+          object_of :payer_id, String
+          array_of  :transactions, Array
+        end
 
+      end
+      class CreditCardHistory < Base
 
+        def self.load_members
+          array_of  :"credit-cards", CreditCard
+          object_of :count, Integer
+          object_of :next_id, String
+        end
 
+      end
 
       constants.each do |data_type_klass|
         data_type_klass = const_get(data_type_klass)
