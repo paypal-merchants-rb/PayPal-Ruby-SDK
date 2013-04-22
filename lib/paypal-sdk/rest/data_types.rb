@@ -49,35 +49,35 @@ module PayPal::SDK
 
         include RequestDataType
 
-            def create()
-              path = "v1/payments/payment"
-              response = api.post(path, self.to_hash, http_header)
-              self.merge!(response)
-              success?
-            end
+        def create()
+          path = "v1/payments/payment"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
 
-            class << self
-              def find(resource_id)
-                raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
-                path = "v1/payments/payment/#{resource_id}"
-                self.new(api.get(path))
-              end
-            end
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/payment/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
 
-            def execute(payment_execution)
-              payment_execution = PaymentExecution.new(payment_execution) unless payment_execution.is_a? PaymentExecution
-              path = "v1/payments/payment/#{self.id}/execute"
-              response = api.post(path, payment_execution.to_hash, http_header)
-              self.merge!(response)
-              success?
-            end
+        def execute(payment_execution)
+          payment_execution = PaymentExecution.new(payment_execution) unless payment_execution.is_a? PaymentExecution
+          path = "v1/payments/payment/#{self.id}/execute"
+          response = api.post(path, payment_execution.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
 
-            class << self
-              def all(options = {})
-                path = "v1/payments/payment"
-                PaymentHistory.new(api.get(path, options))
-              end
-            end
+        class << self
+          def all(options = {})
+            path = "v1/payments/payment"
+            PaymentHistory.new(api.get(path, options))
+          end
+        end
 
       end
       class Payer < Base
@@ -117,20 +117,20 @@ module PayPal::SDK
 
         include RequestDataType
 
-            class << self
-              def find(resource_id)
-                raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
-                path = "v1/vault/credit-card/#{resource_id}"
-                self.new(api.get(path))
-              end
-            end
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/vault/credit-card/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
 
-            def create()
-              path = "v1/vault/credit-card"
-              response = api.post(path, self.to_hash, http_header)
-              self.merge!(response)
-              success?
-            end
+        def create()
+          path = "v1/vault/credit-card"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
 
       end
       class Address < Base
@@ -280,20 +280,20 @@ module PayPal::SDK
 
         include RequestDataType
 
-            class << self
-              def find(resource_id)
-                raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
-                path = "v1/payments/sale/#{resource_id}"
-                self.new(api.get(path))
-              end
-            end
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/sale/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
 
-            def refund(refund)
-              refund = Refund.new(refund) unless refund.is_a? Refund
-              path = "v1/payments/sale/#{self.id}/refund"
-              response = api.post(path, refund.to_hash, http_header)
-              Refund.new(response)
-            end
+        def refund(refund)
+          refund = Refund.new(refund) unless refund.is_a? Refund
+          path = "v1/payments/sale/#{self.id}/refund"
+          response = api.post(path, refund.to_hash, http_header)
+          Refund.new(response)
+        end
 
       end
       class Authorization < Base
@@ -337,13 +337,13 @@ module PayPal::SDK
 
         include RequestDataType
 
-            class << self
-              def find(resource_id)
-                raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
-                path = "v1/payments/refund/#{resource_id}"
-                self.new(api.get(path))
-              end
-            end
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/refund/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
 
       end
       class RedirectUrls < Base
