@@ -144,6 +144,7 @@ if payment.execute( :payer_id => "DUFRQ8GWYMJXC" )
 else
   payment.error # Error Hash
 end
+```
 
 ## OpenID Connect
 
@@ -175,5 +176,5 @@ userinfo = tokeninfo.userinfo
 userinfo = Userinfo.get("Replace with access_token")
 
 # Get logout url
-put tokeninfo.logout_url
+logout_url = tokeninfo.logout_url
 ```
