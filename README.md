@@ -6,65 +6,68 @@ The PayPal REST SDK provides Ruby APIs to create, process and manage payment.
 
 Add this line to your application's Gemfile:
 
-    gem 'paypal-sdk-rest'
-
-    # gem 'paypal-sdk-core', :git => "https://github.com/paypal/sdk-core-ruby.git"
-    # gem 'paypal-sdk-rest', :git => "https://github.com/paypal/rest-api-sdk-ruby.git"
+```ruby
+gem 'paypal-sdk-rest'
+```
 
 And then execute:
 
-    $ bundle
+```sh
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install paypal-sdk-rest
+```sh
+$ gem install paypal-sdk-rest
+```
 
 ## Configuration
 
 For Rails application:
 
-    rails g paypal:sdk:install
+```sh
+rails g paypal:sdk:install
+```
 
 For other ruby application, create a configuration file(`config/paypal.yml`):
 
-    development: &default
-      client_id: EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM
-      client_secret: EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM
-      mode: sandbox
-      # # with Proxy
-      # http_proxy: http://proxy-ipaddress:3129/
-      # # with CA File
-      # ssl_options:
-      #   ca_file: config/cacert.pem
-      # # Override Endpoint
-      # rest_endpoint: https://api.sandbox.paypal.com
-    test:
-      <<: *default
-    production:
-      <<: *default
-      mode: live
+```yaml
+development: &default
+  mode: sandbox
+  client_id: EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM
+  client_secret: EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM
+  # # with Proxy
+  # http_proxy: http://proxy-ipaddress:3129/
+  # # with CA File
+  # ssl_options:
+  #   ca_file: config/cacert.pem
+  # # Override Endpoint
+  # rest_endpoint: https://api.sandbox.paypal.com
+test:
+  <<: *default
+production:
+  mode: live
+  client_id: CLIENT_ID
+  client_secret: CLIENT_SECRET
+```
 
 
 Load Configurations from specified file:
 
-    PayPal::SDK::Core::Config.load('spec/config/paypal.yml',  ENV['RACK_ENV'] || 'development')
+```ruby
+PayPal::SDK::Core::Config.load('spec/config/paypal.yml',  ENV['RACK_ENV'] || 'development')
+```
 
 Without configuration file:
 
-    PayPal::SDK::REST.set_config(
-      :client_id => "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
-      :client_secret => "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
-      :mode => "sandbox", # "sandbox" or "live"
-      :ssl_options => { } )
-
-Override configuration:
-
-    # Class level
-    Payment.set_config( :client_id => "123" )
-
-    # Object level
-    payment.set_config( :client_id => "123" )
-
+```ruby
+PayPal::SDK.configure(
+  :mode => "sandbox", # "sandbox" or "live"
+  :client_id => "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
+  :client_secret => "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
+  :ssl_options => { } )
+```
 
 ## Create Payment
 
@@ -73,9 +76,9 @@ require 'paypal-sdk-rest'
 include PayPal::SDK::REST
 
 PayPal::SDK::REST.set_config(
+  :mode => "sandbox", # "sandbox" or "live"
   :client_id => "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
-  :client_secret => "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
-  :mode => "sandbox" )
+  :client_secret => "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM")
 
 # Build Payment object
 @payment = Payment.new({
@@ -98,12 +101,19 @@ PayPal::SDK::REST.set_config(
           :postal_code => "43210",
           :country_code => "US" }}}]},
   :transactions => [{
+    :item_list => {
+      :items => [{
+        :name => "item",
+        :sku => "item",
+        :price => "1",
+        :currency => "USD",
+        :quantity => 1 }]},
     :amount => {
       :total => "1.00",
       :currency => "USD" },
     :description => "This is the payment transaction description." }]})
 
-# Make API call & get response
+# Create Payment and return the status(true or false)
 if @payment.create
   @payment.id     # Payment Id
 else
@@ -111,19 +121,20 @@ else
 end
 ```
 
-## Get Payment
+## Get Payment details
 
 ```ruby
 # Fetch Payment
 payment = Payment.find("PAY-57363176S1057143SKE2HO3A")
 
-# Get List of REST
+# Get List of Payments
 payment_history = Payment.all( :count => 10 )
-
 payment_history.payments
 ```
 
 ## Execute Payment
+
+Only for [Payment](https://github.com/paypal/rest-api-sdk-ruby/blob/master/samples/payment/create_with_paypal.rb) with `payment_method` as `"paypal"`
 
 ```ruby
 payment = Payment.find("PAY-57363176S1057143SKE2HO3A")
@@ -133,4 +144,36 @@ if payment.execute( :payer_id => "DUFRQ8GWYMJXC" )
 else
   payment.error # Error Hash
 end
+
+## OpenID Connect
+
+```ruby
+# Update client_id, client_secret and redirect_uri
+PayPal::SDK.configure({
+  :openid_client_id     => "client_id",
+  :openid_client_secret => "client_secret",
+  :openid_redirect_uri  => "http://google.com"
+})
+include PayPal::SDK::OpenIDConnect
+
+# Generate authorize URL to Get Authorize code
+puts Tokeninfo.authorize_url( :scope => "openid profile" )
+
+# Create tokeninfo by using Authorize Code from redirect_uri
+tokeninfo = Tokeninfo.create("Replace with Authorize Code received on redirect_uri")
+
+# Refresh tokeninfo object
+tokeninfo.refresh
+
+# Create tokeninfo by using refresh token
+tokeninfo = Tokeninfo.refresh("Replace with refresh_token")
+
+# Get Userinfo
+userinfo = tokeninfo.userinfo
+
+# Get Userinfo by using access token
+userinfo = Userinfo.get("Replace with access_token")
+
+# Get logout url
+put tokeninfo.logout_url
 ```

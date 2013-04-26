@@ -27,14 +27,23 @@ include PayPal::SDK::Core::Logging
   # A transaction defines the contract of a
   # payment - what is the payment for and who
   # is fulfilling it.
-  :transactions =>  [ {
+  :transactions =>  [{
+
+    # Item List
+    :item_list => {
+      :items => [{
+        :name => "item",
+        :sku => "item",
+        :price => "5",
+        :currency => "USD",
+        :quantity => 1 }]},
 
     # ###Amount
     # Let's you specify a payment amount.
     :amount =>  {
       :total =>  "5",
       :currency =>  "USD" },
-    :description =>  "This is the payment transaction description." } ] } )
+    :description =>  "This is the payment transaction description." }]})
 
 # Create Payment and return status
 if @payment.create
