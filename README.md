@@ -62,7 +62,7 @@ PayPal::SDK::Core::Config.load('spec/config/paypal.yml',  ENV['RACK_ENV'] || 'de
 Without configuration file:
 
 ```ruby
-PayPal::SDK::REST.set_config(
+PayPal::SDK.configure(
   :mode => "sandbox", # "sandbox" or "live"
   :client_id => "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
   :client_secret => "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
@@ -144,3 +144,36 @@ if payment.execute( :payer_id => "DUFRQ8GWYMJXC" )
 else
   payment.error # Error Hash
 end
+
+## OpenID Connect
+
+```ruby
+# Update client_id, client_secret and redirect_uri
+PayPal::SDK.configure({
+  :openid_client_id     => "client_id",
+  :openid_client_secret => "client_secret",
+  :openid_redirect_uri  => "http://google.com"
+})
+include PayPal::SDK::OpenIDConnect
+
+# Generate authorize URL to Get Authorize code
+puts Tokeninfo.authorize_url( :scope => "openid profile" )
+
+# Create tokeninfo by using Authorize Code from redirect_uri
+tokeninfo = Tokeninfo.create("Replace with Authorize Code received on redirect_uri")
+
+# Refresh tokeninfo object
+tokeninfo.refresh
+
+# Create tokeninfo by using refresh token
+tokeninfo = Tokeninfo.refresh("Replace with refresh_token")
+
+# Get Userinfo
+userinfo = tokeninfo.userinfo
+
+# Get Userinfo by using access token
+userinfo = Userinfo.get("Replace with access_token")
+
+# Get logout url
+put tokeninfo.logout_url
+```
