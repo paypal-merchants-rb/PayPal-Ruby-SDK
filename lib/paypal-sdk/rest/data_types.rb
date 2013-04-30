@@ -367,7 +367,14 @@ module PayPal::SDK
 
         def self.load_members
           object_of :payer_id, String
-          array_of  :transactions, Array
+          array_of  :transactions, Transactions
+        end
+
+      end
+      class Transactions < Base
+
+        def self.load_members
+          object_of :amount, Amount
         end
 
       end
