@@ -105,7 +105,7 @@ module PayPal::SDK
           object_of :type, String
           object_of :expire_month, Integer
           object_of :expire_year, Integer
-          object_of :cvv2, Integer
+          object_of :cvv2, String
           object_of :first_name, String
           object_of :last_name, String
           object_of :billing_address, Address
