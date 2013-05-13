@@ -44,7 +44,7 @@ module PayPal::SDK
           array_of  :transactions, Transaction
           object_of :state, String
           object_of :redirect_urls, RedirectUrls
-          array_of  :links, Links
+          array_of  :links, Link
         end
 
         include RequestDataType
@@ -112,7 +112,7 @@ module PayPal::SDK
           object_of :payer_id, String
           object_of :state, String
           object_of :valid_until, String
-          array_of  :links, Links
+          array_of  :links, Link
         end
 
         include RequestDataType
@@ -146,27 +146,12 @@ module PayPal::SDK
         end
 
       end
-      class Links < Base
+      class Link < Base
 
         def self.load_members
           object_of :href, String
           object_of :rel, String
-          object_of :targetSchema, HyperSchema
           object_of :method, String
-          object_of :enctype, String
-          object_of :schema, HyperSchema
-        end
-
-      end
-      class HyperSchema < Base
-
-        def self.load_members
-          array_of  :links, Links
-          object_of :fragmentResolution, String
-          object_of :readonly, Boolean
-          object_of :contentEncoding, String
-          object_of :pathStart, String
-          object_of :mediaType, String
         end
 
       end
@@ -275,7 +260,7 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :state, String
           object_of :parent_payment, String
-          array_of  :links, Links
+          array_of  :links, Link
         end
 
         include RequestDataType
@@ -303,7 +288,7 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :state, String
           object_of :parent_payment, String
-          array_of  :links, Links
+          array_of  :links, Link
         end
 
       end
@@ -316,7 +301,7 @@ module PayPal::SDK
           object_of :authorization_id, String
           object_of :parent_payment, String
           object_of :description, String
-          array_of  :links, Links
+          array_of  :links, Link
         end
 
       end
@@ -332,7 +317,7 @@ module PayPal::SDK
           object_of :capture_id, String
           object_of :parent_payment, String
           object_of :description, String
-          array_of  :links, Links
+          array_of  :links, Link
         end
 
         include RequestDataType
