@@ -25,6 +25,10 @@ describe "Payments" do
           "description" =>  "This is the payment transaction description." } ] }
 
 
+  it "Validate user-agent" do
+    PayPal::SDK::REST::API.user_agent.should match "PayPalSDK/rest-sdk-ruby"
+  end
+
   describe "Examples" do
     describe "REST" do
       it "Modifiy global configuration" do
