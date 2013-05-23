@@ -188,6 +188,15 @@ describe "Payments" do
         credit_card.error.should be_nil
       end
 
+      it "Delete" do
+        credit_card = CreditCard.new({
+          "type" =>  "visa",
+          "number" =>  "4417119669820331",
+          "expire_month" =>  "11", "expire_year" =>  "2018" })
+        credit_card.create.should be_true
+        credit_card.delete.should be_true
+      end
+
       describe "Validation" do
         it "Create" do
           credit_card = CreditCard.new({

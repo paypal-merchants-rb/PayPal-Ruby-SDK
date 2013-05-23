@@ -38,13 +38,12 @@ module PayPal::SDK
         def self.load_members
           object_of :id, String
           object_of :create_time, DateTime
-          object_of :update_time, DateTime
           object_of :intent, String
           object_of :payer, Payer
           array_of  :transactions, Transaction
           object_of :state, String
           object_of :redirect_urls, RedirectUrls
-          array_of  :links, Link
+          array_of  :links, Links
         end
 
         include RequestDataType
@@ -112,10 +111,17 @@ module PayPal::SDK
           object_of :payer_id, String
           object_of :state, String
           object_of :valid_until, String
-          array_of  :links, Link
+          array_of  :links, Links
         end
 
         include RequestDataType
+
+        def create()
+          path = "v1/vault/credit-card"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
 
         class << self
           def find(resource_id)
@@ -125,11 +131,25 @@ module PayPal::SDK
           end
         end
 
-        def create()
-          path = "v1/vault/credit-card"
-          response = api.post(path, self.to_hash, http_header)
+        def delete()
+          path = "v1/vault/credit-card/#{self.id}"
+          response = api.delete(path, self.to_hash)
           self.merge!(response)
           success?
+        end
+
+        def update()
+          path = "v1/vault/credit-card/#{self.id}"
+          response = api.patch(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        class << self
+          def all(options = {})
+            path = "v1/vault/credit-card"
+            CreditCardHistory.new(api.get(path, options))
+          end
         end
 
       end
@@ -146,12 +166,27 @@ module PayPal::SDK
         end
 
       end
-      class Link < Base
+      class Links < Base
 
         def self.load_members
           object_of :href, String
           object_of :rel, String
+          object_of :targetSchema, HyperSchema
           object_of :method, String
+          object_of :enctype, String
+          object_of :schema, HyperSchema
+        end
+
+      end
+      class HyperSchema < Base
+
+        def self.load_members
+          array_of  :links, Links
+          object_of :fragmentResolution, String
+          object_of :readonly, Boolean
+          object_of :contentEncoding, String
+          object_of :pathStart, String
+          object_of :mediaType, String
         end
 
       end
@@ -160,6 +195,10 @@ module PayPal::SDK
         def self.load_members
           object_of :credit_card_id, String
           object_of :payer_id, String
+          object_of :last4, String
+          object_of :type, String
+          object_of :expire_month, Integer
+          object_of :expire_year, Integer
         end
 
       end
@@ -260,7 +299,7 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :state, String
           object_of :parent_payment, String
-          array_of  :links, Link
+          array_of  :links, Links
         end
 
         include RequestDataType
@@ -285,10 +324,44 @@ module PayPal::SDK
 
         def self.load_members
           object_of :id, String
+          object_of :create_time, DateTime
+          object_of :update_time, DateTime
           object_of :amount, Amount
           object_of :state, String
           object_of :parent_payment, String
-          array_of  :links, Link
+          object_of :valid_until, String
+          array_of  :links, Links
+        end
+
+        include RequestDataType
+
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/authorization/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
+
+        def capture(capture)
+          capture = Capture.new(capture) unless capture.is_a? Capture
+          path = "v1/payments/authorization/#{self.id}/capture"
+          response = api.post(path, capture.to_hash, http_header)
+          Capture.new(response)
+        end
+
+        def void()
+          path = "v1/payments/authorization/#{self.id}/void"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        def reauthorize()
+          path = "v1/payments/authorization/#{self.id}/reauthorize"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
         end
 
       end
@@ -296,12 +369,31 @@ module PayPal::SDK
 
         def self.load_members
           object_of :id, String
+          object_of :create_time, DateTime
+          object_of :update_time, DateTime
           object_of :amount, Amount
+          object_of :is_final_capture, Boolean
           object_of :state, String
-          object_of :authorization_id, String
           object_of :parent_payment, String
           object_of :description, String
-          array_of  :links, Link
+          array_of  :links, Links
+        end
+
+        include RequestDataType
+
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/capture/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
+
+        def refund(refund)
+          refund = Refund.new(refund) unless refund.is_a? Refund
+          path = "v1/payments/capture/#{self.id}/refund"
+          response = api.post(path, refund.to_hash, http_header)
+          Refund.new(response)
         end
 
       end
@@ -310,14 +402,13 @@ module PayPal::SDK
         def self.load_members
           object_of :id, String
           object_of :create_time, DateTime
-          object_of :update_time, DateTime
           object_of :amount, Amount
           object_of :state, String
           object_of :sale_id, String
           object_of :capture_id, String
           object_of :parent_payment, String
           object_of :description, String
-          array_of  :links, Link
+          array_of  :links, Links
         end
 
         include RequestDataType
