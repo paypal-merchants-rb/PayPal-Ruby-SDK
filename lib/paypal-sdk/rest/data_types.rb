@@ -133,7 +133,7 @@ module PayPal::SDK
 
         def delete()
           path = "v1/vault/credit-card/#{self.id}"
-          response = api.delete(path, self.to_hash)
+          response = api.delete(path, {})
           self.merge!(response)
           success?
         end
@@ -352,7 +352,7 @@ module PayPal::SDK
 
         def void()
           path = "v1/payments/authorization/#{self.id}/void"
-          response = api.post(path, self.to_hash, http_header)
+          response = api.post(path, {}, http_header)
           self.merge!(response)
           success?
         end
