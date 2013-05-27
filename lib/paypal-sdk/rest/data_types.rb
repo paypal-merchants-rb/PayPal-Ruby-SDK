@@ -38,6 +38,7 @@ module PayPal::SDK
         def self.load_members
           object_of :id, String
           object_of :create_time, DateTime
+          object_of :update_time, DateTime
           object_of :intent, String
           object_of :payer, Payer
           array_of  :transactions, Transaction
@@ -136,20 +137,6 @@ module PayPal::SDK
           response = api.delete(path, {})
           self.merge!(response)
           success?
-        end
-
-        def update()
-          path = "v1/vault/credit-card/#{self.id}"
-          response = api.patch(path, self.to_hash, http_header)
-          self.merge!(response)
-          success?
-        end
-
-        class << self
-          def all(options = {})
-            path = "v1/vault/credit-card"
-            CreditCardHistory.new(api.get(path, options))
-          end
         end
 
       end
@@ -375,7 +362,6 @@ module PayPal::SDK
           object_of :is_final_capture, Boolean
           object_of :state, String
           object_of :parent_payment, String
-          object_of :description, String
           array_of  :links, Links
         end
 
@@ -407,7 +393,6 @@ module PayPal::SDK
           object_of :sale_id, String
           object_of :capture_id, String
           object_of :parent_payment, String
-          object_of :description, String
           array_of  :links, Links
         end
 
