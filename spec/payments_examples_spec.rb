@@ -166,6 +166,55 @@ describe "Payments" do
       end
     end
 
+    describe "Authorize" do
+      before :each do
+        @payment = Payment.new(PaymentAttributes.merge( :intent => "authorize" ))
+        @payment.create
+        @payment.error.should be_nil
+      end
+
+      it "Find" do
+        authorize = Authorization.find(@payment.transactions[0].related_resources[0].authorization.id)
+        authorize.error.should be_nil
+        authorize.should be_a Authorization
+      end
+
+      it "Capture" do
+        authorize = @payment.transactions[0].related_resources[0].authorization
+        capture   = authorize.capture({:amount => { :currency => "USD", :total => "1.00" } })
+        capture.error.should be_nil
+      end
+
+      it "Void" do
+        authorize = @payment.transactions[0].related_resources[0].authorization
+        authorize.void()
+        authorize.error.should be_nil
+      end
+
+    end
+
+    describe "Capture" do
+      before :each do
+        @payment = Payment.new(PaymentAttributes.merge( :intent => "authorize" ))
+        @payment.create
+        @payment.error.should be_nil
+        authorize = @payment.transactions[0].related_resources[0].authorization
+        @capture = authorize.capture({:amount => { :currency => "USD", :total => "1.00" } })
+        @capture.error.should be_nil
+      end
+
+      it "Find" do
+        capture = Capture.find(@capture.id)
+        capture.error.should be_nil
+        capture.should be_a Capture
+      end
+
+      it "Refund" do
+        refund = @capture.refund({})
+        refund.error.should be_nil
+      end
+    end
+
     describe "CreditCard" do
       it "Create" do
         credit_card = CreditCard.new({
@@ -186,6 +235,15 @@ describe "Payments" do
         credit_card = CreditCard.find(credit_card.id)
         credit_card.should be_a CreditCard
         credit_card.error.should be_nil
+      end
+
+      it "Delete" do
+        credit_card = CreditCard.new({
+          "type" =>  "visa",
+          "number" =>  "4417119669820331",
+          "expire_month" =>  "11", "expire_year" =>  "2018" })
+        credit_card.create.should be_true
+        credit_card.delete.should be_true
       end
 
       describe "Validation" do
