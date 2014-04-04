@@ -522,7 +522,7 @@ module PayPal::SDK
           end
         end
 
-        def send()
+        def send_invoice()
           path = "v1/invoicing/invoices/#{self.id}/send"
           response = api.post(path, {}, http_header)
           self.merge!(response)
