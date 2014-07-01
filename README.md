@@ -147,6 +147,9 @@ else
 end
 ```
 
+## Create Future Payment
+[Future Payments](https://developer.paypal.com/docs/integration/mobile/make-future-payment/) sample is available [here](https://github.com/paypal/rest-api-sdk-ruby/blob/master/spec/payments_examples_spec.rb#L149)
+
 ## OpenID Connect
 
 ```ruby
