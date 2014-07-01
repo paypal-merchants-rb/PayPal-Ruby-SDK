@@ -24,6 +24,15 @@ describe "Payments" do
             "currency" =>  "USD" },
           "description" =>  "This is the payment transaction description." } ] }
 
+  FuturePaymentAttributes = {
+        "intent" =>  "authorize",
+        "payer" =>  {
+          "payment_method" =>  "paypal" },
+        "transactions" =>  [ {
+          "amount" =>  {
+            "total" =>  "1.00",
+            "currency" =>  "USD" },
+          "description" =>  "This is the payment transaction description." } ] }
 
   it "Validate user-agent" do
     PayPal::SDK::REST::API.user_agent.should match "PayPalSDK/rest-sdk-ruby"
@@ -133,6 +142,29 @@ describe "Payments" do
         it "Execute" do
           pending "Test with capybara"
         end
+      end
+
+    end
+
+    describe "Future Payment" do
+      access_token = nil
+
+      it "Exchange Authorization Code for Refresh / Access Tokens" do
+        # put your authorization code for testing here
+        auth_code = ''
+        if auth_code != ''
+          access_token  = FuturePayment.exch_token(auth_code)
+          access_token.should_not be_nil
+        end
+      end
+
+      it "Create a payment" do
+        # put your Paypal-Application-Correlation-Id
+        correlation_id = '' 
+        @future_payment = FuturePayment.new(FuturePaymentAttributes.merge( :token => access_token ))
+        @future_payment.create(correlation_id)
+        @future_payment.error.should be_nil
+        @future_payment.id.should_not be_nil
       end
 
     end

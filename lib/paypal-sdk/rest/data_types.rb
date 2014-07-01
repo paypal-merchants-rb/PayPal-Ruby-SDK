@@ -867,6 +867,28 @@ module PayPal::SDK
         end
 
       end
+      class FuturePayment < Payment
+
+        def self.exch_token(auth_code)
+          if auth_code
+            token = PayPal::SDK::Core::API::REST.new.token(auth_code)
+            token
+          end
+        end
+
+        def create(correlation_id=nil)
+          path = "v1/payments/payment"
+          if correlation_id != nil
+            header = http_header
+            header = header.merge({
+              "Paypal-Application-Correlation-Id" => correlation_id})
+          end
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+      end
 
       constants.each do |data_type_klass|
         data_type_klass = const_get(data_type_klass)
