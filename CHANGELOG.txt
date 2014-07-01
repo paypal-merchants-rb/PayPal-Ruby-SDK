@@ -1,3 +1,6 @@
+Version 0.7.0 - July 1, 2014
+  * Added future payment support
+
 Version 0.6.1 - Apr 04, 2014
   * Added support for Invoice APIs
 
