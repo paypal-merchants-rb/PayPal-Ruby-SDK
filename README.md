@@ -142,6 +142,7 @@ payment = Payment.find("PAY-57363176S1057143SKE2HO3A")
 
 if payment.execute( :payer_id => "DUFRQ8GWYMJXC" )
   # Success Message
+  # Note that you'll need to `Payment.find` the payment again to access user info like shipping address
 else
   payment.error # Error Hash
 end
