@@ -889,6 +889,75 @@ module PayPal::SDK
         end
 
       end
+      class Plan < Base
+
+        def self.load_members
+          array_of :links, Links
+          array_of :payment_definitions, PaymentDefinition
+          array_of :terms, Terms
+          object_of :create_time, String
+          object_of :description, String
+          object_of :id, String
+          object_of :merchant_preferences, MerchantPreferences
+          object_of :name, String
+          object_of :payee, Payee
+          object_of :state, String
+          object_of :type, String
+          object_of :update_time, String
+        end
+
+      end
+      class PaymentDefinition < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :name, String
+          object_of :type, String
+          object_of :frequency_interval, String
+          object_of :frequency, String
+          object_of :cycles, String
+          object_of :amount, Currency
+          array_of :charge_models, ChargeModels
+        end
+
+      end
+      class ChargeModels < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :type, String
+          object_of :amount, Currency
+        end
+
+      end
+      class MerchantPreferences < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :setup_fee, Currency
+          object_of :cancel_url, String
+          object_of :return_url, String
+          object_of :notify_url, String
+          object_of :max_fail_attempts, String
+          object_of :auto_bill_amount, String
+          object_of :initial_fail_amount_action, String
+          object_of :accepted_payment_type, String
+          object_of :char_set, String
+        end
+
+      end
+      class Terms < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :type, String
+          object_of :max_billing_amount, Currency
+          object_of :occurrences, String
+          object_of :amount_range, Currency
+          object_of :buyer_editable, String
+        end
+
+      end
 
       constants.each do |data_type_klass|
         data_type_klass = const_get(data_type_klass)
