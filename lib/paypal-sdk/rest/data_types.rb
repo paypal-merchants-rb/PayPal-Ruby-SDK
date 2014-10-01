@@ -906,6 +906,38 @@ module PayPal::SDK
           object_of :update_time, String
         end
 
+        include RequestDataType
+
+        def create()
+          path = "v1/payments/billing-plans"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/billing-plans/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
+
+        class << self
+          def all(options = {})
+            path = "v1/payments/billing-plans"
+            PlanHistory.new(api.get(path, options))
+          end
+        end
+
+      end
+      class PlanHistory < Base
+
+        def self.load_members
+          array_of :plans, Plan
+          array_of :links, Links
+        end
+
       end
       class PaymentDefinition < Base
 
