@@ -990,6 +990,32 @@ module PayPal::SDK
         end
 
       end
+      class Agreement < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :name, String
+          object_of :description, String
+          object_of :start_date, String
+          object_of :payer, Payer
+          object_of :shipping_address, Address
+          object_of :override_merchant_preferences, MerchantPreferences
+          array_of :override_charge_models, OverrideChargeModel
+          object_of :plan, Plan
+          object_of :create_time, String
+          object_of :update_time, String
+          array_of :links, Links
+        end
+
+      end
+      class OverrideChargeModel < Base
+
+        def self.load_members
+          object_of :charge_id, String
+          object_of :amount, Currency
+        end
+
+      end
 
       constants.each do |data_type_klass|
         data_type_klass = const_get(data_type_klass)
