@@ -343,6 +343,8 @@ module PayPal::SDK
           object_of :state, String
           object_of :parent_payment, String
           object_of :valid_until, String
+          object_of :protection_eligibility, String
+          object_of :payment_mode, String
           array_of  :links, Links
         end
 
