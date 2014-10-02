@@ -1007,6 +1007,30 @@ module PayPal::SDK
           array_of :links, Links
         end
 
+        include RequestDataType
+
+        def create()
+          path = "v1/payments/billing-agreements"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/billing-agreements/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
+
+        def execute(payment_token)
+          path = "v1/payments/billing-agreements/#{payment_token}/agreement-execute"
+          response = api.post(path, {}, http_header)
+          self.merge!(response)
+          success?
+        end
+
       end
       class OverrideChargeModel < Base
 
