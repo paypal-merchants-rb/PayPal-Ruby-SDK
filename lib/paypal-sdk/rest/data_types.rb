@@ -1032,6 +1032,13 @@ module PayPal::SDK
         end
 
       end
+      class Note < Base
+
+        def self.load_members
+          object_of :note, String
+        end
+
+      end
       class OverrideChargeModel < Base
 
         def self.load_members
