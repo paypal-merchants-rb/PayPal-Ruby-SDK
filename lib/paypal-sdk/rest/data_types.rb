@@ -1031,6 +1031,30 @@ module PayPal::SDK
           success?
         end
 
+        def suspend(note)
+          note = Note.new(note) unless note.is_a? Note
+          path = "v1/payments/billing-agreements/#{self.id}/suspend"
+          response = api.post(path, note.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        def reactivate(note)
+          note = Note.new(note) unless note.is_a? Note
+          path = "v1/payments/billing-agreements/#{self.id}/re-activate"
+          response = api.post(path, note.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        def cancel(note)
+          note = Note.new(note) unless note.is_a? Note
+          path = "v1/payments/billing-agreements/#{self.id}/cancel"
+          response = api.post(path, note.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
       end
       class Note < Base
 
