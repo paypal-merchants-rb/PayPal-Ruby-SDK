@@ -923,6 +923,17 @@ module PayPal::SDK
           end
         end
 
+        def update(value)
+          path = "v1/payments/billing-plans/#{self.id}"
+          params = [{
+            "path" => "/",
+            "value" => value,
+            "op" => "replace"
+          }]
+          response = api.patch(path, params, http_header)
+          success?
+        end
+
         class << self
           def all(options = {})
             path = "v1/payments/billing-plans"
