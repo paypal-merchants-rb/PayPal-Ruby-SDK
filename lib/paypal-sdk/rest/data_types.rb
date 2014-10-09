@@ -1006,6 +1006,7 @@ module PayPal::SDK
         def self.load_members
           object_of :id, String
           object_of :name, String
+          object_of :state, String
           object_of :description, String
           object_of :start_date, String
           object_of :payer, Payer
@@ -1016,6 +1017,7 @@ module PayPal::SDK
           object_of :create_time, String
           object_of :update_time, String
           array_of :links, Links
+          object_of :agreement_details, AgreementDetails
         end
 
         include RequestDataType
@@ -1064,6 +1066,18 @@ module PayPal::SDK
           response = api.post(path, note.to_hash, http_header)
           self.merge!(response)
           success?
+        end
+
+      end
+      class AgreementDetails < Base
+
+        def self.load_members
+          object_of :outstanding_balance, Currency
+          object_of :cycles_remaining, String
+          object_of :cycles_completed, String
+          object_of :final_payment_date, DateTime
+          object_of :failed_payment_count, String
+          object_of :next_billing_date, DateTime
         end
 
       end
