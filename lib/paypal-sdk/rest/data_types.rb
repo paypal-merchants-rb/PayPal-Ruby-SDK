@@ -296,10 +296,25 @@ module PayPal::SDK
       class RelatedResources < Base
 
         def self.load_members
+          object_of :order, Order
           object_of :sale, Sale
           object_of :authorization, Authorization
           object_of :capture, Capture
           object_of :refund, Refund
+        end
+
+      end
+      class Order < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :create_time, DateTime
+          object_of :update_time, DateTime
+          object_of :state, String
+          object_of :amount, Amount
+          object_of :parent_payment, String
+          object_of :reason_code, String
+          array_of  :links, Links
         end
 
       end
