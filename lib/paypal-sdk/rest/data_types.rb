@@ -1037,11 +1037,13 @@ module PayPal::SDK
           end
         end
 
-        def execute(payment_token)
-          path = "v1/payments/billing-agreements/#{payment_token}/agreement-execute"
-          response = api.post(path, {}, http_header)
-          self.merge!(response)
-          success?
+        class << self
+          def execute(token)
+            raise ArgumentError.new("token required") if token.to_s.strip.empty?
+            path = "v1/payments/billing-agreements/#{token}/agreement-execute"
+            response = api.post(path)
+            self.new(response)
+          end
         end
 
         def suspend(note)
