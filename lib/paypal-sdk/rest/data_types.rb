@@ -1080,6 +1080,8 @@ module PayPal::SDK
           object_of :final_payment_date, DateTime
           object_of :failed_payment_count, String
           object_of :next_billing_date, DateTime
+          object_of :last_payment_date, DateTime
+          object_of :last_payment_amount, Currency
         end
 
       end
