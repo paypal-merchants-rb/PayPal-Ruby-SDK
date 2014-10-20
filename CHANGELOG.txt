@@ -1,3 +1,9 @@
+Version 0.7.2 - October 20, 2014
+  * Added Order support
+
+Version 0.7.1 - October 8, 2014
+  * Added Auth support
+
 Version 0.7.0 - July 1, 2014
   * Added future payment support
 
