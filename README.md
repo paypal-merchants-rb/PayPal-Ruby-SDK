@@ -1,7 +1,6 @@
 # REST SDK
 
 The PayPal REST SDK provides Ruby APIs to create, process and manage payment.
-> **Before starting to use the sdk, please be aware of the [existing issues and currently available or upcoming features](https://github.com/paypal/rest-api-sdk-python/wiki/Existing-Issues-and-Unavailable%5CUpcoming-features) for the REST APIs. (which the sdks are based on)** 
 
 ## Installation
 
@@ -142,10 +141,14 @@ payment = Payment.find("PAY-57363176S1057143SKE2HO3A")
 
 if payment.execute( :payer_id => "DUFRQ8GWYMJXC" )
   # Success Message
+  # Note that you'll need to `Payment.find` the payment again to access user info like shipping address
 else
   payment.error # Error Hash
 end
 ```
+
+## Create Future Payment
+[Future Payments](https://developer.paypal.com/docs/integration/mobile/make-future-payment/) sample is available [here](https://github.com/paypal/rest-api-sdk-ruby/blob/master/spec/payments_examples_spec.rb#L149)
 
 ## OpenID Connect
 
