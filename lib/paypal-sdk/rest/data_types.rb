@@ -96,6 +96,7 @@ module PayPal::SDK
 
         def self.load_members
           object_of :payment_method, String
+          object_of :status, String
           array_of  :funding_instruments, FundingInstrument
           object_of :payer_info, PayerInfo
         end
@@ -169,6 +170,7 @@ module PayPal::SDK
       class Address < Base
 
         def self.load_members
+          object_of :recipient_name, String
           object_of :line1, String
           object_of :line2, String
           object_of :city, String
@@ -233,6 +235,9 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :payee, Payee
           object_of :description, String
+          object_of :invoice_number, String
+          object_of :custom, String
+          object_of :soft_descriptor, String
           object_of :item_list, ItemList
           array_of  :related_resources, RelatedResources
           array_of  :transactions, Transaction
@@ -327,6 +332,9 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :state, String
           object_of :parent_payment, String
+          object_of :payment_mode, String
+          object_of :protection_eligibility, String
+          object_of :protection_eligibility_type, String
           array_of  :links, Links
         end
 
