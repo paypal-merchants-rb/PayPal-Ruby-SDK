@@ -906,6 +906,217 @@ module PayPal::SDK
         end
 
       end
+      class Plan < Base
+
+        def self.load_members
+          array_of :links, Links
+          array_of :payment_definitions, PaymentDefinition
+          array_of :terms, Terms
+          object_of :create_time, String
+          object_of :description, String
+          object_of :id, String
+          object_of :merchant_preferences, MerchantPreferences
+          object_of :name, String
+          object_of :payee, Payee
+          object_of :state, String
+          object_of :type, String
+          object_of :update_time, String
+        end
+
+        include RequestDataType
+
+        def create()
+          path = "v1/payments/billing-plans"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/billing-plans/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
+
+        def update(value)
+          path = "v1/payments/billing-plans/#{self.id}"
+          params = [{
+            "path" => "/",
+            "value" => value,
+            "op" => "replace"
+          }]
+          response = api.patch(path, params, http_header)
+          success?
+        end
+
+        class << self
+          def all(options = {})
+            path = "v1/payments/billing-plans"
+            PlanHistory.new(api.get(path, options))
+          end
+        end
+
+      end
+      class PlanHistory < Base
+
+        def self.load_members
+          array_of :plans, Plan
+          array_of :links, Links
+        end
+
+      end
+      class PaymentDefinition < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :name, String
+          object_of :type, String
+          object_of :frequency_interval, String
+          object_of :frequency, String
+          object_of :cycles, String
+          object_of :amount, Currency
+          array_of :charge_models, ChargeModels
+        end
+
+      end
+      class ChargeModels < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :type, String
+          object_of :amount, Currency
+        end
+
+      end
+      class MerchantPreferences < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :setup_fee, Currency
+          object_of :cancel_url, String
+          object_of :return_url, String
+          object_of :notify_url, String
+          object_of :max_fail_attempts, String
+          object_of :auto_bill_amount, String
+          object_of :initial_fail_amount_action, String
+          object_of :accepted_payment_type, String
+          object_of :char_set, String
+        end
+
+      end
+      class Terms < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :type, String
+          object_of :max_billing_amount, Currency
+          object_of :occurrences, String
+          object_of :amount_range, Currency
+          object_of :buyer_editable, String
+        end
+
+      end
+      class Agreement < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :name, String
+          object_of :state, String
+          object_of :description, String
+          object_of :start_date, String
+          object_of :payer, Payer
+          object_of :shipping_address, Address
+          object_of :override_merchant_preferences, MerchantPreferences
+          array_of :override_charge_models, OverrideChargeModel
+          object_of :plan, Plan
+          object_of :create_time, String
+          object_of :update_time, String
+          array_of :links, Links
+          object_of :agreement_details, AgreementDetails
+        end
+
+        include RequestDataType
+
+        def create()
+          path = "v1/payments/billing-agreements"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/payments/billing-agreements/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
+
+        class << self
+          def execute(token)
+            raise ArgumentError.new("token required") if token.to_s.strip.empty?
+            path = "v1/payments/billing-agreements/#{token}/agreement-execute"
+            response = api.post(path)
+            self.new(response)
+          end
+        end
+
+        def suspend(note)
+          note = Note.new(note) unless note.is_a? Note
+          path = "v1/payments/billing-agreements/#{self.id}/suspend"
+          response = api.post(path, note.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        def reactivate(note)
+          note = Note.new(note) unless note.is_a? Note
+          path = "v1/payments/billing-agreements/#{self.id}/re-activate"
+          response = api.post(path, note.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        def cancel(note)
+          note = Note.new(note) unless note.is_a? Note
+          path = "v1/payments/billing-agreements/#{self.id}/cancel"
+          response = api.post(path, note.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+      end
+      class AgreementDetails < Base
+
+        def self.load_members
+          object_of :outstanding_balance, Currency
+          object_of :cycles_remaining, String
+          object_of :cycles_completed, String
+          object_of :final_payment_date, DateTime
+          object_of :failed_payment_count, String
+          object_of :next_billing_date, DateTime
+          object_of :last_payment_date, DateTime
+          object_of :last_payment_amount, Currency
+        end
+
+      end
+      class Note < Base
+
+        def self.load_members
+          object_of :note, String
+        end
+
+      end
+      class OverrideChargeModel < Base
+
+        def self.load_members
+          object_of :charge_id, String
+          object_of :amount, Currency
+        end
+
+      end
 
       constants.each do |data_type_klass|
         data_type_klass = const_get(data_type_klass)
