@@ -125,6 +125,8 @@ module PayPal::SDK
           object_of :payer_id, String
           object_of :state, String
           object_of :valid_until, String
+          object_of :create_time, String
+          object_of :update_time, String
           array_of  :links, Links
         end
 
