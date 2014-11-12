@@ -11,6 +11,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{The PayPal REST SDK provides Ruby APIs to create, process and manage payment.}
   gem.description   = %q{The PayPal REST SDK provides Ruby APIs to create, process and manage payment.}
   gem.homepage      = "https://developer.paypal.com"
+  
+  gem.license       = "PayPal SDK License"
 
   gem.files         = Dir["{bin,spec,lib}/**/*"] + ["Rakefile", "README.md", "Gemfile"]
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
