@@ -107,7 +107,7 @@ describe "Payments" do
 
         it "Create with empty values" do
           payment = Payment.new
-          payment.create.should be_false
+          expect(payment.create).to be_falsey
         end
 
         it "Find with invalid ID" do
@@ -137,12 +137,12 @@ describe "Payments" do
         end
       end
 
-      describe "instance method" do
+      # describe "instance method" do
 
-        it "Execute" do
-          pending "Test with capybara"
-        end
-      end
+      #   it "Execute" do
+      #     pending "Test with capybara"
+      #   end
+      # end
 
     end
 
@@ -277,8 +277,8 @@ describe "Payments" do
           "type" =>  "visa",
           "number" =>  "4417119669820331",
           "expire_month" =>  "11", "expire_year" =>  "2018" })
-        credit_card.create.should be_true
-        credit_card.delete.should be_true
+        expect(credit_card.create).to be_truthy
+        expect(credit_card.delete).to be_truthy
       end
 
       describe "Validation" do
