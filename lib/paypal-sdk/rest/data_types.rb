@@ -908,7 +908,7 @@ module PayPal::SDK
           if correlation_id != nil
             header = http_header
             header = header.merge({
-              "Paypal-Application-Correlation-Id" => correlation_id})
+              "PAYPAL-CLIENT-METADATA-ID" => correlation_id})
           end
           response = api.post(path, self.to_hash, http_header)
           self.merge!(response)
