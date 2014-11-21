@@ -159,7 +159,7 @@ describe "Payments" do
       end
 
       it "Create a payment" do
-        # put your Paypal-Application-Correlation-Id
+        # put your PAYPAL-CLIENT-METADATA-ID
         correlation_id = '' 
         @future_payment = FuturePayment.new(FuturePaymentAttributes.merge( :token => access_token ))
         @future_payment.create(correlation_id)
