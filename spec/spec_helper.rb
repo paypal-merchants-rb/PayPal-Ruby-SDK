@@ -20,5 +20,6 @@ http_log = File.open(File.expand_path('../log/http.log', __FILE__), "w")
 Payment.api.http.set_debug_output(http_log)
 
 RSpec.configure do |config|
+  config.filter_run_excluding :integration => false
   # config.include PayPal::SDK::REST::DataTypes
 end
