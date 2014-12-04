@@ -57,6 +57,7 @@ module PayPal::SDK
           object_of :state, String
           object_of :redirect_urls, RedirectUrls
           array_of  :links, Links
+          object_of :experience_profile_id, String
         end
 
         include RequestDataType
