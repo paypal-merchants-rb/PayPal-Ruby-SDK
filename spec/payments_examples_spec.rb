@@ -34,12 +34,12 @@ describe "Payments" do
             "currency" =>  "USD" },
           "description" =>  "This is the payment transaction description." } ] }
 
-  it "Validate user-agent" do
-    PayPal::SDK::REST::API.user_agent.should match "PayPalSDK/rest-sdk-ruby"
+  it "Validate user-agent", :unit => true do
+    PayPal::SDK::REST::API.user_agent.should match "PayPalSDK/PayPal-Ruby-SDK"
   end
 
   describe "Examples" do
-    describe "REST" do
+    describe "REST", :unit => true do
       it "Modifiy global configuration" do
         backup_config = PayPal::SDK::REST.api.config
         PayPal::SDK::REST.set_config( :client_id => "XYZ" )
@@ -49,9 +49,13 @@ describe "Payments" do
       end
     end
 
-    describe "Payment" do
+    describe "Payment", :integration => true do
       it "Create" do
         payment = Payment.new(PaymentAttributes)
+        puts payment.funding_instruments
+        api = API.new
+        puts "access token: ", api.token
+        puts "data to send: ", PaymentAttributes.to_json
         # Create
         payment.create
         payment.error.should be_nil
@@ -103,7 +107,7 @@ describe "Payments" do
         payment.error.should be_nil
       end
 
-      describe "Validation" do
+      describe "Validation", :integration => true do
 
         it "Create with empty values" do
           payment = Payment.new
@@ -146,7 +150,7 @@ describe "Payments" do
 
     end
 
-    describe "Future Payment" do
+    describe "Future Payment", :future_payment => true do
       access_token = nil
 
       it "Exchange Authorization Code for Refresh / Access Tokens" do
@@ -169,7 +173,7 @@ describe "Payments" do
 
     end
 
-    describe "Sale" do
+    describe "Sale", :integration => true do
       before :each do
         @payment = Payment.new(PaymentAttributes)
         @payment.create
@@ -195,7 +199,7 @@ describe "Payments" do
       end
     end
 
-    describe "Authorize" do
+    describe "Authorize", :integration => true do
       before :each do
         @payment = Payment.new(PaymentAttributes.merge( "intent" => "authorize" ))
         @payment.create
@@ -228,7 +232,7 @@ describe "Payments" do
       end
     end
 
-    describe "Capture" do
+    describe "Capture", :integration => true do
       before :each do
         @payment = Payment.new(PaymentAttributes.merge( "intent" => "authorize" ))
         @payment.create
@@ -250,7 +254,7 @@ describe "Payments" do
       end
     end
 
-    describe "CreditCard" do
+    describe "CreditCard", :integration => true do
       it "Create" do
         credit_card = CreditCard.new({
           "type" =>  "visa",
@@ -281,7 +285,7 @@ describe "Payments" do
         expect(credit_card.delete).to be_truthy
       end
 
-      describe "Validation" do
+      describe "Validation", :integration => true do
         it "Create" do
           credit_card = CreditCard.new({
             "type" =>  "visa",
