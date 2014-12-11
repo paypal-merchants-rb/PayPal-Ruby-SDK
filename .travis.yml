@@ -3,10 +3,7 @@ language: ruby
 rvm:
   - "2.0.0"
   - "1.9.3"
-  - "1.8.7"
-env:
-  - TEST_SUITE=unit
-script: "bundle exec rspec --tag $TEST_SUITE"
+script: "bundle exec rspec --tag unit"
 
 sudo: false
 
