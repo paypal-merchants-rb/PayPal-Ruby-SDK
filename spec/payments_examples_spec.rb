@@ -34,12 +34,12 @@ describe "Payments" do
             "currency" =>  "USD" },
           "description" =>  "This is the payment transaction description." } ] }
 
-  it "Validate user-agent" do
-    PayPal::SDK::REST::API.user_agent.should match "PayPalSDK/rest-sdk-ruby"
+  it "Validate user-agent", :unit => true do
+    PayPal::SDK::REST::API.user_agent.should match "PayPalSDK/PayPal-Ruby-SDK"
   end
 
   describe "Examples" do
-    describe "REST" do
+    describe "REST", :unit => true do
       it "Modifiy global configuration" do
         backup_config = PayPal::SDK::REST.api.config
         PayPal::SDK::REST.set_config( :client_id => "XYZ" )
@@ -49,7 +49,7 @@ describe "Payments" do
       end
     end
 
-    describe "Payment" do
+    describe "Payment", :integration => true do
       it "Create" do
         payment = Payment.new(PaymentAttributes)
         # Create
@@ -103,7 +103,7 @@ describe "Payments" do
         payment.error.should be_nil
       end
 
-      describe "Validation" do
+      describe "Validation", :integration => true do
 
         it "Create with empty values" do
           payment = Payment.new
@@ -146,7 +146,7 @@ describe "Payments" do
 
     end
 
-    describe "Future Payment" do
+    describe "Future Payment", :disabled => true do
       access_token = nil
 
       it "Exchange Authorization Code for Refresh / Access Tokens" do
@@ -169,7 +169,7 @@ describe "Payments" do
 
     end
 
-    describe "Sale" do
+    describe "Sale", :integration => true do
       before :each do
         @payment = Payment.new(PaymentAttributes)
         @payment.create
@@ -195,7 +195,49 @@ describe "Payments" do
       end
     end
 
-    describe "Authorize" do
+    describe "Order", :integration => true do
+      it "Find" do
+        order   = Order.find("O-2HT09787H36911800")
+        expect(order.error).to be_nil
+        expect(order).to_not be_nil
+      end
+
+      # The following Order tests must be ignored when run in an automated environment because executing an order
+      # will require approval via the executed payment's approval_url.
+
+      before :each, :disabled => true do
+        @payment = Payment.new(PaymentAttributes.merge( "intent" => "order" ))
+        payer_id = "" # replace with the actual payer_id
+        @payment.create
+        @payment.execute( :payer_id => payer_id )
+        expect(@payment.error).to be_nil
+      end
+
+      it "Authorize", :disabled => true do
+        auth = order.authorize
+        expect(auth.state).to eq("Pending")
+      end
+
+      it "Capture", :disabled => true do
+        capture = Capture.new({
+            "amount" => {
+              "currency" => "USD",
+              "total" => "1.00"
+            },
+            "is_final_capture" => true
+          })
+        order = order.capture(@capture)
+        expect(order.state).to eq("completed")
+      end
+
+      it "Void", :disabled => true do
+        order = order.void()
+        expect(order.state).to eq("voided")
+      end
+
+    end
+
+    describe "Authorize", :integration => true do
       before :each do
         @payment = Payment.new(PaymentAttributes.merge( "intent" => "authorize" ))
         @payment.create
@@ -223,12 +265,12 @@ describe "Payments" do
      it "Reauthorization" do
         authorize = Authorization.find("7GH53639GA425732B");
         authorize.amount = { :currency => "USD", :total => "1.00" }
-        authorize.reauthorize()
+        authorize.reauthorize
         authorize.error.should_not be_nil
       end
     end
 
-    describe "Capture" do
+    describe "Capture", :integration => true do
       before :each do
         @payment = Payment.new(PaymentAttributes.merge( "intent" => "authorize" ))
         @payment.create
@@ -250,7 +292,7 @@ describe "Payments" do
       end
     end
 
-    describe "CreditCard" do
+    describe "CreditCard", :integration => true do
       it "Create" do
         credit_card = CreditCard.new({
           "type" =>  "visa",
@@ -281,7 +323,7 @@ describe "Payments" do
         expect(credit_card.delete).to be_truthy
       end
 
-      describe "Validation" do
+      describe "Validation", :integration => true do
         it "Create" do
           credit_card = CreditCard.new({
             "type" =>  "visa",
