@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Invoice" do
+describe "Invoice", :integration => true do
 
   InvoiceAttributes = {
     "merchant_info" => {
@@ -22,17 +22,17 @@ describe "Invoice" do
 
   it "create invoice" do
     invoice = PayPal::SDK::REST::Invoice.new(InvoiceAttributes)
-    invoice.create.should be_true
+    expect(invoice.create).to be_truthy
   end
 
   it "list invoice" do
     history = PayPal::SDK::REST::Invoice.get_all( :total_count_required =>true )
-    history.total_count.should_not be_nil
+    expect(history.total_count).not_to be_nil
   end
 
   it "get invoice" do
     invoice = PayPal::SDK::REST::Invoice.find("INV2-P6VJ-36HG-BBVT-M2MA")
     invoice.should be_a PayPal::SDK::REST::Invoice
-    invoice.id.should eql "INV2-P6VJ-36HG-BBVT-M2MA"
+    expect(invoice.id).to eql "INV2-P6VJ-36HG-BBVT-M2MA"
   end
 end

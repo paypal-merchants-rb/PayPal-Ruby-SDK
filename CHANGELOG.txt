@@ -1,3 +1,8 @@
+Version 0.8.0 - December 11, 2014
+  * Added order/auth/capture support
+  * Grouped tests in 2 categories: unit tests, integration(functional) tests
+  * Disabled some tests that involve manual steps (e.g., log in to PayPal website)
+
 Version 0.7.3 - November 21, 2014
   * Changed Correlation ID header for future payment
   * Added data model for Order/Auth/Capture

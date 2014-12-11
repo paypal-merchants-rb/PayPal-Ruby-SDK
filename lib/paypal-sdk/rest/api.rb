@@ -12,7 +12,7 @@ module PayPal
 
         class << self
           def user_agent
-            @user_agent ||= "PayPalSDK/rest-sdk-ruby #{VERSION} (#{sdk_library_details})"
+            @user_agent ||= "PayPalSDK/PayPal-Ruby-SDK #{VERSION} (#{sdk_library_details})"
           end
         end
 
