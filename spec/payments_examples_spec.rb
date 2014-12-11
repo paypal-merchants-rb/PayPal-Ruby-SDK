@@ -52,10 +52,6 @@ describe "Payments" do
     describe "Payment", :integration => true do
       it "Create" do
         payment = Payment.new(PaymentAttributes)
-        puts payment.funding_instruments
-        api = API.new
-        puts "access token: ", api.token
-        puts "data to send: ", PaymentAttributes.to_json
         # Create
         payment.create
         payment.error.should be_nil
@@ -150,7 +146,7 @@ describe "Payments" do
 
     end
 
-    describe "Future Payment", :future_payment => true do
+    describe "Future Payment", :disabled => true do
       access_token = nil
 
       it "Exchange Authorization Code for Refresh / Access Tokens" do
@@ -199,6 +195,48 @@ describe "Payments" do
       end
     end
 
+    describe "Order", :integration => true do
+      it "Find" do
+        order   = Order.find("O-2HT09787H36911800")
+        expect(order.error).to be_nil
+        expect(order).to_not be_nil
+      end
+
+      # The following Order tests must be ignored when run in an automated environment because executing an order
+      # will require approval via the executed payment's approval_url.
+
+      before :each, :disabled => true do
+        @payment = Payment.new(PaymentAttributes.merge( "intent" => "order" ))
+        payer_id = "" # replace with the actual payer_id
+        @payment.create
+        @payment.execute( :payer_id => payer_id )
+        expect(@payment.error).to be_nil
+      end
+
+      it "Authorize", :disabled => true do
+        auth = order.authorize
+        expect(auth.state).to eq("Pending")
+      end
+
+      it "Capture", :disabled => true do
+        capture = Capture.new({
+            "amount" => {
+              "currency" => "USD",
+              "total" => "1.00"
+            },
+            "is_final_capture" => true
+          })
+        order = order.capture(@capture)
+        expect(order.state).to eq("completed")
+      end
+
+      it "Void", :disabled => true do
+        order = order.void()
+        expect(order.state).to eq("voided")
+      end
+
+    end
+
     describe "Authorize", :integration => true do
       before :each do
         @payment = Payment.new(PaymentAttributes.merge( "intent" => "authorize" ))
@@ -227,7 +265,7 @@ describe "Payments" do
      it "Reauthorization" do
         authorize = Authorization.find("7GH53639GA425732B");
         authorize.amount = { :currency => "USD", :total => "1.00" }
-        authorize.reauthorize()
+        authorize.reauthorize
         authorize.error.should_not be_nil
       end
     end
