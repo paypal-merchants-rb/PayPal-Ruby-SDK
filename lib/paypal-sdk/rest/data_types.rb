@@ -433,10 +433,12 @@ module PayPal::SDK
 
         def self.load_members
           object_of :line1, String
+          object_of :line2, String
           object_of :city, String
           object_of :state, String
           object_of :postal_code, String
           object_of :country_code, String
+          object_of :phone, String
           object_of :recipient_name, String
         end
 
