@@ -21,9 +21,9 @@ describe "WebProfiles" do
   }
 
   describe "Examples" do
-    describe "WebProfile" do, :integration => true do
+    describe "WebProfile", :integration => true do
       it "Create" do
-        webprofile = WebProfile.new(WebProfileAttributes)
+        $webprofile = WebProfile.new(WebProfileAttributes)
         webprofile.create
         expect(webprofile.name.to_s).to eq("YeowZa! T-Shirt Shop")
       end
@@ -55,6 +55,12 @@ describe "WebProfiles" do
         expect(webprofile.name).to eq("YeowZa! T-Shirt Shop-8871170336226187544")
       end
 
+      it "Delete" do
+        $webprofile.delete
+        webprofile = WebProfile.find($webprofile.id)
+        puts webprofile
+        expect(webprofile).to be None
+      end
     end
   end
 end

@@ -825,19 +825,13 @@ module PayPal::SDK
         end
 
       end
-      class PatchRequest < Base
-
-        def self.load_members
-	            object_of :op, String
-	            object_of :path, String
-        end
-
-      end
       class Patch < Base
 
         def self.load_members
 	            object_of :op, String
 	            object_of :path, String
+              object_of :value, String
+              object_of :from, String
         end
 
       end
@@ -1574,9 +1568,8 @@ module PayPal::SDK
         end
 
         def partial_update(patch_request)
-          patch_request = PatchRequest.new(patch_request) unless patch_request.is_a? PatchRequest
           path = "v1/payment-experience/web-profiles/#{self.id}"
-          response = api.patch(path, patch_request.to_hash, http_header)
+          response = api.patch(path, patch_request, http_header)
           self.merge!(response)
           success?
         end
