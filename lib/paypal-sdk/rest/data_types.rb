@@ -1592,7 +1592,8 @@ module PayPal::SDK
         class << self
           def get_list(options = {})
             path = "v1/payment-experience/web-profiles/"
-            WebProfileList.new(api.get(path, options))
+            l = api.get(path, options)
+            l.each { |x| WebProfileList.new(x) }
           end
         end
 

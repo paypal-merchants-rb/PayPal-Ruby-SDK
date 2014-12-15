@@ -1,0 +1,60 @@
+require 'spec_helper'
+
+describe "WebProfiles" do
+
+  WebProfileAttributes = {
+    "name" => "YeowZa! T-Shirt Shop",
+    "presentation" => {
+        "brand_name" => "YeowZa! Paypal",
+        "logo_image" => "http://www.yeowza.com",
+        "locale_code" => "US"
+    },
+    "input_fields" => {
+        "allow_note" => true,
+        "no_shipping" => 0,
+        "address_override" => 1
+    },
+    "flow_config" => {
+        "landing_page_type" => "billing",
+        "bank_txn_pending_url" => "http://www.yeowza.com"
+    }
+  }
+
+  describe "Examples" do
+    describe "WebProfile" do, :integration => true do
+      it "Create" do
+        webprofile = WebProfile.new(WebProfileAttributes)
+        webprofile.create
+        expect(webprofile.name.to_s).to eq("YeowZa! T-Shirt Shop")
+      end
+
+      it "List" do
+        list = WebProfile.get_list
+        expect(list.size).to be > 1
+      end
+
+      it "Retrieve" do
+        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
+        expect(webprofile.name.to_s).to eq("YeowZa! T-Shirt Shop-8871170336226187544")
+      end
+
+      it "Update" do
+        # append "-test" to web profile name
+        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
+        webprofile.name += "-test"
+        webprofile.update
+
+        # check whether the name was updated
+        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
+        expect(webprofile.name).to eq("YeowZa! T-Shirt Shop-8871170336226187544-test")
+        webprofile.name = "YeowZa! T-Shirt Shop-8871170336226187544"
+        webprofile.update
+
+        # revert updated profile name for next test run
+        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
+        expect(webprofile.name).to eq("YeowZa! T-Shirt Shop-8871170336226187544")
+      end
+
+    end
+  end
+end
