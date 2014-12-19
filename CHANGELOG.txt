@@ -1,3 +1,10 @@
+Version 0.9.1 - December 19, 2014
+  * Separated out extended data types (future payment)
+
+Version 0.9.0 - December 15, 2014
+  * Added payment-experience (web profiles) support
+  * Added test execution guide
+
 Version 0.8.0 - December 11, 2014
   * Added order/auth/capture support
   * Grouped tests in 2 categories: unit tests, integration(functional) tests
