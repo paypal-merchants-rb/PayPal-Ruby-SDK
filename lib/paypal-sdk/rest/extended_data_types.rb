@@ -2,7 +2,6 @@ module PayPal::SDK
   module REST
     module DataTypes
       class FuturePayment < Payment
-
         def self.exch_token(auth_code)
           if auth_code
             token = PayPal::SDK::Core::API::REST.new.token(auth_code)
@@ -21,7 +20,6 @@ module PayPal::SDK
           self.merge!(response)
           success?
         end
-
       end
     end
   end

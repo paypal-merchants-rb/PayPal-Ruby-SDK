@@ -1,9 +1,7 @@
 module PayPal
   module SDK
     module REST
-
       module RequestDataType
-
         # Get a local API object or Class level API object
         def api
           @api || self.class.api
@@ -50,7 +48,6 @@ module PayPal
           end
         end
       end
-
     end
   end
 end
