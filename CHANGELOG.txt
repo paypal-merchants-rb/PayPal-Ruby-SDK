@@ -1,3 +1,6 @@
+Version 0.10.0 - January 7, 2014
+  * Added subscription (billing plan and agreement) support
+
 Version 0.9.1 - December 19, 2014
   * Separated out extended data types (future payment)
 
