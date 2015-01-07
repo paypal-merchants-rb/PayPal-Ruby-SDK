@@ -832,8 +832,14 @@ module PayPal::SDK
         def self.load_members
 	            object_of :op, String
 	            object_of :path, String
-              object_of :value, String
+              object_of :value, Object
               object_of :from, String
+        end
+
+      end
+      class PatchRequest < Base
+
+        def self.load_members
         end
 
       end
@@ -1273,10 +1279,11 @@ module PayPal::SDK
           success?
         end
 
-        def update(patch_request)
-          patch_request = PatchRequest.new(patch_request) unless patch_request.is_a? PatchRequest
+        def update(patch)
+          patch = Patch.new(patch) unless patch.is_a? Patch
+          patch_request = Array.new(1, patch.to_hash)
           path = "v1/payments/billing-plans/#{self.id}"
-          response = api.patch(path, patch_request.to_hash, http_header)
+          response = api.patch(path, patch_request, http_header)
           self.merge!(response)
           success?
         end
@@ -1412,9 +1419,11 @@ module PayPal::SDK
 
         def self.load_members
 	            object_of :id, String
+              object_of :state, String
 	            object_of :name, String
 	            object_of :description, String
 	            object_of :start_date, String
+              object_of :agreement_details, AgreementDetails
 	            object_of :payer, Payer
 	            object_of :shipping_address, Address
 	            object_of :override_merchant_preferences, MerchantPreferences
@@ -1423,6 +1432,7 @@ module PayPal::SDK
 	            object_of :create_time, String
 	            object_of :update_time, String
 	          array_of  :links, Links
+              object_of :token, String
         end
 
         include RequestDataType
@@ -1431,11 +1441,13 @@ module PayPal::SDK
           path = "v1/payments/billing-agreements/"
           response = api.post(path, self.to_hash, http_header)
           self.merge!(response)
+          self.get_token(self.links)
           success?
         end
 
         def execute()
-          path = "v1/payments/billing-agreements/#{self.id}/agreement-execute"
+          path = "v1/payments/billing-agreements/#{self.token}/agreement-execute"
+          puts path
           response = api.post(path, {}, http_header)
           self.merge!(response)
           success?
@@ -1449,10 +1461,10 @@ module PayPal::SDK
           end
         end
 
-        def update(patch_request)
-          patch_request = PatchRequest.new(patch_request) unless patch_request.is_a? PatchRequest
+        def update(patch)
+          patch = Patch.new(patch) unless patch.is_a? Patch
           path = "v1/payments/billing-agreements/#{self.id}"
-          response = api.patch(path, patch_request.to_hash, http_header)
+          response = api.patch(path, [patch.to_hash], http_header)
           self.merge!(response)
           success?
         end
@@ -1498,12 +1510,35 @@ module PayPal::SDK
         end
 
         class << self
-          def transactions(options = {})
-            path = "v1/payments/billing-agreements/{agreement-id}/transactions"
+          def transactions(agreement_id, start_date, end_date, options = {})
+            path = "v1/payments/billing-agreements/#{agreement_id}/transactions" #?start-date=#{start_date}&end-date=#{end_date}"
+            options = { :start_date => start_date, :end_date => end_date }
             AgreementTransactions.new(api.get(path, options))
           end
         end
 
+        def get_token(links)
+          links.each do |link|
+            if link.rel.eql? "approval_url"
+              uri = URI.parse(link.href)
+              params = CGI.parse(uri.query)
+              self.token = params['token'][0]
+              return
+            end
+          end
+        end
+      end
+      class AgreementDetails < Base
+        def self.load_members
+          object_of :outstanding_balance, Currency
+          object_of :cycles_remaining, String
+          object_of :cycles_completed, String
+          object_of :next_billing_date, String
+          object_of :last_payment_date, String
+          object_of :last_payment_amount, Currency
+          object_of :final_payment_date, String
+          object_of :failed_payment_count, String
+        end
       end
       class OverrideChargeModel < Base
 
