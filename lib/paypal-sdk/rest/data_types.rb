@@ -464,6 +464,7 @@ module PayPal::SDK
           object_of :subtotal, String
           object_of :shipping, String
           object_of :tax, String
+          object_of :fee, String
           object_of :handling_fee, String
           object_of :shipping_discount, String
           object_of :insurance, String
