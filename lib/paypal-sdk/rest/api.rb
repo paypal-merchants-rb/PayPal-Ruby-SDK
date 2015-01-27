@@ -15,7 +15,6 @@ module PayPal
             @user_agent ||= "PayPalSDK/PayPal-Ruby-SDK #{VERSION} (#{sdk_library_details})"
           end
         end
-
       end
     end
   end

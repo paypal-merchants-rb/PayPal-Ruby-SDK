@@ -1,20 +1,11 @@
-module PayPal
-  module SDK
-    module REST
+module PayPal::SDK
+  module Core
+    module OpenIDConnect
       module RequestDataType
+
         # Get a local API object or Class level API object
         def api
           @api || self.class.api
-        end
-
-        # Convert Hash object to ErrorHash object
-        def error=(hash)
-          @error =
-            if hash.is_a? Hash
-              ErrorHash.convert(hash)
-            else
-              hash
-            end
         end
 
         class << self
@@ -22,7 +13,15 @@ module PayPal
           # === Example
           #   RequestDataType.api
           def api
-            @api ||= API.new
+            @api ||= API.new({})
+          end
+
+          def client_id
+            api.config.openid_client_id || api.config.client_id
+          end
+
+          def client_secret
+            api.config.openid_client_secret || api.config.client_secret
           end
 
           # Setter for RequestDataType.api

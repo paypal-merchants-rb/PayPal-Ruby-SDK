@@ -1,3 +1,6 @@
+Version 1.0.0 - January 27, 2014
+  * Merged sdk-core-ruby with paypal-ruby-sdk
+
 Version 0.10.0 - January 7, 2014
   * Added subscription (billing plan and agreement) support
 

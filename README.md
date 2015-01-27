@@ -69,6 +69,50 @@ PayPal::SDK.configure(
   :ssl_options => { } )
 ```
 
+Logger configuration:
+
+```ruby
+PayPal::SDK.logger = Logger.new(STDERR)
+```
+
+
+### OpenIDConnect Samples
+
+```ruby
+require 'paypal-sdk-rest'
+
+# Update client_id, client_secret and redirect_uri
+PayPal::SDK.configure({
+  :openid_client_id     => "client_id",
+  :openid_client_secret => "client_secret",
+  :openid_redirect_uri  => "http://google.com"
+})
+include PayPal::SDK::OpenIDConnect
+
+# Generate URL to Get Authorize code
+puts Tokeninfo.authorize_url( :scope => "openid profile" )
+
+# Create tokeninfo by using AuthorizeCode from redirect_uri
+tokeninfo = Tokeninfo.create("Replace with Authorize Code received on redirect_uri")
+puts tokeninfo.to_hash
+
+# Refresh tokeninfo object
+tokeninfo = tokeninfo.refresh
+puts tokeninfo.to_hash
+
+# Create tokeninfo by using refresh token
+tokeninfo = Tokeninfo.refresh("Replace with refresh_token")
+puts tokeninfo.to_hash
+
+# Get Userinfo
+userinfo = tokeninfo.userinfo
+puts userinfo.to_hash
+
+# Get logout url
+put tokeninfo.logout_url
+```
+
+
 ## Create Payment
 
 ```ruby

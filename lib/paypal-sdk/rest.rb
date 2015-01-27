@@ -25,6 +25,7 @@ module PayPal
         def new(*args)
           API.new(*args)
         end
+
         include ClassMethods
 
         def included(klass)
