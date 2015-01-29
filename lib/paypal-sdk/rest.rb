@@ -5,7 +5,6 @@ module PayPal
     module REST
       autoload :VERSION,   "paypal-sdk/rest/version"
       autoload :DataTypes, "paypal-sdk/rest/data_types"
-      autoload :ExtendedDataTypes, "paypal-sdk/rest/extended_data_types"
       autoload :API,       "paypal-sdk/rest/api"
       autoload :RequestDataType,  "paypal-sdk/rest/request_data_type"
       autoload :SetAPI,           "paypal-sdk/rest/set_api"
