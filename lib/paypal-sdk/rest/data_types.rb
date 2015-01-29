@@ -36,11 +36,16 @@ module PayPal::SDK
         end
       end
 
+
       class FuturePayment < Payment
+
+        include PayPal::SDK::OpenIDConnect
+
         def self.exch_token(auth_code)
           if auth_code
-            token = PayPal::SDK::Core::API::REST.new.token(auth_code)
-            token
+            tokeninfo = Tokeninfo.create(auth_code)
+            puts "tokeninfo=", tokeninfo.to_hash
+            tokeninfo
           end
         end
 
@@ -56,7 +61,7 @@ module PayPal::SDK
           success?
         end
       end
-      
+
       class Payment < Base
         def self.load_members
           object_of :id, String
