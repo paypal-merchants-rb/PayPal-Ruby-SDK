@@ -474,6 +474,9 @@ module PayPal::SDK
 
       class Payee < Base
         def self.load_members
+          object_of :email, String
+          object_of :merchant_id, String
+          object_of :phone, Phone
         end
       end
 
