@@ -91,9 +91,9 @@ module PayPal::SDK::Core
       # * <tt>action</tt> -- Action to perform
       # * <tt>params</tt> -- (Optional) Parameters for the action
       # * <tt>initheader</tt> -- (Optional) HTTP header
-      def post(action, params = {}, header = {})
+      def post(action, params = {}, header = {}, query = {})
         action, params, header = "", action, params if action.is_a? Hash
-        api_call(:method => :post, :action => action, :params => params, :header => header)
+        api_call(:method => :post, :action => action, :query => query, :params => params, :header => header)
       end
       alias_method :request, :post
 

@@ -732,6 +732,7 @@ module PayPal::SDK
           object_of :message, String
           object_of :information_link, String
           array_of  :details, ErrorDetails
+          array_of  :links, Links
         end
       end
 
@@ -936,6 +937,104 @@ module PayPal::SDK
         end
       end
 
+      class Payout < Base
+
+        def self.load_members
+            object_of :sender_batch_header, PayoutSenderBatchHeader
+            array_of  :items, PayoutItem
+        end
+
+        include RequestDataType
+
+        def create(sync_mode = false)
+          path = "v1/payments/payouts"
+          options = { :sync_mode => sync_mode }
+          response = api.post(path, self.to_hash, http_header, options)
+          PayoutBatch.new(response)
+        end
+
+        class << self
+          def get(payout_batch_id, options = {})
+            raise ArgumentError.new("id required") if payout_batch_id.to_s.strip.empty?
+            path = "v1/payments/payouts/#{payout_batch_id}"
+            PayoutBatch.new(api.get(path, options))
+          end
+        end
+      end
+      class PayoutItem < Base
+
+        def self.load_members
+              object_of :recipient_type, String
+              object_of :amount, Currency
+              object_of :note, String
+              object_of :receiver, String
+              object_of :sender_item_id, String
+        end
+
+        include RequestDataType
+
+        class << self
+          def get(payout_item_id)
+            raise ArgumentError.new("payout_item_id required") if payout_item_id.to_s.strip.empty?
+            path = "v1/payments/payouts-item/#{payout_item_id}"
+            PayoutItemDetails.new(api.get(path))
+          end
+          def cancel(payout_item_id)
+            raise ArgumentError.new("payout_item_id required") if payout_item_id.to_s.strip.empty?
+            path = "v1/payments/payouts-item/#{payout_item_id}/cancel"
+            PayoutItemDetails.new(api.post(path))
+          end
+        end
+
+      end
+      class PayoutItemDetails < Base
+
+        def self.load_members
+              object_of :payout_item_id, String
+              object_of :transaction_id, String
+              object_of :transaction_status, String
+              object_of :payout_item_fee, Currency
+              object_of :payout_batch_id, String
+              object_of :sender_batch_id, String
+              object_of :payout_item, PayoutItem
+              object_of :time_processed, String
+              object_of :errors, Error
+              array_of  :links, Links
+        end
+
+      end
+      class PayoutBatch < Base
+
+        def self.load_members
+            object_of :batch_header, PayoutBatchHeader
+            array_of  :items, PayoutItemDetails
+            array_of  :links, Links
+        end
+
+      end
+      class PayoutBatchHeader < Base
+
+        def self.load_members
+              object_of :payout_batch_id, String
+              object_of :batch_status, String
+              object_of :time_created, String
+              object_of :time_completed, String
+              object_of :sender_batch_header, PayoutSenderBatchHeader
+              object_of :amount, Currency
+              object_of :fees, Currency
+              object_of :errors, Error
+        end
+
+      end
+      class PayoutSenderBatchHeader < Base
+
+        def self.load_members
+              object_of :sender_batch_id, String
+              object_of :email_subject, String
+              object_of :recipient_type, String
+        end
+
+      end
       class Invoices < Base
         def self.load_members
           object_of :total_count, Integer
