@@ -87,7 +87,7 @@ describe PayPal::SDK::Core::API::REST do
     end
   end
 
-  describe "Success request" do
+  describe "Success request", :integration => true do
 
     it "Create Payment" do
       response = @api.post("payment", {
