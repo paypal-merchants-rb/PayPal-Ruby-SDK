@@ -16,11 +16,11 @@
       	background: url('images/edt-format-source-button.png') no-repeat left
       		top;
       }
-      
+
       .header {
         font-weight: bold;
       }
-	  
+
       .header td {
         padding: 10px 0px 10px 0px;
       }
@@ -90,6 +90,48 @@
           %td
             %a.source.imagelink{:href => "sale/refund.html"} Source
         %tr{:valign => "top", :class => "header"}
+          %td Payouts
+        %tr
+          %td Create Single Payout
+          %td
+          %td
+            %a.execute.imagelink{:href => "payouts/createSync"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payouts/createSync.html"} Source
+        %tr
+          %td Create Batch Payout
+          %td
+          %td
+            %a.execute.imagelink{:href => "payouts/create"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payouts/create.html"} Source
+        %tr
+          %td Get Payout Batch Status
+          %td
+          %td
+            %a.execute.imagelink{:href => "payouts/get_batch_status"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payouts/get_batch_status.html"} Source
+        %tr
+          %td Get Payout Item Status
+          %td
+          %td
+            %a.execute.imagelink{:href => "payouts/get_item_status"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payouts/get_item_status.html"} Source
+        %tr
+          %td Cancel Unclaimed Payout
+          %td
+          %td
+            %a.execute.imagelink{:href => "payouts/cancel"} Execute
+          %td
+          %td
+            %a.source.imagelink{:href => "payouts/cancel.html"} Source
+        %tr{:valign => "top", :class => "header"}
           %td Vault
         %tr
           %td Save a credit card
@@ -148,7 +190,7 @@
             %a.execute.imagelink{:href => "authorization/void"} Execute
           %td
           %td
-            %a.source.imagelink{:href => "authorization/void.html"} Source  
+            %a.source.imagelink{:href => "authorization/void.html"} Source
         %tr
           %td Get captured payment details
           %td
@@ -156,7 +198,7 @@
             %a.execute.imagelink{:href => "capture/find"} Execute
           %td
           %td
-            %a.source.imagelink{:href => "capture/find.html"} Source  
+            %a.source.imagelink{:href => "capture/find.html"} Source
         %tr
           %td Refund captured payment
           %td
@@ -164,4 +206,4 @@
             %a.execute.imagelink{:href => "capture/refund"} Execute
           %td
           %td
-            %a.source.imagelink{:href => "capture/refund.html"} Source  
+            %a.source.imagelink{:href => "capture/refund.html"} Source
