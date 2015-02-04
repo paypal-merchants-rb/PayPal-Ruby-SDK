@@ -80,12 +80,50 @@ class App < Sinatra::Application
       :header => "Retrieving credit card: #{@credit_card.id}",
       :display_hash => @credit_card }
   end
-  
+
   get "/credit_card/delete" do
       @credit_card = RunSample.run("credit_card/delete.rb", "@credit_card")
       haml :display_hash, :locals => {
         :header => "Deleted credit card: #{@credit_card.id}",
         :display_hash => @credit_card }
+  end
+
+  get "/payouts/create" do
+    @payout_batch = RunSample.run("payouts/create.rb", "@payout_batch")
+    haml :display_hash, :locals => {
+                          :header => "Created a Batch Payout: #{@payout_batch.batch_header.payout_batch_id}",
+                          :display_hash => @payout_batch }
+  end
+
+  get "/payouts/createSync" do
+    @payout_batch = RunSample.run("payouts/createSync.rb", "@payout_batch")
+    haml :display_hash, :locals => {
+                          :header => "Created a Synchronous Payout: #{@payout_batch.batch_header.payout_batch_id}",
+                          :display_hash => @payout_batch
+                      }
+  end
+
+  get "/payouts/get_batch_status" do
+    @payout_batch = RunSample.run("payouts/get_batch_status.rb", "@payout_batch")
+    haml :display_hash, :locals => {
+                          :header => "Got Batch Status of: #{@payout_batch.batch_header.payout_batch_id}",
+                          :display_hash => @payout_batch
+                      }
+  end
+
+  get "/payouts/get_item_status" do
+    @payout_item_details = RunSample.run("payouts/get_item_status.rb", "@payout_item_details")
+    haml :display_hash, :locals => {
+                          :header => "Got Item Status of: #{@payout_item_details.payout_item_id}",
+                          :display_hash => @payout_item_details
+                      }
+  end
+  get "/payouts/cancel" do
+    @payout_item_detail = RunSample.run("payouts/cancel.rb", "@payout_item_detail")
+    haml :display_hash, :locals => {
+    :header => "Cancel Unclaimed Payouts of #{@payout_item_detail.payout_item_id}",
+        :display_hash => @payout_item_detail
+    }
   end
 
   get "/credit_card/create" do
@@ -94,42 +132,42 @@ class App < Sinatra::Application
       :header => "Saved a new credit card: #{@credit_card.id}",
       :display_hash => @credit_card }
   end
-  
+
   get "/authorization/reauthorize" do
     @authorization = RunSample.run("authorization/reauthorize.rb", "@authorization")
     haml :display_hash, :locals => {
       :header => "Reauthorized an authorized payment: #{@authorization.id}",
       :display_hash => @authorization }
   end
-  
+
   get "/authorization/find" do
     @authorization = RunSample.run("authorization/find.rb", "@authorization")
     haml :display_hash, :locals => {
       :header => "Retrieving an authorization payment: #{@authorization.id}",
       :display_hash => @authorization }
   end
-  
+
   get "/authorization/void" do
     @authorization = RunSample.run("authorization/void.rb", "@authorization")
     haml :display_hash, :locals => {
       :header => "Void an authorized payment: #{@authorization.id}",
       :display_hash => @authorization }
   end
-    
+
   get "/authorization/capture" do
     @capture = RunSample.run("authorization/capture.rb", "@capture")
     haml :display_hash, :locals => {
       :header => "Captured an authorized payment: #{@capture.id}",
       :display_hash => @capture }
   end
-   
+
   get "/capture/find" do
     @capture = RunSample.run("capture/find.rb", "@capture")
     haml :display_hash, :locals => {
       :header => "Retrieving Captured Payment: #{@capture.id}",
       :display_hash => @capture }
   end
-     
+
   get "/capture/refund" do
     @refund = RunSample.run("capture/refund.rb", "@refund")
     haml :display_hash, :locals => {
@@ -137,7 +175,7 @@ class App < Sinatra::Application
       :display_hash => @refund }
   end
 
-  Dir["payment/*", "sale/*", "credit_card/*", "authorization/*", "capture/*"].each do |file_name|
+  Dir["payment/*", "sale/*", "credit_card/*", "authorization/*", "capture/*", "payouts/*"].each do |file_name|
     get "/#{file_name.sub(/rb$/, "html")}" do
       CodeRay.scan(File.read(file_name), "ruby").page :title => "Source: #{file_name}"
     end
