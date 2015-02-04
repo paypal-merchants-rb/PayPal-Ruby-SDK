@@ -36,32 +36,6 @@ module PayPal::SDK
         end
       end
 
-
-      class FuturePayment < Payment
-
-        include PayPal::SDK::OpenIDConnect
-
-        def self.exch_token(auth_code)
-          if auth_code
-            tokeninfo = Tokeninfo.create(auth_code)
-            puts "tokeninfo=", tokeninfo.to_hash
-            tokeninfo
-          end
-        end
-
-        def create(correlation_id=nil)
-          path = "v1/payments/payment"
-          if correlation_id != nil
-            header = http_header
-            header = header.merge({
-              "PAYPAL-CLIENT-METADATA-ID" => correlation_id})
-          end
-          response = api.post(path, self.to_hash, http_header)
-          self.merge!(response)
-          success?
-        end
-      end
-
       class Payment < Base
         def self.load_members
           object_of :id, String
@@ -114,6 +88,32 @@ module PayPal::SDK
             path = "v1/payments/payment"
             PaymentHistory.new(api.get(path, options))
           end
+        end
+      end
+
+
+      class FuturePayment < Payment
+
+        include PayPal::SDK::OpenIDConnect
+
+        def self.exch_token(auth_code)
+          if auth_code
+            tokeninfo = Tokeninfo.create(auth_code)
+            puts "tokeninfo=", tokeninfo.to_hash
+            tokeninfo
+          end
+        end
+
+        def create(correlation_id=nil)
+          path = "v1/payments/payment"
+          if correlation_id != nil
+            header = http_header
+            header = header.merge({
+              "PAYPAL-CLIENT-METADATA-ID" => correlation_id})
+          end
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
         end
       end
 
