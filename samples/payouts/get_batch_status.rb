@@ -8,7 +8,7 @@ begin
   @payout_batch = RunSample.run('payouts/create.rb', '@payout_batch')
 
   # Get Payout Batch Status
-  @payout_batch= Payout.get(@payout_batch.batch_header.payout_batch_id);
+  @payout_batch= Payout.get(@payout_batch.batch_header.payout_batch_id)
   logger.info "Got Payout Batch Status[#{@payout_batch.batch_header.payout_batch_id}]"
 
 rescue ResourceNotFound => err
