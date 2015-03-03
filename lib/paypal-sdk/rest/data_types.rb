@@ -41,6 +41,7 @@ module PayPal::SDK
           object_of :id, String
           object_of :intent, String
           object_of :payer, Payer
+          object_of :payee, Payee
           object_of :cart, String
           array_of  :transactions, Transaction
           array_of  :failed_transactions, Error
@@ -121,6 +122,8 @@ module PayPal::SDK
         def self.load_members
           object_of :payment_method, String
           object_of :status, String
+          object_of :account_type, String
+          object_of :account_age, String
           array_of  :funding_instruments, FundingInstrument
           object_of :funding_option_id, String
           object_of :funding_option, FundingOption
@@ -197,6 +200,7 @@ module PayPal::SDK
           object_of :state, String
           object_of :phone, String
           object_of :normalization_status, String
+          object_of :status, String
         end
       end
 
@@ -417,14 +421,18 @@ module PayPal::SDK
           object_of :email, String
           object_of :external_remember_me_id, String
           object_of :buyer_account_number, String
+          object_of :salutation, String
           object_of :first_name, String
+          object_of :middle_name, String
           object_of :last_name, String
+          object_of :suffix, String
           object_of :payer_id, String
           object_of :phone, String
           object_of :phone_type, String
           object_of :birth_date, String
           object_of :tax_id, String
           object_of :tax_id_type, String
+          object_of :country_code, String
           object_of :billing_address, Address
           object_of :shipping_address, ShippingAddress
         end
@@ -458,6 +466,7 @@ module PayPal::SDK
           object_of :custom, String
           object_of :soft_descriptor, String
           object_of :item_list, ItemList
+          object_of :purchase_unit_reference_id, String
           array_of  :related_resources, RelatedResources
           array_of  :transactions, Transaction
         end
@@ -474,6 +483,8 @@ module PayPal::SDK
           object_of :soft_descriptor, String
           object_of :payment_options, PaymentOptions
           object_of :item_list, ItemList
+          object_of :notify_url, String
+          object_of :order_url, String
         end
       end
 
@@ -531,8 +542,19 @@ module PayPal::SDK
           object_of :sku, String
           object_of :url, String
           object_of :category, String
+          object_of :weight, Measurement
+          object_of :length, Measurement
+          object_of :height, Measurement
+          object_of :width, Measurement
           array_of  :supplementary_data, NameValuePair
           array_of  :postback_data, NameValuePair
+        end
+      end
+
+      class Measurement < Base
+        def self.load_members
+          object_of :value, String
+          object_of :unit, String
         end
       end
 
@@ -547,6 +569,7 @@ module PayPal::SDK
         def self.load_members
           array_of  :items, Item
           object_of :shipping_address, ShippingAddress
+          object_of :shipping_method, String
         end
       end
 
@@ -571,6 +594,13 @@ module PayPal::SDK
           object_of :protection_eligibility, String
           object_of :protection_eligibility_type, String
           object_of :clearing_time, String
+          object_of :recipient_fund_status, String
+          object_of :hold_reason, String
+          object_of :transaction_fee, Currency
+          object_of :receivable_amount, Currency
+          object_of :exchange_rate, String
+          object_of :fmf_details, FmfDetails
+          object_of :receipt_id, String
           object_of :parent_payment, String
           object_of :create_time, String
           object_of :update_time, String
@@ -607,8 +637,10 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :payment_mode, String
           object_of :state, String
+          object_of :reason_code, String
           object_of :protection_eligibility, String
           object_of :protection_eligibility_type, String
+          object_of :fmf_details, FmfDetails
           object_of :parent_payment, String
           object_of :valid_until, String
           object_of :create_time, String
@@ -655,10 +687,12 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :payment_mode, String
           object_of :state, String
+          object_of :reason_code, String
           object_of :pending_reason, String
           object_of :"protection-eligibility", String
           object_of :"protection-eligibility_type", String
           object_of :parent_payment, String
+          object_of :fmf_details, FmfDetails
           object_of :create_time, String
           object_of :update_time, String
           array_of  :links, Links
@@ -702,6 +736,7 @@ module PayPal::SDK
           object_of :is_final_capture, Boolean
           object_of :state, String
           object_of :parent_payment, String
+          object_of :transaction_fee, Currency
           object_of :create_time, String
           object_of :update_time, String
           array_of  :links, Links
@@ -754,8 +789,10 @@ module PayPal::SDK
       class Error < Base
         def self.load_members
           object_of :name, String
+          object_of :purchase_unit_reference_id, String
           object_of :debug_id, String
           object_of :message, String
+          object_of :code, String
           object_of :information_link, String
           array_of  :details, ErrorDetails
           array_of  :links, Links
@@ -766,6 +803,17 @@ module PayPal::SDK
         def self.load_members
           object_of :field, String
           object_of :issue, String
+          object_of :purchase_unit_reference_id, String
+          object_of :code, String
+        end
+      end
+
+      class FmfDetails < Base
+        def self.load_members
+          object_of :filter_type, String
+          object_of :filter_id, String
+          object_of :name, String
+          object_of :description, String
         end
       end
 
