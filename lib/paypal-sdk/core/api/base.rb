@@ -154,7 +154,7 @@ module PayPal::SDK::Core
         end
 
         def user_agent
-          @user_agent ||= "PayPalSDK/rest-sdk-ruby #{VERSION} (#{sdk_library_details})"
+          @user_agent ||= "PayPalSDK/rest-sdk-ruby #{PayPal::SDK::REST::VERSION} (#{sdk_library_details})"
         end
       end
     end
