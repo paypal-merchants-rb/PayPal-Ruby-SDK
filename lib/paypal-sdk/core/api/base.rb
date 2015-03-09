@@ -1,3 +1,5 @@
+require 'paypal-sdk/rest/version'
+
 module PayPal::SDK::Core
 
   module API
