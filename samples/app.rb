@@ -116,6 +116,70 @@ class App < Sinatra::Application
     }
   end
 
+  get "/notifications/get_webhooks_event_types" do
+    @webhooks_event_types = RunSample.run("notifications/get_webhooks_event_types.rb", "@webhooks_event_types")
+    haml :display_hash, :locals => {
+      :header => "Got Webhook Event Types",
+        :display_hash => @webhooks_event_types
+    }
+  end
+
+  get "/notifications/create" do
+    @webhook = RunSample.run("notifications/create.rb", "@webhook")
+    haml :display_hash, :locals => {
+      :header => "Created Webhook #{@webhook.id}",
+        :display_hash => @webhook
+    }
+  end
+
+  get "/notifications/get_webhook" do
+    @webhook = RunSample.run("notifications/get_webhook.rb", "@webhook")
+    haml :display_hash, :locals => {
+      :header => "Got Webhook #{@webhook.id}",
+        :display_hash => @webhook
+    }
+  end
+
+  get "/notifications/update_webhook" do
+    @webhook = RunSample.run("notifications/update_webhook.rb", "@webhook")
+    haml :display_hash, :locals => {
+      :header => "Updated Webhook #{@webhook.id}",
+        :display_hash => @webhook
+    }
+  end
+
+  get "/notifications/get_subscribed_webhooks_event_types" do
+    @webhooks_event_types = RunSample.run("notifications/get_subscribed_webhooks_event_types.rb", "@webhook_event_types")
+    haml :display_hash, :locals => {
+      :header => "Got webhook subscribed event types ",
+        :display_hash => @webhooks_event_types
+    }
+  end
+
+  get "/notifications/get_all_webhooks" do
+    @webhooks_list = RunSample.run("notifications/get_all_webhooks.rb", "@webhooks_list")
+    haml :display_hash, :locals => {
+      :header => "Got all webhooks ",
+        :display_hash => @webhooks_list
+    }
+  end
+
+  get "/notifications/delete_webhook" do
+    @webhook = RunSample.run("notifications/delete_webhook.rb", "@webhook")
+    haml :display_hash, :locals => {
+      :header => "Deleted webhook ",
+        :display_hash => @webhook
+    }
+  end
+
+  get "/notifications/simulate_event" do
+    @resource = RunSample.run("notifications/simulate_event.rb", "@resource")
+    haml :display_hash, :locals => {
+      :header => "Simulated webhook event, got back resource ",
+        :display_hash => @resource
+    }
+  end
+
   get "/credit_card/create" do
     @credit_card = RunSample.run("credit_card/create.rb", "@credit_card")
     haml :display_hash, :locals => {
@@ -165,7 +229,7 @@ class App < Sinatra::Application
       :display_hash => @refund }
   end
 
-  Dir["payment/*", "sale/*", "credit_card/*", "authorization/*", "capture/*", "payouts/*"].each do |file_name|
+  Dir["payment/*", "sale/*", "credit_card/*", "authorization/*", "capture/*", "payouts/*", "notifications/*"].each do |file_name|
     get "/#{file_name.sub(/rb$/, "html")}" do
       CodeRay.scan(File.read(file_name), "ruby").page :title => "Source: #{file_name}"
     end
