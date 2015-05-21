@@ -1,4 +1,5 @@
 require 'multi_json'
+require 'paypal-sdk/rest/version'
 
 module PayPal::SDK
   module Core
@@ -39,7 +40,7 @@ module PayPal::SDK
 
         class << self
           def user_agent
-            @user_agent ||= "PayPalSDK/openid-connect-ruby #{VERSION} (#{sdk_library_details})"
+            @user_agent ||= "PayPalSDK/openid-connect-ruby #{PayPal::SDK::REST::VERSION} (#{sdk_library_details})"
           end
         end
 

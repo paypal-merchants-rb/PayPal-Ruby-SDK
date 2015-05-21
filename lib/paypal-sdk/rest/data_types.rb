@@ -1,5 +1,6 @@
 require 'paypal-sdk-core'
 require 'uuidtools'
+require 'multi_json'
 
 module PayPal::SDK
   module REST
@@ -1011,6 +1012,161 @@ module PayPal::SDK
         end
       end
 
+      class WebhooksEventType < Base
+
+        def self.load_members
+          array_of :event_types, EventType
+        end
+
+        include RequestDataType
+
+        class << self
+          def all(options = {})
+            path = "v1/notifications/webhooks-event-types"
+            EventTypeList.new(api.get(path, options))
+          end
+        end
+      end
+
+      class EventTypeList < Base
+        def self.load_members
+          array_of  :event_types, EventType
+        end
+      end
+
+      class WebhookList < Base
+        def self.load_members
+          array_of  :webhooks, Webhook
+        end
+      end
+
+      class EventType < Base
+        def self.load_members
+          object_of :name, String
+          object_of :description, String
+        end
+      end
+
+      class WebhookEventList < Base
+        def self.load_members
+          object_of :count, Integer
+          array_of  :events, WebhookEvent
+          array_of :links, Links
+        end
+      end
+
+      class WebhookEvent < Base
+        def self.load_members
+          object_of :id, String
+          object_of :create_time, String
+          object_of :resource_type, String
+          object_of :event_type, String
+          object_of :summary, String
+          object_of :resource, Hash
+          array_of :links, Links
+        end
+
+        def resend()
+          path = "v1/notifications/webhooks-events/#{self.id}/resend"
+          WebhookEvent.new(api.post(path))
+        end
+
+        def get_resource()
+          webhook_resource_type = self.resource_type
+          resource_class = self.class.get_resource_class(webhook_resource_type)
+          if resource_class
+            return Object::const_get(resource_class).new(self.resource)
+          else
+            return self.resource
+          end
+        end
+
+        include RequestDataType
+
+        class << self
+
+          def get_resource_class(name)
+            class_array = PayPal::SDK::REST.constants.select {|c| Class === PayPal::SDK::REST.const_get(c)}
+            class_array.each do |classname|
+              if (classname.to_s.downcase == name.downcase)
+                return classname
+              end
+            end
+          end
+
+          def search(page_size, start_time, end_time)
+            path = "v1/notifications/webhooks-events"
+            options = { :page_size => page_size, :start_time => start_time, :end_time => end_time }
+            WebhookEventList.new(api.get(path, options))
+          end
+
+          def get(webhook_event_id)
+            raise ArgumentError.new("webhook_event_id required") if webhook_event_id.to_s.strip.empty?
+            path = "v1/notifications/webhooks-events/#{webhook_event_id}"
+            WebhookEvent.new(api.get(path))
+          end
+        end
+      end
+
+      class Webhook < Base
+
+        def self.load_members
+          object_of :id, String
+          object_of :url, String
+          array_of :event_types, EventType
+          array_of :links, Links
+        end
+
+        include RequestDataType
+
+        def create()
+          path = "v1/notifications/webhooks"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          Webhook.new(response)
+        end
+
+        def update(patch)
+          patch = Patch.new(patch) unless patch.is_a? Patch
+          patch_request = Array.new(1, patch.to_hash)
+          path = "v1/notifications/webhooks/#{self.id}"
+          response = api.patch(path, patch_request, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        def delete()
+          path = "v1/notifications/webhooks/#{self.id}"
+          response = api.delete(path, {})
+          self.merge!(response)
+          success?
+        end
+
+        class << self
+          def get(webhook_id)
+            raise ArgumentError.new("webhook_id required") if webhook_id.to_s.strip.empty?
+            path = "v1/notifications/webhooks/#{webhook_id}"
+            Webhook.new(api.get(path))
+          end
+          def get_event_types(webhook_id)
+            raise ArgumentError.new("webhook_id required") if webhook_id.to_s.strip.empty?
+            path = "v1/notifications/webhooks/#{webhook_id}/event-types"
+            EventTypeList.new(api.get(path))
+          end
+          def all(options={})
+            path = "v1/notifications/webhooks"
+            WebhookList.new(api.get(path))
+          end
+
+          def simulate_event(webhook_id, url, event_type)
+            path = "v1/notifications/simulate-event"
+            options = { :webhook_id => webhook_id, :url => url, :event_type => event_type }
+            response = api.post(path, options)
+            WebhookEvent.new(response)
+          end
+        end
+      end
+
       class Payout < Base
 
         def self.load_members
@@ -1531,7 +1687,6 @@ module PayPal::SDK
 
         def execute()
           path = "v1/payments/billing-agreements/#{self.token}/agreement-execute"
-          puts path
           response = api.post(path, {}, http_header)
           self.merge!(response)
           success?

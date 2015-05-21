@@ -1,4 +1,5 @@
 require 'paypal-sdk-core'
+require 'paypal-sdk/rest/version'
 
 module PayPal
   module SDK
@@ -12,7 +13,7 @@ module PayPal
 
         class << self
           def user_agent
-            @user_agent ||= "PayPalSDK/PayPal-Ruby-SDK #{VERSION} (#{sdk_library_details})"
+            @user_agent ||= "PayPalSDK/PayPal-Ruby-SDK #{PayPal::SDK::REST::VERSION} (#{sdk_library_details})"
           end
         end
       end
