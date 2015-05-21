@@ -1,3 +1,6 @@
+Version 1.2.1 - May 21, 2015
+  * Paypal-Debug-Id printed for any exception
+
 Version 1.2.0 - March 3, 2015
   * Webhook management API support added
 
