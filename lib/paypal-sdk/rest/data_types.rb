@@ -162,7 +162,7 @@ module PayPal::SDK
         include RequestDataType
 
         def create()
-          path = "v1/vault/credit-card"
+          path = "v1/vault/credit-cards"
           response = api.post(path, self.to_hash, http_header)
           self.merge!(response)
           success?
@@ -171,20 +171,20 @@ module PayPal::SDK
         class << self
           def find(resource_id)
             raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
-            path = "v1/vault/credit-card/#{resource_id}"
+            path = "v1/vault/credit-cards/#{resource_id}"
             self.new(api.get(path))
           end
         end
 
         def delete()
-          path = "v1/vault/credit-card/#{self.id}"
+          path = "v1/vault/credit-cards/#{self.id}"
           response = api.delete(path, {})
           self.merge!(response)
           success?
         end
 
         def update()
-          path = "v1/vault/credit-card/#{self.id}"
+          path = "v1/vault/credit-cards/#{self.id}"
           response = api.patch(path, self.to_hash, http_header)
           self.merge!(response)
           success?
@@ -690,8 +690,8 @@ module PayPal::SDK
           object_of :state, String
           object_of :reason_code, String
           object_of :pending_reason, String
-          object_of :"protection-eligibility", String
-          object_of :"protection-eligibility_type", String
+          object_of :protection_eligibility, String
+          object_of :protection_eligibility_type, String
           object_of :parent_payment, String
           object_of :fmf_details, FmfDetails
           object_of :create_time, String
@@ -889,7 +889,7 @@ module PayPal::SDK
 
       class CreditCardList < Base
         def self.load_members
-          array_of  :"credit-cards", CreditCard
+          array_of  :credit_cards, CreditCard
           object_of :count, Integer
           object_of :next_id, String
         end
@@ -897,7 +897,7 @@ module PayPal::SDK
 
       class BankAccountsList < Base
         def self.load_members
-          array_of  :"bank-accounts", BankAccount
+          array_of  :bank_accounts, BankAccount
           object_of :count, Integer
           object_of :next_id, String
         end
