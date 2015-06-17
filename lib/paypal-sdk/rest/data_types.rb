@@ -162,7 +162,7 @@ module PayPal::SDK
         include RequestDataType
 
         def create()
-          path = "v1/vault/credit-card"
+          path = "v1/vault/credit-cards"
           response = api.post(path, self.to_hash, http_header)
           self.merge!(response)
           success?
@@ -171,20 +171,20 @@ module PayPal::SDK
         class << self
           def find(resource_id)
             raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
-            path = "v1/vault/credit-card/#{resource_id}"
+            path = "v1/vault/credit-cards/#{resource_id}"
             self.new(api.get(path))
           end
         end
 
         def delete()
-          path = "v1/vault/credit-card/#{self.id}"
+          path = "v1/vault/credit-cards/#{self.id}"
           response = api.delete(path, {})
           self.merge!(response)
           success?
         end
 
         def update()
-          path = "v1/vault/credit-card/#{self.id}"
+          path = "v1/vault/credit-cards/#{self.id}"
           response = api.patch(path, self.to_hash, http_header)
           self.merge!(response)
           success?
