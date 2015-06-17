@@ -1,3 +1,7 @@
+Version 1.2.2 - June 17, 2015
+  * Fixed NameError due to underscore in variable name
+  * Fixed Vault endpoints
+
 Version 1.2.1 - May 21, 2015
   * Paypal-Debug-Id printed for any exception
 
