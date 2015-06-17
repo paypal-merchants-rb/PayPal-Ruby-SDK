@@ -690,8 +690,8 @@ module PayPal::SDK
           object_of :state, String
           object_of :reason_code, String
           object_of :pending_reason, String
-          object_of :"protection-eligibility", String
-          object_of :"protection-eligibility_type", String
+          object_of :protection_eligibility, String
+          object_of :protection_eligibility_type, String
           object_of :parent_payment, String
           object_of :fmf_details, FmfDetails
           object_of :create_time, String
@@ -889,7 +889,7 @@ module PayPal::SDK
 
       class CreditCardList < Base
         def self.load_members
-          array_of  :"credit-cards", CreditCard
+          array_of  :credit_cards, CreditCard
           object_of :count, Integer
           object_of :next_id, String
         end
@@ -897,7 +897,7 @@ module PayPal::SDK
 
       class BankAccountsList < Base
         def self.load_members
-          array_of  :"bank-accounts", BankAccount
+          array_of  :bank_accounts, BankAccount
           object_of :count, Integer
           object_of :next_id, String
         end
