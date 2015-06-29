@@ -9,7 +9,7 @@ describe "Payments" do
           "funding_instruments" =>  [ {
             "credit_card" =>  {
               "type" =>  "visa",
-              "number" =>  "4417119669820331",
+              "number" =>  "4567516310777851",
               "expire_month" =>  "11", "expire_year" =>  "2018",
               "cvv2" =>  "874",
               "first_name" =>  "Joe", "last_name" =>  "Shopper",
@@ -296,7 +296,7 @@ describe "Payments" do
       it "Create" do
         credit_card = CreditCard.new({
           "type" =>  "visa",
-          "number" =>  "4417119669820331",
+          "number" =>  "4567516310777851",
           "expire_month" =>  "11", "expire_year" =>  "2018",
           "cvv2" =>  "874",
           "first_name" =>  "Joe", "last_name" =>  "Shopper",
@@ -317,7 +317,7 @@ describe "Payments" do
       it "Delete" do
         credit_card = CreditCard.new({
           "type" =>  "visa",
-          "number" =>  "4417119669820331",
+          "number" =>  "4567516310777851",
           "expire_month" =>  "11", "expire_year" =>  "2018" })
         expect(credit_card.create).to be_truthy
         expect(credit_card.delete).to be_truthy
