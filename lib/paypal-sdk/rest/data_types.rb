@@ -1087,7 +1087,7 @@ module PayPal::SDK
         include RequestDataType
 
         class << self
-          
+
           def get_cert(cert_url)
             data = open(cert_url).read()
             cert = OpenSSL::X509::Certificate.new data
@@ -1112,7 +1112,7 @@ module PayPal::SDK
           def verify_common_name(cert)
             common_name = cert.subject.to_a.select{|name, _, _| name == 'CN' }.first[1]
 
-            common_name.start_with?("messageverificationcerts.") and common_name.end_with?("paypal.com")
+            common_name.start_with?("messageverificationcerts.") && common_name.end_with?("paypal.com")
           end
 
           def verify_signature(transmission_id, timestamp, webhook_id, event_body, cert, actual_sig_encoded, algo)
@@ -1136,12 +1136,12 @@ module PayPal::SDK
           def verify_cert(cert)
             cert_store = get_cert_chain()
 
-            verify_cert_chain(cert_store, cert) and verify_common_name(cert) and verify_expiration(cert)
+            verify_cert_chain(cert_store, cert) && verify_common_name(cert) && verify_expiration(cert)
           end
 
           def verify(transmission_id, timestamp, webhook_id, event_body, cert_url, sig, algo='sha256')
             cert = get_cert(cert_url)
-            verify_signature(transmission_id, timestamp, webhook_id, event_body, cert, sig, algo) and verify_cert(cert)
+            verify_signature(transmission_id, timestamp, webhook_id, event_body, cert, sig, algo) && verify_cert(cert)
           end
 
           def get_resource_class(name)
