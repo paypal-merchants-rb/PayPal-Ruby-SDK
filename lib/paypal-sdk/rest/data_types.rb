@@ -1,6 +1,9 @@
 require 'paypal-sdk-core'
 require 'uuidtools'
 require 'multi_json'
+require 'open-uri'
+require 'zlib'
+require "base64"
 
 module PayPal::SDK
   module REST
@@ -1084,6 +1087,62 @@ module PayPal::SDK
         include RequestDataType
 
         class << self
+
+          def get_cert(cert_url)
+            data = open(cert_url).read()
+            cert = OpenSSL::X509::Certificate.new data
+          end
+
+          def get_cert_chain()
+            root_cert = "data/DigiCertHighAssuranceEVRootCA.pem"
+            intermediate_cert = "data/DigiCertSHA2ExtendedValidationServerCA.pem"
+
+            cert_store = OpenSSL::X509::Store.new
+            cert_store.add_file(root_cert)
+            cert_store.add_file(intermediate_cert)
+
+            cert_store
+          end
+
+          def get_expected_sig(transmission_id, timestamp, webhook_id, event_body)
+            crc = Zlib::crc32(event_body).to_s
+            transmission_id + "|" + timestamp + "|" + webhook_id + "|" + crc
+          end
+
+          def verify_common_name(cert)
+            common_name = cert.subject.to_a.select{|name, _, _| name == 'CN' }.first[1]
+
+            common_name.start_with?("messageverificationcerts.") && common_name.end_with?("paypal.com")
+          end
+
+          def verify_signature(transmission_id, timestamp, webhook_id, event_body, cert, actual_sig_encoded, algo)
+            expected_sig = get_expected_sig(transmission_id, timestamp, webhook_id, event_body)
+
+            digest = OpenSSL::Digest.new(algo)
+            digest.update(expected_sig)
+            actual_sig = Base64.decode64(actual_sig_encoded).force_encoding('UTF-8')
+
+            cert.public_key.verify(digest, actual_sig, expected_sig)
+          end
+
+          def verify_expiration(cert)
+            cert.not_after >= Time.now
+          end
+
+          def verify_cert_chain(cert_store, cert)
+            cert_store.verify(cert)
+          end
+
+          def verify_cert(cert)
+            cert_store = get_cert_chain()
+
+            verify_cert_chain(cert_store, cert) && verify_common_name(cert) && verify_expiration(cert)
+          end
+
+          def verify(transmission_id, timestamp, webhook_id, event_body, cert_url, sig, algo='sha256')
+            cert = get_cert(cert_url)
+            verify_signature(transmission_id, timestamp, webhook_id, event_body, cert, sig, algo) && verify_cert(cert)
+          end
 
           def get_resource_class(name)
             class_array = PayPal::SDK::REST.constants.select {|c| Class === PayPal::SDK::REST.const_get(c)}

@@ -1,3 +1,6 @@
+Version 1.3.0 - June 30, 2015
+  * Added Webhook validation
+
 Version 1.2.2 - June 17, 2015
   * Fixed NameError due to underscore in variable name
   * Fixed Vault endpoints
