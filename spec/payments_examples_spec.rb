@@ -150,11 +150,14 @@ describe "Payments" do
       access_token = nil
 
       it "Exchange Authorization Code for Refresh / Access Tokens" do
+
         # put your authorization code for testing here
         auth_code = ''
+
         if auth_code != ''
-          access_token  = FuturePayment.exch_token(auth_code)
-          access_token.should_not be_nil
+          tokeninfo  = FuturePayment.exch_token(auth_code)
+          tokeninfo.access_token.should_not be_nil
+          tokeninfo.refresh_token.should_not be_nil
         end
       end
 
