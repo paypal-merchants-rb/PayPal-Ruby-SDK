@@ -99,16 +99,6 @@ module PayPal::SDK
 
       class FuturePayment < Payment
 
-        include PayPal::SDK::OpenIDConnect
-
-        def self.exch_token(auth_code)
-          if auth_code
-            tokeninfo = Tokeninfo.create(auth_code)
-            puts "tokeninfo=", tokeninfo.to_hash
-            tokeninfo
-          end
-        end
-
         def create(correlation_id=nil)
           path = "v1/payments/payment"
           if correlation_id != nil
@@ -119,6 +109,18 @@ module PayPal::SDK
           response = api.post(path, self.to_hash, http_header)
           self.merge!(response)
           success?
+        end
+
+        class << self
+
+          def exch_token(auth_code)
+            if auth_code
+              PayPal::SDK::OpenIDConnect::DataTypes::Tokeninfo.token_hash(auth_code)
+            else
+              raise ArgumentError.new("authorization code required") if auth_code.to_s.strip.empty?
+            end
+          end
+
         end
       end
 
