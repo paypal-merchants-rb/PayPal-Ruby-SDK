@@ -345,6 +345,15 @@ describe "Payments" do
           credit_card.error["details"][0]["issue"].should eql "Required field missing"
         end
       end
+    end
+
+    describe 'CreditCardList', :integration => true do
+
+      it "List" do
+        options = { :create_time => "2015-03-28T15:33:43Z" }
+        credit_card_list = CreditCardList.list()
+        expect(credit_card_list.total_items).to be > 0
+      end
 
     end
 
