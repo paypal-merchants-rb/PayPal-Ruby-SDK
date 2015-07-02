@@ -9,4 +9,4 @@ sudo: false
 
 notifications:
   recipients:
-    - DL-PP-Platform-Ruby-SDK@ebay.com
+    - DL-PP-Platform-Ruby-SDK@paypal.com

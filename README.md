@@ -131,7 +131,7 @@ PayPal::SDK::REST.set_config(
     :funding_instruments => [{
       :credit_card => {
         :type => "visa",
-        :number => "4417119669820331",
+        :number => "4567516310777851",
         :expire_month => "11",
         :expire_year => "2018",
         :cvv2 => "874",
@@ -191,7 +191,7 @@ end
 ```
 
 ## Create Future Payment
-[Future Payments](https://developer.paypal.com/docs/integration/mobile/make-future-payment/) sample is available [here](https://github.com/paypal/rest-api-sdk-ruby/blob/master/spec/payments_examples_spec.rb#L149)
+[Future Payments](https://developer.paypal.com/docs/integration/mobile/make-future-payment/) sample is available [here](https://github.com/paypal/rest-api-sdk-ruby/blob/master/samples/payment/create_future_payment.rb#L149)
 
 ## Webhook event validation
 See [webhook event validation code sample](https://github.com/paypal/PayPal-Ruby-SDK/blob/master/samples/notifications/verify_webhook_event.rb) and [webhook event validation docs](https://developer.paypal.com/docs/integration/direct/rest-webhooks-overview/#event-signature)

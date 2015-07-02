@@ -16,7 +16,7 @@ include PayPal::SDK::Core::Logging
    # A resource representing a credit card that can be
    # used to fund a payment.
    :type => "visa",
-   :number => "4417119669820331",
+   :number => "4567516310777851",
    :expire_month => "11",
    :expire_year => "2018",
    :cvv2 => "874",
