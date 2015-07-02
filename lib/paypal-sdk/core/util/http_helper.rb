@@ -89,10 +89,12 @@ module PayPal::SDK::Core
       # * payload - Hash(:http, :method, :uri, :body, :header)
       def log_http_call(payload)
         logger.info "Request[#{payload[:method]}]: #{payload[:uri].to_s}"
+        logger.debug "Request.body=#{payload[:body]}\trequest.header=#{payload[:header]}"
         start_time = Time.now
         response = yield
         logger.info sprintf("Response[%s]: %s, Duration: %.3fs", response.code,
           response.message, Time.now - start_time)
+        logger.debug "Response.body: #{response.body}"
         response
       end
 

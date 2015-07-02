@@ -99,16 +99,6 @@ module PayPal::SDK
 
       class FuturePayment < Payment
 
-        include PayPal::SDK::OpenIDConnect
-
-        def self.exch_token(auth_code)
-          if auth_code
-            tokeninfo = Tokeninfo.create(auth_code)
-            puts "tokeninfo=", tokeninfo.to_hash
-            tokeninfo
-          end
-        end
-
         def create(correlation_id=nil)
           path = "v1/payments/payment"
           if correlation_id != nil
@@ -119,6 +109,18 @@ module PayPal::SDK
           response = api.post(path, self.to_hash, http_header)
           self.merge!(response)
           success?
+        end
+
+        class << self
+
+          def exch_token(auth_code)
+            if auth_code
+              PayPal::SDK::OpenIDConnect::DataTypes::Tokeninfo.token_hash(auth_code)
+            else
+              raise ArgumentError.new("authorization code required") if auth_code.to_s.strip.empty?
+            end
+          end
+
         end
       end
 
@@ -892,9 +894,19 @@ module PayPal::SDK
 
       class CreditCardList < Base
         def self.load_members
-          array_of  :credit_cards, CreditCard
-          object_of :count, Integer
-          object_of :next_id, String
+          array_of  :items, CreditCard
+          object_of :total_items, Integer
+          object_of :total_pages, Integer
+          array_of :links, Links
+        end
+
+        class << self
+          def list(options={})
+            # for entire list of filter options, see https://developer.paypal.com/webapps/developer/docs/api/#list-credit-card-resources
+            path = "v1/vault/credit-cards"
+            response = api.get(path, options)
+            self.new(response)
+          end
         end
       end
 

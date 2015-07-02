@@ -9,7 +9,7 @@ describe "Payments" do
           "funding_instruments" =>  [ {
             "credit_card" =>  {
               "type" =>  "visa",
-              "number" =>  "4417119669820331",
+              "number" =>  "4567516310777851",
               "expire_month" =>  "11", "expire_year" =>  "2018",
               "cvv2" =>  "874",
               "first_name" =>  "Joe", "last_name" =>  "Shopper",
@@ -150,11 +150,14 @@ describe "Payments" do
       access_token = nil
 
       it "Exchange Authorization Code for Refresh / Access Tokens" do
+
         # put your authorization code for testing here
         auth_code = ''
+
         if auth_code != ''
-          access_token  = FuturePayment.exch_token(auth_code)
-          access_token.should_not be_nil
+          tokeninfo  = FuturePayment.exch_token(auth_code)
+          tokeninfo.access_token.should_not be_nil
+          tokeninfo.refresh_token.should_not be_nil
         end
       end
 
@@ -296,7 +299,7 @@ describe "Payments" do
       it "Create" do
         credit_card = CreditCard.new({
           "type" =>  "visa",
-          "number" =>  "4417119669820331",
+          "number" =>  "4567516310777851",
           "expire_month" =>  "11", "expire_year" =>  "2018",
           "cvv2" =>  "874",
           "first_name" =>  "Joe", "last_name" =>  "Shopper",
@@ -317,7 +320,7 @@ describe "Payments" do
       it "Delete" do
         credit_card = CreditCard.new({
           "type" =>  "visa",
-          "number" =>  "4417119669820331",
+          "number" =>  "4567516310777851",
           "expire_month" =>  "11", "expire_year" =>  "2018" })
         expect(credit_card.create).to be_truthy
         expect(credit_card.delete).to be_truthy
@@ -341,6 +344,15 @@ describe "Payments" do
 
           credit_card.error["details"][0]["issue"].should eql "Required field missing"
         end
+      end
+    end
+
+    describe 'CreditCardList', :integration => true do
+
+      it "List" do
+        options = { :create_time => "2015-03-28T15:33:43Z" }
+        credit_card_list = CreditCardList.list()
+        expect(credit_card_list.total_items).to be > 0
       end
 
     end

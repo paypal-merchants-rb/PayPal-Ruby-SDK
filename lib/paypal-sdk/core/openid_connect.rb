@@ -55,8 +55,16 @@ module PayPal::SDK
         class Tokeninfo < Base
           include RequestDataType
           PATH = "v1/identity/openidconnect/tokenservice"
+          FP_PATH = "v1/oauth2/token"
 
           class << self
+
+            def basic_auth_header(options)
+              credentials = options[:client_id].to_s + ":" + options[:client_secret].to_s
+              encoded = Base64.encode64(credentials.force_encoding('UTF-8')).gsub!(/\n/, "")
+              "Basic #{encoded}"
+            end
+
             def create_from_authorization_code(options, http_header = {})
               options = { :code => options } if options.is_a? String
               options = options.merge( :grant_type => "authorization_code" )
@@ -70,6 +78,16 @@ module PayPal::SDK
               Tokeninfo.new(api.post(PATH, with_credentials(options), http_header))
             end
             alias_method :refresh, :create_from_refresh_token
+
+            def create_from_future_payment_auth_code(options, http_header = {})
+              options = { :code => options } if options.is_a? String
+              options = options.merge( { :grant_type => "authorization_code", :response_type => "token", :redirect_uri => "urn:ietf:wg:oauth:2.0:oob" } )
+              http_header = http_header.merge( { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => basic_auth_header(with_credentials(options)) } )
+
+              Tokeninfo.new(api.post(FP_PATH, options, http_header))
+            end
+            alias_method :token_hash, :create_from_future_payment_auth_code
+            alias_method :create_fp, :create_from_future_payment_auth_code
 
             def with_credentials(options = {})
               options = options.dup
