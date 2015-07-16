@@ -23,42 +23,51 @@ describe "WebProfiles" do
   describe "Examples" do
     describe "WebProfile", :integration => true do
       it "Create" do
+
         api = API.new
         $webprofile = WebProfile.new(WebProfileAttributes.merge( :token => api.token ))
+
+        # generate a random number and append it to name
+        suffix = Random.rand(1000000000).to_s
+        $randname = $webprofile.name + suffix
+        $webprofile.name = $randname
+
+        # create webhook
         $webprofile.create
-        expect($webprofile.name.to_s).to eq("YeowZa! T-Shirt Shop")
+        expect($webprofile.name.to_s).to eq($randname)
       end
 
       it "List" do
         list = WebProfile.get_list
         expect(list.size).to be > 1
+        expect(list.first).to be_an_instance_of(WebProfileList)
       end
 
       it "Retrieve" do
-        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
-        expect(webprofile.name.to_s).to eq("YeowZa! T-Shirt Shop-8871170336226187544")
+        webprofile = WebProfile.find($webprofile.id)
+        expect(webprofile.name.to_s).to eq($randname)
       end
 
       it "Update" do
         # append "-test" to web profile name
-        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
+        webprofile = WebProfile.find($webprofile.id)
         webprofile.name += "-test"
         webprofile.update
 
         # check whether the name was updated
-        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
-        expect(webprofile.name).to eq("YeowZa! T-Shirt Shop-8871170336226187544-test")
-        webprofile.name = "YeowZa! T-Shirt Shop-8871170336226187544"
+        webprofile = WebProfile.find($webprofile.id)
+        expect(webprofile.name).to eq($randname + "-test")
+        webprofile.name = $randname
         webprofile.update
 
         # revert updated profile name for next test run
-        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
-        expect(webprofile.name).to eq("YeowZa! T-Shirt Shop-8871170336226187544")
+        webprofile = WebProfile.find($webprofile.id)
+        expect(webprofile.name).to eq($randname)
       end
 
       it "Partial update" do
         # retrieve web profile to perform partial update on
-        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
+        webprofile = WebProfile.find($webprofile.id)
 
         # set up partial update
         h = {"op" => "replace",
@@ -67,7 +76,7 @@ describe "WebProfiles" do
 
         # do partial update by sending a patch request
         expect(webprofile.partial_update( [h] )).to be_truthy
-        webprofile = WebProfile.find("XP-A4UX-5GLG-DAA8-26FL")
+        webprofile = WebProfile.find($webprofile.id)
         expect(webprofile.presentation.brand_name).to eq("new_brand_name")
 
         # restore original value for the next test run
@@ -75,18 +84,20 @@ describe "WebProfiles" do
           "path" => "/presentation/brand_name",
           "value" => "brand_name"}
         expect(webprofile.partial_update( [h] )).to be_truthy
-        expect(WebProfile.find("XP-A4UX-5GLG-DAA8-26FL").presentation.brand_name).to eq("brand_name")
+        expect(WebProfile.find($webprofile.id).presentation.brand_name).to eq("brand_name")
       end
 
       it "Delete" do
-        puts $webprofile.inspect
         # delete newly created web profile from above create test
         expect($webprofile.delete).to be_truthy
 
         # make sure it is not retrieved from the system
-        webprofile = WebProfile.find($webprofile.id)
-        puts webprofile
-        expect(webprofile).to be_nil
+        begin
+          webprofile = WebProfile.find($webprofile.id)
+          expect(webprofile).to be_nil
+          fail "WebProfile with ID=#{$webprofile.id} has not been deleted"
+        rescue ResourceNotFound
+        end
       end
     end
   end
