@@ -1,3 +1,8 @@
+Version 1.3.2
+  * Fixed webprofile.create()
+  * Fixed webprofile.get_list()
+  * Updated webprofile test cases
+
 Version 1.3.1
   * Added CreditCard list() support
   * Added request/response body debugging statements
