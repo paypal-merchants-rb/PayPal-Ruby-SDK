@@ -32,6 +32,7 @@ describe "WebProfiles" do
       it "List" do
         list = WebProfile.get_list
         expect(list.size).to be > 1
+        expect(list.first).to be_an_instance_of(WebProfileList)
       end
 
       it "Retrieve" do
