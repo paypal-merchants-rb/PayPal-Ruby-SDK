@@ -1900,7 +1900,8 @@ module PayPal::SDK
         def create()
           path = "v1/payment-experience/web-profiles/"
           response = api.post(path, self.to_hash, http_header)
-          CreateProfileResponse.new(response)
+          self.merge!(response)
+          Webhook.new(response)
         end
 
         def update()
