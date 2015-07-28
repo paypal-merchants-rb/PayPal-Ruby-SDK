@@ -15,6 +15,7 @@ module PayPal::SDK::Core
         begin
           response_body = JSON.parse(response.body)
           debug_id = response["Paypal-Debug-Id"]
+          debug_id = response_body["debug_id"] if debug_id.to_s == ''
         rescue
         end
         message = "Failed."
