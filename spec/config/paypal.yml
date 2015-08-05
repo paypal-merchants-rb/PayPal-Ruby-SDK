@@ -8,6 +8,7 @@ test: &default
   http_timeout: 30
   mode: sandbox
   sandbox_email_address: Platform.sdk.seller@gmail.com
+  verbose_logging: false
 
 development:
   <<: *default

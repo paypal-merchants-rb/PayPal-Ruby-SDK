@@ -36,6 +36,7 @@ module PayPal::SDK::Core
       #   Logging.logger = Logger.new(STDERR)
       def logger=(logger)
         @logger = logger
+        @logger.level = Logger::INFO
       end
 
     end
