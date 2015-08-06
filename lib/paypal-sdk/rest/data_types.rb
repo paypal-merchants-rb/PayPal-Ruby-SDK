@@ -1881,7 +1881,6 @@ module PayPal::SDK
           object_of :net_amount, Currency
           object_of :payer_email, String
           object_of :payer_name, String
-          object_of :time_updated, String
           object_of :time_zone, String
           object_of :time_stamp, DateTime
         end
