@@ -940,7 +940,6 @@ module PayPal::SDK
           object_of :merchant_memo, String
           object_of :logo_url, String
           object_of :total_amount, Currency
-          array_of  :payment_details, PaymentDetail
           array_of  :payments, PaymentDetail
           array_of  :refund_details, RefundDetail
           object_of :metadata, Metadata
