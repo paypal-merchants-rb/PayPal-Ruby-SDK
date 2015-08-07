@@ -475,6 +475,7 @@ module PayPal::SDK
           object_of :purchase_unit_reference_id, String
           array_of  :related_resources, RelatedResources
           array_of  :transactions, Transaction
+          object_of :payment_options, PaymentOptions
         end
       end
 
