@@ -3,7 +3,8 @@ Version 1.3.3
   * Enabled verbose payload logging [#146](https://github.com/paypal/PayPal-Ruby-SDK/issues/146)
   * Removed `time_updated` field in agreement_transaction per [API change](https://developer.paypal.com/webapps/developer/docs/api/#agreementtransaction-object)
   * Removed `payment_details` field in invoice per [API change](https://developer.paypal.com/webapps/developer/docs/api/#invoice-object)
-  * Added `payment_options` field to Transaction per [API change](https://developer.paypal.com/webapps/developer/docs/api/#paymentoptions-object)
+  * Added `payment_options` field to Transaction per [API change](https://developer.paypal.com/webapps/developer/docs/api/#transaction-object)
+  * Added secure logging to avoid logging confidential data (e.g., credit card number)
  
 Version 1.3.2
   * Fixed webprofile.create()
