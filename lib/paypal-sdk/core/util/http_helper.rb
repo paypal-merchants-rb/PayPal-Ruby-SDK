@@ -85,7 +85,7 @@ module PayPal::SDK::Core
         logger.info sprintf("Response[%s]: %s, Duration: %.3fs", response.code,
           response.message, Time.now - start_time)
 
-        logger.debug "Response.body=#{response.body}\tResponse.header=#{response.header}"
+        logger.debug "Response.body=#{response.body}\tResponse.header=#{response.to_hash}"
         
         response
       end
