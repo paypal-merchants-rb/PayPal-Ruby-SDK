@@ -141,7 +141,6 @@ describe PayPal::SDK::OpenIDConnect do
     end
 
     it "get", :integration => true do
-      # api = OpenIDConnect::Userinfo.new( { :name => "Testing" } )
       api = PayPal::SDK::REST::API.new
       access_token = api.token_hash()
       userinfo = OpenIDConnect::Userinfo.get( access_token )
