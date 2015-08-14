@@ -475,6 +475,7 @@ module PayPal::SDK
           object_of :purchase_unit_reference_id, String
           array_of  :related_resources, RelatedResources
           array_of  :transactions, Transaction
+          object_of :payment_options, PaymentOptions
         end
       end
 
@@ -940,7 +941,6 @@ module PayPal::SDK
           object_of :merchant_memo, String
           object_of :logo_url, String
           object_of :total_amount, Currency
-          array_of  :payment_details, PaymentDetail
           array_of  :payments, PaymentDetail
           array_of  :refund_details, RefundDetail
           object_of :metadata, Metadata
@@ -1882,7 +1882,6 @@ module PayPal::SDK
           object_of :net_amount, Currency
           object_of :payer_email, String
           object_of :payer_name, String
-          object_of :time_updated, String
           object_of :time_zone, String
           object_of :time_stamp, DateTime
         end
