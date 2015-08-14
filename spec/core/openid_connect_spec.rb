@@ -131,12 +131,21 @@ describe PayPal::SDK::OpenIDConnect do
       OpenIDConnect::Userinfo.api.stub( :post => { :name => "Testing" } )
 
       userinfo = OpenIDConnect::Userinfo.get("access_token")
+      userinfo = OpenIDConnect::Userinfo.new( { :name => "Testing" } )
       userinfo.should be_a OpenIDConnect::Userinfo
       userinfo.name.should eql "Testing"
 
       userinfo = OpenIDConnect::Userinfo.get( :access_token => "access_token" )
       userinfo.should be_a OpenIDConnect::Userinfo
       userinfo.name.should eql "Testing"
+    end
+
+    it "get", :integration => true do
+      api = PayPal::SDK::REST::API.new
+      access_token = api.token_hash()
+      userinfo = OpenIDConnect::Userinfo.get( access_token )
+      userinfo.should be_a OpenIDConnect::Userinfo
+      userinfo.email.should eql "jaypatel512-facilitator@hotmail.com"
     end
   end
 

@@ -58,10 +58,6 @@ module PayPal::SDK::Core
       # Make Http call
       # * payload - Hash(:http, :method, :uri, :body, :header)
       def http_call(payload)
-        if Config.config.verbose_logging
-          logger.info payload.inspect
-        end
-
         response =
           log_http_call(payload) do
             http = payload[:http] || create_http_connection(payload[:uri])
@@ -74,14 +70,6 @@ module PayPal::SDK::Core
             end
           end
 
-        if Config.config.verbose_logging
-          if response.code.to_i == 200
-            logger.info(response.body)
-          else
-            logger.warn(response.body)
-          end
-        end
-
         handle_response(response)
       end
 
@@ -89,12 +77,16 @@ module PayPal::SDK::Core
       # * payload - Hash(:http, :method, :uri, :body, :header)
       def log_http_call(payload)
         logger.info "Request[#{payload[:method]}]: #{payload[:uri].to_s}"
+
         logger.debug "Request.body=#{payload[:body]}\trequest.header=#{payload[:header]}"
+
         start_time = Time.now
         response = yield
         logger.info sprintf("Response[%s]: %s, Duration: %.3fs", response.code,
           response.message, Time.now - start_time)
-        logger.debug "Response.body: #{response.body}"
+
+        logger.debug "Response.body=#{response.body}\tResponse.header=#{response.to_hash}"
+        
         response
       end
 

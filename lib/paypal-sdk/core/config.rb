@@ -220,6 +220,10 @@ module PayPal::SDK::Core
 
       # Get logger
       def logger
+        if @@configurations[:mode] == 'live' and Logging.logger.level == Logger::DEBUG
+          Logging.logger.warn "DEBUG log level not allowed in sandbox mode for security of confidential information. Changing log level to INFO..."
+          Logging.logger.level = Logger::INFO
+        end
         Logging.logger
       end
 

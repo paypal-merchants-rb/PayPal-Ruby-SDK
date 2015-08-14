@@ -73,7 +73,11 @@ Logger configuration:
 
 ```ruby
 PayPal::SDK.logger = Logger.new(STDERR)
+
+# change log level to INFO
+PayPal::SDK.logger.level = Logger::INFO
 ```
+**NOTE**: At `DEBUG` level, all requests/responses are logged except when `mode` is set to `live`. In order to disable request/response printing, set the log level to `INFO` or less verbose ones.
 
 
 ### OpenIDConnect Samples
