@@ -67,11 +67,14 @@ module PayPal::SDK
           success?
         end
 
-        def update(patch_request)
-          patch_request = PatchRequest.new(patch_request) unless patch_request.is_a? PatchRequest
+        def update(patch_requests)
+          patch_request_array = []
+          patch_requests.each do |patch_request|
+            patch_request = Patch.new(patch_request) unless patch_request.is_a? Patch
+            patch_request_array << patch_request.to_hash
+          end
           path = "v1/payments/payment/#{self.id}"
-          response = api.patch(path, patch_request.to_hash, http_header)
-          object.new(response)
+          response = api.patch(path, patch_request_array, http_header)
         end
 
         def execute(payment_execution)
@@ -866,8 +869,8 @@ module PayPal::SDK
 
       class Patch < Base
         def self.load_members
-	            object_of :op, String
-	            object_of :path, String
+              object_of :op, String
+              object_of :path, String
               object_of :value, Object
               object_of :from, String
         end
@@ -1730,20 +1733,20 @@ module PayPal::SDK
 
       class Agreement < Base
         def self.load_members
-	            object_of :id, String
+              object_of :id, String
               object_of :state, String
-	            object_of :name, String
-	            object_of :description, String
-	            object_of :start_date, String
+              object_of :name, String
+              object_of :description, String
+              object_of :start_date, String
               object_of :agreement_details, AgreementDetails
-	            object_of :payer, Payer
-	            object_of :shipping_address, Address
-	            object_of :override_merchant_preferences, MerchantPreferences
-	          array_of  :override_charge_models, OverrideChargeModel
-	            object_of :plan, Plan
-	            object_of :create_time, String
-	            object_of :update_time, String
-	          array_of  :links, Links
+              object_of :payer, Payer
+              object_of :shipping_address, Address
+              object_of :override_merchant_preferences, MerchantPreferences
+            array_of  :override_charge_models, OverrideChargeModel
+              object_of :plan, Plan
+              object_of :create_time, String
+              object_of :update_time, String
+            array_of  :links, Links
               object_of :token, String
         end
 
