@@ -456,6 +456,8 @@ module PayPal::SDK
           object_of :postal_code, String
           object_of :country_code, String
           object_of :phone, String
+          object_of :normalization_status, String
+          object_of :id, String
           object_of :recipient_name, String
         end
       end
@@ -475,6 +477,7 @@ module PayPal::SDK
           object_of :custom, String
           object_of :soft_descriptor, String
           object_of :item_list, ItemList
+          object_of :notify_url, String
           object_of :purchase_unit_reference_id, String
           array_of  :related_resources, RelatedResources
           array_of  :transactions, Transaction
