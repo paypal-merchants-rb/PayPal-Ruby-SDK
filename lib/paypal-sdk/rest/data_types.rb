@@ -749,6 +749,7 @@ module PayPal::SDK
           object_of :transaction_fee, Currency
           object_of :create_time, String
           object_of :update_time, String
+          object_of :invoice_number, String
           array_of  :links, Links
         end
 
