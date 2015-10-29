@@ -71,7 +71,8 @@ module PayPal::SDK
           patch_request = PatchRequest.new(patch_request) unless patch_request.is_a? PatchRequest
           path = "v1/payments/payment/#{self.id}"
           response = api.patch(path, patch_request.to_hash, http_header)
-          object.new(response)
+          self.merge!(response)
+          success?
         end
 
         def execute(payment_execution)
