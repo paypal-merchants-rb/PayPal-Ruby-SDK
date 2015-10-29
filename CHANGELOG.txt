@@ -1,3 +1,6 @@
+Version 1.3.4
+  * Fix payment.update() [#163](https://github.com/paypal/PayPal-Ruby-SDK/issues/163)
+
 Version 1.3.3
   * Added failover for capturing debug ID
   * Enabled verbose payload logging [#146](https://github.com/paypal/PayPal-Ruby-SDK/issues/146)
