@@ -2,6 +2,10 @@
 
 The PayPal REST SDK provides Ruby APIs to create, process and manage payment.
 
+## Prerequisites
+- Ruby 2.0.0 or above
+- Bundler
+
 ## Installation
 
 Add this line to your application's Gemfile:

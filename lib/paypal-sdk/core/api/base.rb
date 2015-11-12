@@ -153,6 +153,11 @@ module PayPal::SDK::Core
       class << self
         def sdk_library_details
           @library_details ||= "paypal-sdk-core #{PayPal::SDK::REST::VERSION}; ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}-#{RUBY_PLATFORM}"
+          begin
+            @library_details << ";#{OpenSSL::OPENSSL_LIBRARY_VERSION}"
+          rescue NameError
+            @library_details << ";OpenSSL #{OpenSSL::OPENSSL_VERSION}"
+          end
         end
 
         def user_agent
