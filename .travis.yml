@@ -3,11 +3,11 @@ language: ruby
 
 rvm:
   - "2.0.0"
-  - "1.9.3"
+  - "2.2.3"
 script: "bundle exec rspec --tag unit"
 
 sudo: false
 
 notifications:
   recipients:
-    - DL-PP-Platform-Ruby-SDK@paypal.com
+    - DL-PP-Ruby-SDK@paypal.com

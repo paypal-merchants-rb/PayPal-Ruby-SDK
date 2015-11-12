@@ -75,6 +75,8 @@ module PayPal::SDK
           end
           path = "v1/payments/payment/#{self.id}"
           response = api.patch(path, patch_request_array, http_header)
+          self.merge!(response)
+          success?
         end
 
         def execute(payment_execution)

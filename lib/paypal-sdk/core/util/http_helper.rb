@@ -43,6 +43,11 @@ module PayPal::SDK::Core
           https.use_ssl = true
           https.ca_file = default_ca_file
           https.verify_mode = OpenSSL::SSL::VERIFY_PEER
+          begin
+            https.ssl_version = :TLSv1_2
+          rescue => error
+            logger.warn("WARNING: TLSv1.2 is not supported. Your connection may not be secure. You MUST update to the latest security library")
+          end
           config.ssl_options.each do |key, value|
             http.send("#{key}=", value)
           end
