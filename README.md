@@ -2,6 +2,10 @@
 
 The PayPal REST SDK provides Ruby APIs to create, process and manage payment.
 
+## Prerequisites
+- Ruby 2.0.0 or above
+- Bundler
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -240,7 +244,7 @@ logout_url = tokeninfo.logout_url
 To make Payouts, you should enable this option in your account at http://developer.paypal.com.
 
 ```ruby
-Payout.new(
+@payout = Payout.new(
   {
     :sender_batch_header => {
       :sender_batch_id => SecureRandom.hex(8),
