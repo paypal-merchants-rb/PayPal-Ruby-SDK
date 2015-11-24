@@ -193,9 +193,10 @@ module PayPal::SDK
           success?
         end
 
-        def update()
+        def update(patch_request)
+          patch_request = PatchRequest.new(patch_request) unless patch_request.is_a? PatchRequest
           path = "v1/vault/credit-cards/#{self.id}"
-          response = api.patch(path, self.to_hash, http_header)
+          response = api.patch(path, patch_request.to_hash, http_header)
           self.merge!(response)
           success?
         end
