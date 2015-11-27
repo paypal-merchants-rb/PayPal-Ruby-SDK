@@ -46,7 +46,7 @@ module PayPal::SDK::Core
           begin
             https.ssl_version = :TLSv1_2
           rescue => error
-            logger.warn("WARNING: TLSv1.2 is not supported. Your connection may not be secure. You MUST update to the latest security library")
+            logger.warn("WARNING: Your system does not support TLSv1.2. Per PCI Security Council mandate (https://github.com/paypal/TLS-update), you MUST update to latest security library.")
           end
           config.ssl_options.each do |key, value|
             http.send("#{key}=", value)
