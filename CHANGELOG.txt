@@ -1,6 +1,7 @@
-Version 1.3.5
+Version 1.4.0
   * Fix CreditCard.update()
-  * Update TLS warning message
+  * Payment API support
+  * Updated TLS warning message
 
 Version 1.3.4
   * Fix payment.update() [#163](https://github.com/paypal/PayPal-Ruby-SDK/issues/163)
