@@ -132,7 +132,7 @@ describe PayPal::SDK::Core::API::REST do
 
   end
 
-  describe "Failure request" do
+  describe "Failure request", :integration => true do
     it "Invalid Resource ID" do
       lambda {
         response = @api.get("payment/PAY-1234")
