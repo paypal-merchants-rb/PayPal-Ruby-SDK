@@ -56,6 +56,11 @@ module PayPal::SDK
           object_of :create_time, String
           object_of :update_time, String
           array_of  :links, Links
+          object_of :note_to_payer, String
+          array_of  :billing_agreement_tokens, String
+          object_of :potential_payer_info, PotentialPayerInfo
+          object_of :credit_financing_offered, CreditFinancingOffered
+          object_of :failure_reason, String
         end
 
         include RequestDataType
@@ -67,10 +72,14 @@ module PayPal::SDK
           success?
         end
 
-        def update(patch_request)
-          patch_request = PatchRequest.new(patch_request) unless patch_request.is_a? PatchRequest
+        def update(patch_requests)
+          patch_request_array = []
+          patch_requests.each do |patch_request|
+            patch_request = Patch.new(patch_request) unless patch_request.is_a? Patch
+            patch_request_array << patch_request.to_hash
+          end
           path = "v1/payments/payment/#{self.id}"
-          response = api.patch(path, patch_request.to_hash, http_header)
+          response = api.patch(path, patch_request_array, http_header)
           self.merge!(response)
           success?
         end
@@ -96,6 +105,130 @@ module PayPal::SDK
           end
         end
       end
+
+      class PotentialPayerInfo < Base
+        def self.load_members
+          object_of :email, String
+          object_of :external_remember_me_id, String
+          object_of :billing_address, Address
+        end
+
+        include RequestDataType
+      end
+
+      class ProcessorResponse < Base
+        def self.load_members
+          object_of :response_code, String
+          object_of :avs_code, String
+          object_of :cvv_code, Address
+          object_of :advice_code, String
+          object_of :eci_submitted, String
+          object_of :vpas, String
+        end
+
+        include RequestDataType
+      end
+
+      class AlternatePayment < Base
+        def self.load_members
+          object_of :alternate_payment_account_id, String
+          object_of :external_customer_id, String
+          object_of :alternate_payment_provider_id, String
+        end
+
+        include RequestDataType
+      end
+
+      class Billing < Base
+        def self.load_members
+          object_of :billing_agreement_id, String
+        end
+
+        include RequestDataType
+      end
+
+      class BillingAgreementToken < Base
+        def self.load_members
+        end
+
+        include RequestDataType
+      end
+
+      class CarrierAccountToken < Base
+        def self.load_members
+          object_of :carrier_account_id, String
+          object_of :external_customer_id, String
+        end
+      end
+
+      class CountryCode < Base
+        def self.load_members
+          object_of :country_code, String
+        end
+
+        include RequestDataType
+      end
+
+      class CreditFinancingOffered < Base
+        def self.load_members
+          object_of :total_cost, Currency
+          object_of :term, Number
+          object_of :monthly_payment, Currency
+          object_of :total_interest, Currency
+          object_of :payer_acceptance, Boolean
+          object_of :cart_amount_immutable, Boolean
+        end
+
+        include RequestDataType
+      end
+
+      class ExternalFunding < Base
+        def self.load_members
+          object_of :reference_id, String
+          object_of :code, String
+          object_of :funding_account_id, String
+          object_of :display_text, String
+        end
+
+        include RequestDataType
+      end
+
+      class PotentialPayerInfo < Base
+        def self.load_members
+          object_of :email, String
+          object_of :external_remember_me_id, String
+          object_of :billing_address, Address
+        end
+
+        include RequestDataType
+      end
+
+      class PrivateLabelCard < Base
+        def self.load_members
+          object_of :id, String
+          object_of :card_number, String
+          object_of :issuer_id, Address
+          object_of :issuer_name, Address
+          object_of :image_key, Address
+        end
+
+        include RequestDataType
+      end
+
+      class ProcessorResponse < Base
+        def self.load_members
+          object_of :response_code, String
+          object_of :avs_code, String
+          object_of :cvv_code, String
+          object_of :advice_code, String
+          object_of :eci_submitted, String
+          object_of :vpas, String
+        end
+
+        include RequestDataType
+      end
+
+
 
 
       class FuturePayment < Payment
@@ -136,6 +269,7 @@ module PayPal::SDK
           object_of :funding_option, FundingOption
           object_of :related_funding_option, FundingOption
           object_of :payer_info, PayerInfo
+          object_of :billing, Billing
         end
       end
 
@@ -189,9 +323,11 @@ module PayPal::SDK
           success?
         end
 
-        def update()
+        def update(patch)
+          patch = Patch.new(patch) unless patch.is_a? Patch
+          patch_request = Array.new(1, patch.to_hash)
           path = "v1/vault/credit-cards/#{self.id}"
-          response = api.patch(path, self.to_hash, http_header)
+          response = api.patch(path, patch_request, http_header)
           self.merge!(response)
           success?
         end
@@ -245,6 +381,7 @@ module PayPal::SDK
           object_of :external_customer_id, String
           object_of :status, String
           object_of :valid_until, String
+          object_of :issue_number, String
         end
       end
 
@@ -377,6 +514,8 @@ module PayPal::SDK
           object_of :funding_detail, FundingDetail
           object_of :additional_text, String
           object_of :extends, FundingInstrument
+          object_of :negative_balance_amount, Currency
+          object_of :links, Links
         end
       end
 
@@ -384,6 +523,8 @@ module PayPal::SDK
         def self.load_members
           object_of :clearing_time, String
           object_of :payment_hold_date, String
+          object_of :payment_debit_date, String
+          object_of :processing_type, String
         end
       end
 
@@ -454,6 +595,8 @@ module PayPal::SDK
           object_of :postal_code, String
           object_of :country_code, String
           object_of :phone, String
+          object_of :normalization_status, String
+          object_of :id, String
           object_of :recipient_name, String
         end
       end
@@ -473,6 +616,7 @@ module PayPal::SDK
           object_of :custom, String
           object_of :soft_descriptor, String
           object_of :item_list, ItemList
+          object_of :notify_url, String
           object_of :purchase_unit_reference_id, String
           array_of  :related_resources, RelatedResources
           array_of  :transactions, Transaction
@@ -493,6 +637,7 @@ module PayPal::SDK
           object_of :item_list, ItemList
           object_of :notify_url, String
           object_of :order_url, String
+          object_of :reference_id, String
         end
       end
 
@@ -578,6 +723,7 @@ module PayPal::SDK
           array_of  :items, Item
           object_of :shipping_address, ShippingAddress
           object_of :shipping_method, String
+          object_of :shipping_phone_number, String
         end
       end
 
@@ -613,6 +759,10 @@ module PayPal::SDK
           object_of :create_time, String
           object_of :update_time, String
           array_of  :links, Links
+          object_of :processor_response, ProcessorResponse
+          object_of :billing_agreement_id, String
+          object_of :payment_hold_reasons, String
+          object_of :processor_response, ProcessorResponse
         end
 
         include RequestDataType
@@ -747,6 +897,7 @@ module PayPal::SDK
           object_of :transaction_fee, Currency
           object_of :create_time, String
           object_of :update_time, String
+          object_of :invoice_number, String
           array_of  :links, Links
         end
 
@@ -797,7 +948,6 @@ module PayPal::SDK
       class Error < Base
         def self.load_members
           object_of :name, String
-          object_of :purchase_unit_reference_id, String
           object_of :debug_id, String
           object_of :message, String
           object_of :code, String
@@ -811,7 +961,6 @@ module PayPal::SDK
         def self.load_members
           object_of :field, String
           object_of :issue, String
-          object_of :purchase_unit_reference_id, String
           object_of :code, String
         end
       end
@@ -867,8 +1016,8 @@ module PayPal::SDK
 
       class Patch < Base
         def self.load_members
-	            object_of :op, String
-	            object_of :path, String
+              object_of :op, String
+              object_of :path, String
               object_of :value, Object
               object_of :from, String
         end
@@ -876,6 +1025,10 @@ module PayPal::SDK
       class PatchRequest < Base
 
         def self.load_members
+              object_of :op, String
+              object_of :path, String
+              object_of :value, Object
+              object_of :from, String
         end
 
       end
@@ -883,6 +1036,7 @@ module PayPal::SDK
         def self.load_members
           object_of :payer_id, String
           array_of  :transactions, CartBase
+          object_of :carrier_account_id, String
         end
       end
 
@@ -1731,20 +1885,20 @@ module PayPal::SDK
 
       class Agreement < Base
         def self.load_members
-	            object_of :id, String
+              object_of :id, String
               object_of :state, String
-	            object_of :name, String
-	            object_of :description, String
-	            object_of :start_date, String
+              object_of :name, String
+              object_of :description, String
+              object_of :start_date, String
               object_of :agreement_details, AgreementDetails
-	            object_of :payer, Payer
-	            object_of :shipping_address, Address
-	            object_of :override_merchant_preferences, MerchantPreferences
-	          array_of  :override_charge_models, OverrideChargeModel
-	            object_of :plan, Plan
-	            object_of :create_time, String
-	            object_of :update_time, String
-	          array_of  :links, Links
+              object_of :payer, Payer
+              object_of :shipping_address, Address
+              object_of :override_merchant_preferences, MerchantPreferences
+            array_of  :override_charge_models, OverrideChargeModel
+              object_of :plan, Plan
+              object_of :create_time, String
+              object_of :update_time, String
+            array_of  :links, Links
               object_of :token, String
         end
 
