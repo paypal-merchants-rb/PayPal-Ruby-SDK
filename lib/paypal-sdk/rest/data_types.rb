@@ -1280,7 +1280,7 @@ module PayPal::SDK
           def verify_common_name(cert)
             common_name = cert.subject.to_a.select{|name, _, _| name == 'CN' }.first[1]
 
-            common_name.start_with?("messageverificationcerts.") && common_name.end_with?("paypal.com")
+            common_name.start_with?("messageverificationcerts.") && common_name.end_with?(".paypal.com")
           end
 
           def verify_signature(transmission_id, timestamp, webhook_id, event_body, cert, actual_sig_encoded, algo)
