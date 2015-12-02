@@ -1,3 +1,6 @@
+Version 1.4.1
+  * Fix Webhook common name verification
+
 Version 1.4.0
   * Fix CreditCard.update()
   * Payment API support
