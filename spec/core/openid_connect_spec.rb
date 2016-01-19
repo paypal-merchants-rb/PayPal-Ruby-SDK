@@ -8,16 +8,16 @@ describe PayPal::SDK::OpenIDConnect do
   end
 
   it "Validate user_agent" do
-    OpenIDConnect::API.user_agent.should match "PayPalSDK/openid-connect-ruby"
+    expect(OpenIDConnect::API.user_agent).to match "PayPalSDK/openid-connect-ruby"
   end
 
   describe "generate_authorize_url" do
 
     it "generate autorize_url" do
       url = OpenIDConnect::Tokeninfo.authorize_url
-      url.should match "client_id=client_id"
-      url.should match Regexp.escape("redirect_uri=#{CGI.escape("http://google.com")}")
-      url.should match "scope=openid"
+      expect(url).to match "client_id=client_id"
+      expect(url).to match Regexp.escape("redirect_uri=#{CGI.escape("http://google.com")}")
+      expect(url).to match "scope=openid"
     end
 
     describe "sandbox" do
@@ -27,7 +27,7 @@ describe PayPal::SDK::OpenIDConnect do
 
       it "generates a sandbox authorize url" do
         url = OpenIDConnect::Tokeninfo.authorize_url
-        url.should match "sandbox.paypal.com"
+        expect(url).to match "sandbox.paypal.com"
       end
     end
   end
@@ -37,43 +37,43 @@ describe PayPal::SDK::OpenIDConnect do
       :client_id => "new_client_id",
       :redirect_uri => "http://example.com",
       :scope => "openid profile")
-    url.should match "client_id=new_client_id"
-    url.should match Regexp.escape("redirect_uri=#{CGI.escape("http://example.com")}")
-    url.should match Regexp.escape("scope=#{CGI.escape("openid profile")}")
+    expect(url).to match "client_id=new_client_id"
+    expect(url).to match Regexp.escape("redirect_uri=#{CGI.escape("http://example.com")}")
+    expect(url).to match Regexp.escape("scope=#{CGI.escape("openid profile")}")
   end
 
   it "Generate logout_url" do
     url = OpenIDConnect.logout_url
-    url.should match "logout=true"
-    url.should match Regexp.escape("redirect_uri=#{CGI.escape("http://google.com")}")
-    url.should_not match "id_token"
+    expect(url).to match "logout=true"
+    expect(url).to match Regexp.escape("redirect_uri=#{CGI.escape("http://google.com")}")
+    expect(url).not_to match "id_token"
   end
 
   it "Override logout_url params" do
     url = OpenIDConnect.logout_url({
       :redirect_uri => "http://example.com",
       :id_token  => "testing" })
-    url.should match Regexp.escape("redirect_uri=#{CGI.escape("http://example.com")}")
-    url.should match "id_token=testing"
+    expect(url).to match Regexp.escape("redirect_uri=#{CGI.escape("http://example.com")}")
+    expect(url).to match "id_token=testing"
   end
 
   describe "Validation" do
     it "Create token" do
-      lambda{
+      expect{
         tokeninfo = OpenIDConnect::Tokeninfo.create("invalid-autorize-code")
-      }.should raise_error PayPal::SDK::Core::Exceptions::BadRequest
+      }.to raise_error PayPal::SDK::Core::Exceptions::BadRequest
     end
 
     it "Refresh token" do
-      lambda{
+      expect{
         tokeninfo = OpenIDConnect::Tokeninfo.refresh("invalid-refresh-token")
-      }.should raise_error PayPal::SDK::Core::Exceptions::BadRequest
+      }.to raise_error PayPal::SDK::Core::Exceptions::BadRequest
     end
 
     it "Get userinfo" do
-      lambda{
+      expect{
         userinfo = OpenIDConnect::Userinfo.get("invalid-access-token")
-      }.should raise_error PayPal::SDK::Core::Exceptions::UnauthorizedAccess
+      }.to raise_error PayPal::SDK::Core::Exceptions::UnauthorizedAccess
     end
   end
 
@@ -85,32 +85,32 @@ describe PayPal::SDK::OpenIDConnect do
     end
 
     it "create" do
-      OpenIDConnect::Tokeninfo.api.stub( :post => { :access_token => "access_token" } )
+      allow(OpenIDConnect::Tokeninfo.api).to receive_messages( :post => { :access_token => "access_token" } )
       tokeninfo = OpenIDConnect::Tokeninfo.create("authorize_code")
-      tokeninfo.should be_a OpenIDConnect::Tokeninfo
-      tokeninfo.access_token.should eql "access_token"
+      expect(tokeninfo).to be_a OpenIDConnect::Tokeninfo
+      expect(tokeninfo.access_token).to eql "access_token"
     end
 
     it "refresh" do
-      @tokeninfo.api.stub( :post => { :access_token => "new_access_token" } )
-      @tokeninfo.access_token.should eql "test_access_token"
+      allow(@tokeninfo.api).to receive_messages( :post => { :access_token => "new_access_token" } )
+      expect(@tokeninfo.access_token).to eql "test_access_token"
       @tokeninfo.refresh
-      @tokeninfo.access_token.should eql "new_access_token"
+      expect(@tokeninfo.access_token).to eql "new_access_token"
     end
 
     it "userinfo" do
-      @tokeninfo.api.stub( :post => { :name => "Testing" } )
+      allow(@tokeninfo.api).to receive_messages( :post => { :name => "Testing" } )
       userinfo = @tokeninfo.userinfo
-      userinfo.should be_a OpenIDConnect::Userinfo
-      userinfo.name.should eql "Testing"
+      expect(userinfo).to be_a OpenIDConnect::Userinfo
+      expect(userinfo.name).to eql "Testing"
     end
 
     describe "logout_url" do
       it "Generate logout_url" do
         url = @tokeninfo.logout_url
-        url.should match "id_token=test_id_token"
-        url.should match "logout=true"
-        url.should match Regexp.escape("redirect_uri=#{CGI.escape("http://google.com")}")
+        expect(url).to match "id_token=test_id_token"
+        expect(url).to match "logout=true"
+        expect(url).to match Regexp.escape("redirect_uri=#{CGI.escape("http://google.com")}")
       end
 
       describe "sandbox" do
@@ -120,7 +120,7 @@ describe PayPal::SDK::OpenIDConnect do
 
         it "generates a sandbox logout url" do
           url = @tokeninfo.logout_url
-          url.should match "sandbox.paypal.com"
+          expect(url).to match "sandbox.paypal.com"
         end
       end
     end
@@ -128,24 +128,24 @@ describe PayPal::SDK::OpenIDConnect do
 
   describe "Userinfo" do
     it "get" do
-      OpenIDConnect::Userinfo.api.stub( :post => { :name => "Testing" } )
+      allow(OpenIDConnect::Userinfo.api).to receive_messages( :post => { :name => "Testing" } )
 
       userinfo = OpenIDConnect::Userinfo.get("access_token")
       userinfo = OpenIDConnect::Userinfo.new( { :name => "Testing" } )
-      userinfo.should be_a OpenIDConnect::Userinfo
-      userinfo.name.should eql "Testing"
+      expect(userinfo).to be_a OpenIDConnect::Userinfo
+      expect(userinfo.name).to eql "Testing"
 
       userinfo = OpenIDConnect::Userinfo.get( :access_token => "access_token" )
-      userinfo.should be_a OpenIDConnect::Userinfo
-      userinfo.name.should eql "Testing"
+      expect(userinfo).to be_a OpenIDConnect::Userinfo
+      expect(userinfo.name).to eql "Testing"
     end
 
     it "get", :integration => true do
       api = PayPal::SDK::REST::API.new
       access_token = api.token_hash()
       userinfo = OpenIDConnect::Userinfo.get( access_token )
-      userinfo.should be_a OpenIDConnect::Userinfo
-      userinfo.email.should eql "jaypatel512-facilitator@hotmail.com"
+      expect(userinfo).to be_a OpenIDConnect::Userinfo
+      expect(userinfo.email).to eql "jaypatel512-facilitator@hotmail.com"
     end
   end
 

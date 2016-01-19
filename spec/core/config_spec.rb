@@ -5,17 +5,17 @@ describe PayPal::SDK::Core::Config do
   Config = PayPal::SDK::Core::Config
 
   it "load configuration file and default environment" do
-    lambda {
+    expect {
       Config.load("spec/config/paypal.yml", "test")
-      Config.default_environment.should eql "test"
-    }.should_not raise_error
+      expect(Config.default_environment).to eql "test"
+    }.not_to raise_error
   end
 
   it "Set default environment" do
     begin
       backup_default_environment = Config.default_environment
       Config.default_environment = "new_env"
-      Config.default_environment.should eql "new_env"
+      expect(Config.default_environment).to eql "new_env"
     ensure
       Config.default_environment = backup_default_environment
     end
@@ -25,9 +25,9 @@ describe PayPal::SDK::Core::Config do
     begin
       backup_configurations = Config.configurations
       Config.configurations = { Config.default_environment => { :username => "direct", :password => "direct" } }
-      Config.config.username.should eql "direct"
-      Config.config.password.should eql "direct"
-      Config.config.signature.should be_nil
+      expect(Config.config.username).to eql "direct"
+      expect(Config.config.password).to eql "direct"
+      expect(Config.config.signature).to be_nil
     ensure
       Config.configurations = backup_configurations
     end
@@ -38,8 +38,8 @@ describe PayPal::SDK::Core::Config do
       backup_configurations = Config.configurations
       Config.configurations = nil
       Config.configure( :username => "Testing" )
-      Config.config.username.should eql "Testing"
-      Config.config.app_id.should be_nil
+      expect(Config.config.username).to eql "Testing"
+      expect(Config.config.app_id).to be_nil
     ensure
       Config.configurations = backup_configurations
     end
@@ -52,8 +52,8 @@ describe PayPal::SDK::Core::Config do
       Config.configure do |config|
         config.username = "Testing"
       end
-      Config.config.username.should eql "Testing"
-      Config.config.app_id.should be_nil
+      expect(Config.config.username).to eql "Testing"
+      expect(Config.config.app_id).to be_nil
     ensure
       Config.configurations = backup_configurations
     end
@@ -66,9 +66,9 @@ describe PayPal::SDK::Core::Config do
       Config.configure do |config|
         config.username = "Testing"
       end
-      Config.config.username.should eql "Testing"
-      Config.config.app_id.should_not be_nil
-      Config.config.app_id.should eql default_config.app_id
+      expect(Config.config.username).to eql "Testing"
+      expect(Config.config.app_id).not_to be_nil
+      expect(Config.config.app_id).to eql default_config.app_id
     ensure
       Config.configurations = backup_configurations
     end
@@ -76,59 +76,59 @@ describe PayPal::SDK::Core::Config do
 
   it "validate configuration" do
     config = Config.new( :username => "XYZ")
-    lambda {
+    expect {
       config.required!(:username)
-    }.should_not raise_error
-    lambda {
+    }.not_to raise_error
+    expect {
       config.required!(:password)
-    }.should raise_error "Required configuration(password)"
-    lambda {
+    }.to raise_error "Required configuration(password)"
+    expect {
       config.required!(:username, :password)
-    }.should raise_error "Required configuration(password)"
-    lambda {
+    }.to raise_error "Required configuration(password)"
+    expect {
       config.required!(:password, :signature)
-    }.should raise_error "Required configuration(password, signature)"
+    }.to raise_error "Required configuration(password, signature)"
   end
 
   it "return default environment configuration" do
-    Config.config.should be_a Config
+    expect(Config.config).to be_a Config
   end
 
   it "return configuration based on environment" do
-    Config.config(:development).should be_a Config
+    expect(Config.config(:development)).to be_a Config
   end
 
   it "override default configuration" do
     override_configuration = { :username => "test.example.com", :app_id => "test"}
     config = Config.config(override_configuration)
 
-    config.username.should eql(override_configuration[:username])
-    config.app_id.should eql(override_configuration[:app_id])
+    expect(config.username).to eql(override_configuration[:username])
+    expect(config.app_id).to eql(override_configuration[:app_id])
   end
 
   it "get cached config" do
-    Config.config(:test).should eql Config.config(:test)
-    Config.config(:test).should_not eql Config.config(:development)
+    expect(Config.config(:test)).to eql Config.config(:test)
+    expect(Config.config(:test)).not_to eql Config.config(:development)
   end
 
   it "should raise error on invalid environment" do
-    lambda {
+    expect {
       Config.config(:invalid_env)
-    }.should raise_error "Configuration[invalid_env] NotFound"
+    }.to raise_error "Configuration[invalid_env] NotFound"
   end
 
   it "set logger" do
     require 'logger'
     my_logger = Logger.new(STDERR)
     Config.logger = my_logger
-    Config.logger.should eql my_logger
+    expect(Config.logger).to eql my_logger
   end
 
   it "Access PayPal::SDK methods" do
-    PayPal::SDK.configure.should eql PayPal::SDK::Core::Config.config
-    PayPal::SDK.logger.should eql PayPal::SDK::Core::Config.logger
+    expect(PayPal::SDK.configure).to eql PayPal::SDK::Core::Config.config
+    expect(PayPal::SDK.logger).to eql PayPal::SDK::Core::Config.logger
     PayPal::SDK.logger = PayPal::SDK.logger
-    PayPal::SDK.logger.should eql PayPal::SDK::Core::Config.logger
+    expect(PayPal::SDK.logger).to eql PayPal::SDK::Core::Config.logger
   end
 
   describe "include Configuration" do
@@ -138,38 +138,38 @@ describe PayPal::SDK::Core::Config do
 
     it "Get default configuration" do
       test_object = TestConfig.new
-      test_object.config.should be_a Config
+      expect(test_object.config).to be_a Config
     end
 
     it "Change environment" do
       test_object = TestConfig.new
       test_object.set_config("test")
-      test_object.config.should eql Config.config("test")
-      test_object.config.should_not eql Config.config("development")
+      expect(test_object.config).to eql Config.config("test")
+      expect(test_object.config).not_to eql Config.config("development")
     end
 
     it "Override environment configuration" do
       test_object = TestConfig.new
       test_object.set_config("test", :username => "test")
-      test_object.config.should_not eql Config.config("test")
+      expect(test_object.config).not_to eql Config.config("test")
     end
 
     it "Override default/current configuration" do
       test_object = TestConfig.new
       test_object.set_config( :username => "test")
-      test_object.config.username.should eql "test"
+      expect(test_object.config.username).to eql "test"
       test_object.set_config( :password => "test")
-      test_object.config.password.should eql "test"
-      test_object.config.username.should eql "test"
+      expect(test_object.config.password).to eql "test"
+      expect(test_object.config.username).to eql "test"
     end
 
     it "Append ssl_options" do
       test_object = TestConfig.new
       test_object.set_config( :ssl_options => { :ca_file => "test_path" } )
-      test_object.config.ssl_options[:ca_file].should eql "test_path"
+      expect(test_object.config.ssl_options[:ca_file]).to eql "test_path"
       test_object.set_config( :ssl_options => { :verify_mode => 1 } )
-      test_object.config.ssl_options[:verify_mode].should eql 1
-      test_object.config.ssl_options[:ca_file].should eql "test_path"
+      expect(test_object.config.ssl_options[:verify_mode]).to eql 1
+      expect(test_object.config.ssl_options[:ca_file]).to eql "test_path"
     end
 
     it "Set configuration without loading configuration File" do
@@ -177,11 +177,11 @@ describe PayPal::SDK::Core::Config do
       begin
         Config.configurations = nil
         test_object = TestConfig.new
-        lambda {
+        expect {
           test_object.config
-        }.should raise_error
+        }.to raise_error
         test_object.set_config( :username => "test" )
-        test_object.config.should be_a Config
+        expect(test_object.config).to be_a Config
       ensure
         Config.configurations = backup_configurations
       end
