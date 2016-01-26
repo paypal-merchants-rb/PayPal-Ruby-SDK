@@ -69,13 +69,13 @@ describe "Subscription" do
       # create access token and then create a plan
       $api = API.new
       plan = Plan.new(PlanAttributes.merge( :token => $api.token ))
-      Plan.api.should_not eql plan.api
+      expect(Plan.api).not_to eql plan.api
       plan.create
 
       # make sure the transaction was successful
       $plan_id = plan.id
-      plan.error.should be_nil
-      plan.id.should_not be_nil
+      expect(plan.error).to be_nil
+      expect(plan.id).not_to be_nil
     end
 
     it "Update" do
@@ -96,8 +96,8 @@ describe "Subscription" do
     it "List" do
       # list all billing plans
       plan_list = Plan.all
-      plan_list.error.should be_nil
-      plan_list.plans.count.should > 1
+      expect(plan_list.error).to be_nil
+      expect(plan_list.plans.count).to be > 1
     end
 
     it "Delete" do
@@ -117,7 +117,7 @@ describe "Subscription" do
 
       # make sure the plan has been deleted
       plan = Plan.find(plan_id)
-      plan.id.should_not eq plan_id
+      expect(plan.id).not_to eq plan_id
     end
   end
 

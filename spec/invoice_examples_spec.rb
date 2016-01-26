@@ -32,7 +32,7 @@ describe "Invoice", :integration => true do
 
   it "get invoice" do
     invoice = PayPal::SDK::REST::Invoice.find("INV2-P6VJ-36HG-BBVT-M2MA")
-    invoice.should be_a PayPal::SDK::REST::Invoice
+    expect(invoice).to be_a PayPal::SDK::REST::Invoice
     expect(invoice.id).to eql "INV2-P6VJ-36HG-BBVT-M2MA"
   end
 end

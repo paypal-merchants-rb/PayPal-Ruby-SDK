@@ -15,14 +15,14 @@ describe PayPal::SDK::Core::Logging do
   end
 
   it "get logger object" do
-    @test_logging.logger.should be_a Logger
+    expect(@test_logging.logger).to be_a Logger
   end
 
   it "write message to logger" do
     test_message = "Example log message!!!"
     @test_logging.logger.info(test_message)
     @logger_file.rewind
-    @logger_file.read.should match test_message
+    expect(@logger_file.read).to match test_message
   end
 
 end
