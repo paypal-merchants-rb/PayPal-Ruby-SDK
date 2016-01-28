@@ -1,7 +1,7 @@
 require "spec_helper"
 require "securerandom"
 
-describe "Webhooks", :integration => true do
+describe "Webhooks" do
 
   webhookAttributes = {
     :url => "https://www.yeowza.com/paypal_webhook_"+SecureRandom.hex(8),
@@ -15,7 +15,7 @@ describe "Webhooks", :integration => true do
     ]
   }
 
-  describe "Notifications" do
+  describe "Notifications", :integration => true do
     it "create webhook" do
       $webhook = PayPal::SDK::REST::Webhook.new(webhookAttributes)
       expect($webhook.create).to be_truthy
@@ -42,7 +42,7 @@ describe "Webhooks", :integration => true do
     end
   end
 
-  describe "Validation" do
+  describe "Validation", :integration => true do
 
     transmission_id = "dfb3be50-fd74-11e4-8bf3-77339302725b"
     timestamp = "2015-05-18T15:45:13Z"
