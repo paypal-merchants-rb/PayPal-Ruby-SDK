@@ -1,3 +1,7 @@
+Version 1.4.2
+  * Fix test category [#178](https://github.com/paypal/PayPal-Ruby-SDK/issues/178)
+  * Delete code irrelevant to REST APIs [#179](https://github.com/paypal/PayPal-Ruby-SDK/issues/179)
+
 Version 1.4.1
   * Fix Webhook common name verification
 
