@@ -1,3 +1,6 @@
+Version 1.4.3
+  * Fix issue where uninitialized constant PayPal::SDK::Core::API::Merchant occurs for merchant-sdk-ruby issue [#184](https://github.com/paypal/PayPal-Ruby-SDK/issues/184)
+
 Version 1.4.2
   * Fix test category [#178](https://github.com/paypal/PayPal-Ruby-SDK/issues/178)
   * Delete code irrelevant to REST APIs [#179](https://github.com/paypal/PayPal-Ruby-SDK/issues/179)
