@@ -3,6 +3,7 @@ module PayPal
     module Core
       module API
         autoload :Base,     "paypal-sdk/core/api/base"
+        autoload :Merchant, "paypal-sdk/core/api/merchant"
         autoload :REST,     "paypal-sdk/core/api/rest"
 
         module DataTypes
