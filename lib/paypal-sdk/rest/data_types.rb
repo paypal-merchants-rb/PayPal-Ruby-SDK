@@ -1074,6 +1074,12 @@ module PayPal::SDK
         end
       end
 
+      class InvoiceAmountWrapper < Base
+        def self.load_members
+          object_of :paypal, Currency
+        end
+      end
+
       class Invoice < Base
         def self.load_members
           object_of :id, String
@@ -1093,6 +1099,7 @@ module PayPal::SDK
           object_of :tax_inclusive, Boolean
           object_of :terms, String
           object_of :note, String
+          object_of :refunded_amount, InvoiceAmountWrapper
           object_of :merchant_memo, String
           object_of :logo_url, String
           object_of :total_amount, Currency
