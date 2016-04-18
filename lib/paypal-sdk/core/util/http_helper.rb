@@ -90,8 +90,11 @@ module PayPal::SDK::Core
         logger.info sprintf("Response[%s]: %s, Duration: %.3fs", response.code,
           response.message, Time.now - start_time)
 
-        logger.debug "Response.body=#{response.body}\tResponse.header=#{response.to_hash}"
-        
+        logger.add(
+          response_details_log_level(response),
+          "Response.body=#{response.body}\tResponse.header=#{response.to_hash}"
+        )
+
         response
       end
 
@@ -150,6 +153,16 @@ module PayPal::SDK::Core
             raise(ServerError.new(response))
           else
             raise(ConnectionError.new(response, "Unknown response code: #{response.code}"))
+        end
+      end
+
+      private
+
+      def response_details_log_level(response)
+        if (400...600).cover?(response.code.to_i)
+          Logger::WARN
+        else
+          Logger::DEBUG
         end
       end
 
