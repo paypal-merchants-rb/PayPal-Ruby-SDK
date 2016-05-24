@@ -1,6 +1,11 @@
 PayPal Node SDK release notes
 =============================
 
+1.4.5
+------
+  * Log error responses in live mode [#192](https://github.com/paypal/PayPal-Ruby-SDK/pull/192)
+  * Fixed patch_requests by Array in update method of CreditCard [#193](https://github.com/paypal/PayPal-Ruby-SDK/pull/193)
+
 1.4.4
 ------
   * Update on Invoicing API changes [#189](https://github.com/paypal/PayPal-Ruby-SDK/pull/189)
