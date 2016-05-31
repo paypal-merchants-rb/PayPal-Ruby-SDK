@@ -55,7 +55,7 @@ configatron.wait_for_package_manager_method = method(:wait_for_package_manager)
 configatron.release_to_github = true
 
 def package_version()
-  f=File.open("lib/paypal-sdk/rest/version.rb", 'r') do |f|
+  File.open("lib/paypal-sdk/rest/version.rb", 'r') do |f|
     f.each_line do |line|
       if line.match (/VERSION = \"\d*\.\d*\.\d*\"/)
         return line.strip.split('=')[1].strip.split('"')[1]
