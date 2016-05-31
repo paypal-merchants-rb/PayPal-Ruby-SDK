@@ -1,6 +1,10 @@
 PayPal Node SDK release notes
 =============================
 
+1.4.6
+------
+  * Enable Passing Custom Headers [#197](https://github.com/paypal/PayPal-Ruby-SDK/pull/197)
+
 1.4.5
 ------
   * Log error responses in live mode [#192](https://github.com/paypal/PayPal-Ruby-SDK/pull/192)
