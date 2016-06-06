@@ -79,6 +79,14 @@ module PayPal::SDK
             end
             alias_method :refresh, :create_from_refresh_token
 
+            def create_from_third_party_refresh_token(options, http_header = {})
+              options = { :refresh_token => options } if options.is_a? String
+              options = options.merge( :grant_type => "refresh_token" )
+              http_header = http_header.merge( { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => basic_auth_header(with_credentials(options)) } )
+              Tokeninfo.new(api.post(FP_PATH, options, http_header))
+            end
+            alias_method :refresh_third_party, :create_from_third_party_refresh_token
+
             def create_from_future_payment_auth_code(options, http_header = {})
               options = { :code => options } if options.is_a? String
               options = options.merge( { :grant_type => "authorization_code", :response_type => "token", :redirect_uri => "urn:ietf:wg:oauth:2.0:oob" } )
