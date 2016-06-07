@@ -1,4 +1,4 @@
-## PayPal REST API Ruby SDK [![Build Status](https://travis-ci.org/paypal/PayPal-Ruby-SDK.png?branch=master)](https://travis-ci.org/paypal/PayPal-Ruby-SDK)
+## PayPal REST API Ruby SDK [![Build Status](https://travis-ci.org/paypal/PayPal-Ruby-SDK.svg?branch=master)](https://travis-ci.org/paypal/PayPal-Ruby-SDK)
 
 The PayPal REST SDK provides Ruby APIs to create, process and manage payment.
 
