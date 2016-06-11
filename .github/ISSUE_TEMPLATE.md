@@ -2,7 +2,7 @@
 
 - Mode (Sandbox/Live):
 - PayPal-Debug-ID(s) (from any logs):
-- Version of node.js used:
+- Version of Ruby used:
 - SDK Version:
 
 ### Issue Description
