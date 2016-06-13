@@ -3,6 +3,8 @@ test: &default
   mode: sandbox
   client_id: AYSq3RDGsmBLJE-otTkBtM-jBRd1TCQwFf9RGfwddNXWz0uFU9ztymylOhRS
   client_secret: EGnHDxD_qRPdaLdZz8iCr8N7_MzF-YHPTkjs6NKYQvQSBngp4PTTVWkPZRbL
+  #Your OpenID redirect URI must be the same value as your app's return URL. It is configured in the PayPal Developer Dashboard ( https://developer.paypal.com/developer/applications/ ).
+  openid_redirect_uri: http://localhost/paypal/PayPal-PHP-SDK/sample/lipp/UserConsentRedirect.php?success=true
 
 development:
   <<: *default
