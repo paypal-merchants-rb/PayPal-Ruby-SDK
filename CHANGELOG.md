@@ -3,6 +3,7 @@ PayPal Node SDK release notes
 
 1.4.6
 ------
+  * Enabled Third Party Invoicing [#204](https://github.com/paypal/PayPal-Ruby-SDK/pull/204)
   * Enable Passing Custom Headers [#197](https://github.com/paypal/PayPal-Ruby-SDK/pull/197)
 
 1.4.5
