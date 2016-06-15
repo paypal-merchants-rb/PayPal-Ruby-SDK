@@ -76,7 +76,7 @@ module PayPal::SDK
               options = { :refresh_token => options } if options.is_a? String
               options = options.merge( :grant_type => "refresh_token" )
               http_header = http_header.merge( { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => basic_auth_header(with_credentials(options)) } )
-              Tokeninfo.new(api.post(FP_PATH, options, http_header))
+              Tokeninfo.new(api.post(PATH, options, http_header))
             end
             alias_method :refresh, :create_from_refresh_token
 
