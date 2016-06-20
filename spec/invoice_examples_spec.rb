@@ -4,7 +4,7 @@ describe "Invoice", :integration => true do
 
   InvoiceAttributes = {
     "merchant_info" => {
-      "email" => "PPX.DevNet-facilitator@gmail.com"
+      "email" => "jaypatel512-facilitator@hotmail.com"
     },
     "billing_info" => [ { "email" => "example@example.com" } ],
     "items" => [
@@ -31,8 +31,8 @@ describe "Invoice", :integration => true do
   end
 
   it "get invoice" do
-    invoice = PayPal::SDK::REST::Invoice.find("INV2-P6VJ-36HG-BBVT-M2MA")
+    invoice = PayPal::SDK::REST::Invoice.find("INV2-6KYE-67GV-8AJR-SAER")
     expect(invoice).to be_a PayPal::SDK::REST::Invoice
-    expect(invoice.id).to eql "INV2-P6VJ-36HG-BBVT-M2MA"
+    expect(invoice.id).to eql "INV2-6KYE-67GV-8AJR-SAER"
   end
 end
