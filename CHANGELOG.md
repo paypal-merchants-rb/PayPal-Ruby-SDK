@@ -1,6 +1,10 @@
 PayPal Node SDK release notes
 =============================
 
+1.4.7
+------
+  * Enabled third party invoicing for all invoicing API operations [#209](https://github.com/paypal/PayPal-Ruby-SDK/pull/209)
+  
 1.4.6
 ------
   * Enabled Third Party Invoicing [#204](https://github.com/paypal/PayPal-Ruby-SDK/pull/204)
