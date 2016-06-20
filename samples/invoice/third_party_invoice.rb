@@ -96,8 +96,22 @@ logger.info userinfo.email
 }.merge( :token => access_token )
 )
 
+# create and send invoice
 if @invoice.create
   logger.info "Invoice[#{@invoice.id}] created successfully"
+  if @invoice.send_invoice == true
+    logger.info "Invoice[#{@invoice.id}] sent successfully"
+    # To find invoice please use access token generated from refresh token
+    if @invoice= Invoice.find("#{@invoice.id}", access_token)
+      logger.info "Got Invoice Details for Invoice[#{@invoice.id}]"
+    else
+      logger.error @invoice.error.inspect
+    end
+  else
+   logger.error @invoice.error.inspect
+  end
 else
   logger.error @invoice.error.inspect
 end
+
+
