@@ -5,7 +5,7 @@
 .bundle
 .config
 .yardoc
-Gemfile.lock
+samples/Gemfile.lock
 InstalledFiles
 _yardoc
 coverage
