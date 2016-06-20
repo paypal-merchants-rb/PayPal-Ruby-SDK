@@ -1173,21 +1173,25 @@ module PayPal::SDK
           success?
         end
 
+        #
         class << self
-          def search(options)
+          def search(options, access_token = nil)
             path = "v1/invoicing/search"
+            api.token = access_token unless access_token.nil?
             response = api.post(path, options)
             Invoices.new(response)
           end
 
-          def find(resource_id)
+          def find(resource_id, access_token = nil)
             raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
             path = "v1/invoicing/invoices/#{resource_id}"
+            api.token = access_token unless access_token.nil?
             self.new(api.get(path))
           end
 
-          def get_all(options = {})
+          def get_all(options = {}, access_token = nil)
             path = "v1/invoicing/invoices/"
+            api.token = access_token unless access_token.nil?
             Invoices.new(api.get(path, options))
           end
         end
