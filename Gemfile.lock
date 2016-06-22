@@ -76,7 +76,7 @@ DEPENDENCIES
   coveralls
   paypal-sdk-rest!
   rake
-  releasinator (~> 0.4)
+  releasinator (~> 0.5)
   rspec
   simplecov
 
