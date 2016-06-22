@@ -9,7 +9,7 @@ configatron.prerelease_checklist_items = [
 ]
 
 def validate_version_match()
-  if package_version() != @current_release.version
+  if 'v' + package_version() != @current_release.version
     Printer.fail("Package.json version #{package_version} does not match changelog version #{@current_release.version}.")
     abort()
   end
