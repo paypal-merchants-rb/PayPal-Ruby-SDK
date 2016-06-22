@@ -1,4 +1,4 @@
-PayPal Node SDK release notes
+PayPal Ruby SDK release notes
 =============================
 
 v1.4.7
