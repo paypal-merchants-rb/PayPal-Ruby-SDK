@@ -24,6 +24,21 @@ describe "Payments" do
             "currency" =>  "USD" },
           "description" =>  "This is the payment transaction description." } ] }
 
+  PaymentAttributesPayPal = {
+        "intent" =>  "sale",
+        "payer" =>  {
+          "payment_method" =>  "paypal"
+        },
+        "redirect_urls" => {
+          "return_url" => 'https://localhost/return',
+          "cancel_url" => 'https://localhost/cancel',
+        },
+        "transactions" =>  [ {
+          "amount" =>  {
+            "total" =>  "1.00",
+            "currency" =>  "USD" },
+          "description" =>  "This is the payment transaction description." } ] }
+
   FuturePaymentAttributes = {
         "intent" =>  "authorize",
         "payer" =>  {
@@ -56,6 +71,8 @@ describe "Payments" do
         payment.create
         expect(payment.error).to be_nil
         expect(payment.id).not_to be_nil
+        expect(payment.approval_url).to be_nil
+        expect(payment.token).to be_nil
       end
 
       it "Create with request_id" do
@@ -89,6 +106,18 @@ describe "Payments" do
         payment.create
         expect(payment.error).to be_nil
         expect(payment.id).not_to be_nil
+      end
+
+      it "Create with redirect urls" do
+        payment = Payment.new(PaymentAttributesPayPal)
+        # Create
+        payment.create
+        expect(payment.error).to be_nil
+        expect(payment.id).not_to be_nil
+        expect(payment.approval_url).to include('webscr?cmd=_express-checkout')
+        expect(payment.approval_url).not_to include('useraction=commit')
+        expect(payment.approval_url(true)).to eq payment.approval_url + '&useraction=commit'
+        expect(payment.token).to match /^EC-[A-Z0-9]+$/
       end
 
       it "List" do
@@ -163,7 +192,7 @@ describe "Payments" do
 
       it "Create a payment" do
         # put your PAYPAL-CLIENT-METADATA-ID
-        correlation_id = '' 
+        correlation_id = ''
         @future_payment = FuturePayment.new(FuturePaymentAttributes.merge( :token => access_token ))
         @future_payment.create(correlation_id)
         expect(@future_payment.error).to be_nil
