@@ -92,6 +92,18 @@ module PayPal::SDK
           success?
         end
 
+        def approval_url(immediate = false)
+          link = links.detect { |l| l.rel == 'approval_url' }
+          return nil unless link
+          link.href + (immediate ? '&useraction=commit' : '')
+        end
+
+        def token
+          url = approval_url
+          return nil unless url
+          CGI.parse(URI.parse(url).query)['token'].first
+        end
+
         class << self
           def find(resource_id)
             raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
