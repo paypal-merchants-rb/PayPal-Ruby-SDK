@@ -1107,6 +1107,7 @@ module PayPal::SDK
           array_of  :items, InvoiceItem
           object_of :invoice_date, String
           object_of :payment_term, PaymentTerm
+          object_of :reference, String
           object_of :discount, Cost
           object_of :shipping_cost, ShippingCost
           object_of :custom, CustomAmount
