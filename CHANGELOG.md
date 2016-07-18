@@ -1,6 +1,10 @@
 PayPal Ruby SDK release notes
 =============================
 
+TODO
+------
+  * Use UTF-8 as the character set when generating CRC32 checksum when validating webhook events
+
 v1.4.7
 ------
   * Enabled third party invoicing for all invoicing API operations [#209](https://github.com/paypal/PayPal-Ruby-SDK/pull/209)

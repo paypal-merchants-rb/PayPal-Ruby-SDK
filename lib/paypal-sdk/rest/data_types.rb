@@ -1300,7 +1300,8 @@ module PayPal::SDK
           end
 
           def get_expected_sig(transmission_id, timestamp, webhook_id, event_body)
-            crc = Zlib::crc32(event_body).to_s
+            utf8_encoded_event_body = event_body.encode("UTF-8")
+            crc = Zlib::crc32(utf8_encoded_event_body).to_s
             transmission_id + "|" + timestamp + "|" + webhook_id + "|" + crc
           end
 
