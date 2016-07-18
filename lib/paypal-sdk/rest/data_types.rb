@@ -33,7 +33,19 @@ module PayPal::SDK
           super
         end
 
+        def raise_error!
+          raise Core::Exceptions::UnsuccessfulApiCall, error if error
+        end
+
         def self.load_members
+        end
+
+        def self.raise_on_api_error(*methods)
+          methods.each do |symbol|
+            define_method("#{symbol}!") {|*arg|
+              raise_error! unless send(symbol, *arg)
+            }
+          end
         end
 
         class Number < Float
@@ -91,6 +103,8 @@ module PayPal::SDK
           self.merge!(response)
           success?
         end
+
+        raise_on_api_error :create, :update, :execute
 
         def approval_url(immediate = false)
           link = links.detect { |l| l.rel == 'approval_url' }
@@ -257,6 +271,8 @@ module PayPal::SDK
           success?
         end
 
+        raise_on_api_error :create
+
         class << self
 
           def exch_token(auth_code)
@@ -346,6 +362,8 @@ module PayPal::SDK
           self.merge!(response)
           success?
         end
+
+        raise_on_api_error :create, :update, :delete
       end
 
       class Address < Base
@@ -458,6 +476,8 @@ module PayPal::SDK
           self.merge!(response)
           success?
         end
+
+        raise_on_api_error :create, :update, :delete
       end
 
       class ExtendedBankAccount < BankAccount
@@ -851,6 +871,8 @@ module PayPal::SDK
           self.merge!(response)
           success?
         end
+
+        raise_on_api_error :capture, :void, :reauthorize
       end
 
       class Order < Base
@@ -900,6 +922,8 @@ module PayPal::SDK
           response = api.post(path, self.to_hash, http_header)
           Authorization.new(response)
         end
+
+        raise_on_api_error :capture, :void, :authorize
       end
 
       class Capture < Base
@@ -1186,6 +1210,10 @@ module PayPal::SDK
           success?
         end
 
+        raise_on_api_error :create, :send_invoice, :remind, :cancel,
+                           :record_payment, :record_refund, :update, :delete
+
+
         #
         class << self
           def search(options, access_token = nil)
@@ -1395,6 +1423,8 @@ module PayPal::SDK
           self.merge!(response)
           success?
         end
+
+        raise_on_api_error :update, :delete
 
         class << self
           def get(webhook_id)
@@ -1785,6 +1815,8 @@ module PayPal::SDK
           success?
         end
 
+        raise_on_api_error :create, :update
+
         class << self
           def find(resource_id)
             raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
@@ -2002,6 +2034,9 @@ module PayPal::SDK
           success?
         end
 
+        raise_on_api_error :create, :execute, :update, :suspend, :re_activate,
+                           :cancel, :bill_balance, :set_balance
+
         class << self
           def transactions(agreement_id, start_date, end_date, options = {})
             path = "v1/payments/billing-agreements/#{agreement_id}/transactions" #?start-date=#{start_date}&end-date=#{end_date}"
@@ -2107,6 +2142,8 @@ module PayPal::SDK
           self.merge!(response)
           success?
         end
+
+        raise_on_api_error :update, :partial_update, :delete
 
         class << self
           def find(resource_id)

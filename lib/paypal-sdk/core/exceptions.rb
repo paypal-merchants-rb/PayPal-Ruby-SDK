@@ -94,5 +94,15 @@ module PayPal::SDK::Core
         @response['Allow'].split(',').map { |verb| verb.strip.downcase.to_sym }
       end
     end
+
+    # API error: returned as 200 + "error" key in response.
+    class UnsuccessfulApiCall < RuntimeError
+      attr_reader :api_error
+
+      def initialize(api_error)
+        super(api_error['message'])
+        @api_error = api_error
+      end
+    end
   end
 end
