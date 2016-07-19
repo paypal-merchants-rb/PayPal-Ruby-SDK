@@ -3,9 +3,7 @@ configatron.product_name = "PayPal Ruby SDK"
 
 # List of items to confirm from the person releasing.  Required, but empty list is ok.
 configatron.prerelease_checklist_items = [  
-  "Sanity check the master branch.", 
-  "Unit tests passed.",
-  "Functional tests passed."
+  "Sanity check the master branch."
 ]
 
 def validate_version_match()
@@ -45,7 +43,7 @@ configatron.publish_to_package_manager_method = method(:publish_to_package_manag
 
 
 def wait_for_package_manager(version)
-  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- https://rubygems.org/gems/paypal-sdk-rest/versions/#{version} | cat")
+  CommandProcessor.wait_for("wget -U \"non-empty-user-agent\" -qO- https://rubygems.org/gems/paypal-sdk-rest/versions/#{package_version} | cat")
 end
 
 # The method that waits for the package manager to be done.  Required
