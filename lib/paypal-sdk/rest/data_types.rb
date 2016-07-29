@@ -2112,6 +2112,7 @@ module PayPal::SDK
           object_of :flow_config, FlowConfig
           object_of :input_fields, InputFields
           object_of :presentation, Presentation
+          object_of :temporary, Boolean
         end
 
         include RequestDataType
@@ -2120,7 +2121,7 @@ module PayPal::SDK
           path = "v1/payment-experience/web-profiles/"
           response = api.post(path, self.to_hash, http_header)
           self.merge!(response)
-          Webhook.new(response)
+          WebProfile.new(response)
         end
 
         def update()
@@ -2156,6 +2157,13 @@ module PayPal::SDK
           def get_list(options = {})
             path = "v1/payment-experience/web-profiles/"
             l = api.get(path, options)
+            # The API is inconsistent in that it returns an array of WebProfiles
+            # instead of a JSON object with a property which should be a list
+            # of WebProfiles.
+            #
+            # Note that the WebProfileList is technically incorrect. It should
+            # be a WebProfile.new() here, but due to backwards-compatibility,
+            # may need to leave it as WebProfileList.
             l.map { |x| WebProfileList.new(x) }
           end
         end
@@ -2197,6 +2205,7 @@ module PayPal::SDK
           object_of :flow_config, FlowConfig
           object_of :input_fields, InputFields
           object_of :presentation, Presentation
+          object_of :temporary, Boolean
         end
       end
 

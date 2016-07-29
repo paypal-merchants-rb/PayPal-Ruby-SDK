@@ -34,6 +34,7 @@ describe "WebProfiles" do
 
         # create webhook
         $webprofile.create
+        expect($webprofile).to be_an_instance_of(WebProfile)
         expect($webprofile.name.to_s).to eq($randname)
       end
 
@@ -45,6 +46,7 @@ describe "WebProfiles" do
 
       it "Retrieve" do
         webprofile = WebProfile.find($webprofile.id)
+        expect(webprofile).to be_an_instance_of(WebProfile)
         expect(webprofile.name.to_s).to eq($randname)
       end
 
