@@ -1,5 +1,9 @@
 PayPal Ruby SDK release notes
 =============================
+v1.4.9
+------
+  * Use String.force_encoding to force conversion to UTF-8 [#220](https://github.com/paypal/PayPal-Ruby-SDK/pull/220).
+  * Fix WebProfile GET/retrieve to return a WebProfile instance [#219](https://github.com/paypal/PayPal-Ruby-SDK/pull/219).
 
 v1.4.8
 ------

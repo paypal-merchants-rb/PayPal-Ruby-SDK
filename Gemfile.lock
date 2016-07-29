@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    paypal-sdk-rest (1.4.8)
+    paypal-sdk-rest (1.4.9)
       multi_json (~> 1.0)
       uuidtools (~> 2.1)
       xml-simple
