@@ -10,7 +10,7 @@ include PayPal::SDK::Core::Logging
 #logger.info(PayPal::SDK::OpenIDConnect.authorize_url({'scope': 'openid https://uri.paypal.com/services/invoicing email'}))
 
 # For example, the URL to redirect the third party merchant may be like:
-# https://www.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=AYSq3RDGsmBLJE-otTkBtM-jBRd1TCQwFf9RGfwddNXWz0uFU9ztymylOhRS&scope=openid%20https%3A%2F%2Furi.paypal.com%2Fservices%2Finvoicing%20email&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Fpaypal%2FPayPal-PHP-SDK%2Fsample%2Flipp%2FUserConsentRedirect.php%3Fsuccess%3Dtrue
+# https://www.sandbox.paypal.com/signin/authorize?client_id=AYSq3RDGsmBLJE-otTkBtM-jBRd1TCQwFf9RGfwddNXWz0uFU9ztymylOhRS&scope=openid%20https%3A%2F%2Furi.paypal.com%2Fservices%2Finvoicing%20email&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Fpaypal%2FPayPal-PHP-SDK%2Fsample%2Flipp%2FUserConsentRedirect.php%3Fsuccess%3Dtrue
 
 # Step 2. After the third party merchant authorizes your request, Log In with PayPal will redirect the browser to your configured openid_redirect_uri with an authorization code query parameter value.
 

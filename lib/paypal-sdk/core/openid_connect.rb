@@ -20,8 +20,8 @@ module PayPal::SDK
         end
         alias_method :config=, :set_config
 
-        AUTHORIZATION_URL  = "paypal.com/webapps/auth/protocol/openidconnect/v1/authorize"
-        ENDSESSION_URL     = "paypal.com/webapps/auth/protocol/openidconnect/v1/endsession"
+        AUTHORIZATION_URL  = "paypal.com/signin/authorize"
+        ENDSESSION_URL     = "paypal.com/signin/endsession"
         DEFAULT_SCOPE      = "openid"
 
         def authorize_url(params = {})
