@@ -1122,30 +1122,39 @@ module PayPal::SDK
       class Invoice < Base
         def self.load_members
           object_of :id, String
-          object_of :number, String
-          object_of :uri, String
-          object_of :status, String
-          object_of :merchant_info, MerchantInfo
-          array_of  :billing_info, BillingInfo
-          object_of :shipping_info, ShippingInfo
-          array_of  :items, InvoiceItem
-          object_of :invoice_date, String
-          object_of :payment_term, PaymentTerm
-          object_of :reference, String
-          object_of :discount, Cost
-          object_of :shipping_cost, ShippingCost
-          object_of :custom, CustomAmount
-          object_of :tax_calculated_after_discount, Boolean
-          object_of :tax_inclusive, Boolean
-          object_of :terms, String
-          object_of :note, String
-          object_of :refunded_amount, InvoiceAmountWrapper
-          object_of :merchant_memo, String
-          object_of :logo_url, String
-          object_of :total_amount, Currency
+	      object_of :number, String
+	      object_of :template_id, String
+	      object_of :uri, String
+	      object_of :status, String
+	      object_of :merchant_info, MerchantInfo
+	      array_of  :billing_info, BillingInfo
+	      array_of  :cc_info, Participant
+	      object_of :shipping_info, ShippingInfo
+	      array_of  :items, InvoiceItem
+	      object_of :invoice_date, String
+	      object_of :payment_term, PaymentTerm
+	      object_of :reference, String
+	      object_of :discount, Cost
+	      object_of :shipping_cost, ShippingCost
+	      object_of :custom, CustomAmount
+	      object_of :allow_partial_payment, Boolean
+	      object_of :minimum_amount_due, Currency
+	      object_of :tax_calculated_after_discount, Boolean
+	      object_of :tax_inclusive, Boolean
+	      object_of :terms, String
+	      object_of :note, String
+	      object_of :merchant_memo, String
+	      object_of :logo_url, String
+	      object_of :total_amount, Currency
           array_of  :payments, PaymentDetail
-          array_of  :refund_details, RefundDetail
-          object_of :metadata, Metadata
+          array_of  :refunds, RefundDetail
+	      object_of :metadata, Metadata
+	      object_of :additional_data, String
+	      object_of :gratuity, Currency
+	      object_of :paid_amount, PaymentSummary
+	      object_of :refunded_amount, PaymentSummary
+          array_of  :attachments, FileAttachment
+          array_of  :links, Links
         end
 
         include RequestDataType
@@ -1213,7 +1222,6 @@ module PayPal::SDK
         raise_on_api_error :create, :send_invoice, :remind, :cancel,
                            :record_payment, :record_refund, :update, :delete
 
-
         #
         class << self
           def search(options, access_token = nil)
@@ -1234,6 +1242,153 @@ module PayPal::SDK
             path = "v1/invoicing/invoices/"
             api.token = access_token unless access_token.nil?
             Invoices.new(api.get(path, options))
+          end
+
+          def qr_code(options = {})
+            path = "v1/invoicing/invoices/{invoice_id}/qr-code"
+            object.new(api.get(path, options))
+          end
+
+          def self.generate_number(options)
+            path = "v1/invoicing/invoices/next-invoice-number"
+            response = api.post(path, options)
+            object.new(response)
+          end
+        end
+      end
+
+      class Participant < Base
+        def self.load_members
+	            object_of :email, String
+	            object_of :first_name, String
+	            object_of :last_name, String
+	            object_of :business_name, String
+	            object_of :phone, Phone
+	            object_of :fax, Phone
+	            object_of :website, String
+	            object_of :additional_info, String
+	            object_of :address, Address
+        end
+      end
+
+      class Template < Base
+
+        def self.load_members
+	            object_of :template_id, String
+	            object_of :name, String
+	            object_of :default, Boolean
+	            object_of :template_data, TemplateData
+	            array_of  :settings, TemplateSettings
+	            object_of :unit_of_measure, String
+	            object_of :custom, Boolean
+	            array_of  :links, Links
+        end
+
+        include RequestDataType
+
+        def delete()
+          path = "v1/invoicing/templates/#{self.template_id}"
+          response = api.delete(path, {})
+          self.merge!(response)
+          success?
+        end
+
+        def update()
+          path = "v1/invoicing/templates/#{self.template_id}"
+          response = api.put(path, self.to_hash, http_header)
+          self.merge!(response)
+          Template.new(response)
+        end
+
+        def create()
+            path = "v1/invoicing/templates"
+            response = api.post(path, self.to_hash, http_header)
+            self.merge!(response)
+            Template.new(response)
+        end
+
+        class << self
+          def get(template_id, options = {})
+            raise ArgumentError.new("template_id required") if template_id.to_s.strip.empty?
+            path = "v1/invoicing/templates/#{template_id}"
+            self.new(api.get(path, options))
+          end
+        end
+      end
+
+      class TemplateData < Base
+
+        def self.load_members
+	            object_of :merchant_info, MerchantInfo
+	            array_of  :billing_info, BillingInfo
+	            array_of  :cc_info, String
+	            object_of :shipping_info, ShippingInfo
+	            array_of  :items, InvoiceItem
+	            object_of :payment_term, PaymentTerm
+	            object_of :reference, String
+	            object_of :discount, Cost
+	            object_of :shipping_cost, ShippingCost
+	            object_of :custom, CustomAmount
+	            object_of :allow_partial_payment, Boolean
+	            object_of :minimum_amount_due, Currency
+	            object_of :tax_calculated_after_discount, Boolean
+	            object_of :tax_inclusive, Boolean
+	            object_of :terms, String
+	            object_of :note, String
+	            object_of :merchant_memo, String
+	            object_of :logo_url, String
+	            object_of :total_amount, Currency
+	            array_of  :attachments, FileAttachment
+        end
+
+      end
+
+      class TemplateSettings < Base
+
+        def self.load_members
+	            object_of :field_name, String
+	            object_of :display_preference, TemplateSettingsMetadata
+        end
+      end
+
+      class TemplateSettingsMetadata < Base
+
+        def self.load_members
+	            object_of :hidden, Boolean
+        end
+
+      end
+
+      class PaymentSummary < Base
+        def self.load_members
+	            object_of :paypal, Currency
+	            object_of :other, Currency
+        end
+      end
+      class FileAttachment < Base
+
+        def self.load_members
+	            object_of :name, String
+	            object_of :url, String
+        end
+
+      end
+      class Templates < Base
+
+        def self.load_members
+	          array_of  :addresses, Address
+	          array_of  :emails, String
+	          array_of  :phones, Phone
+	          array_of  :templates, Template
+	          array_of  :links, Links
+        end
+
+        include RequestDataType
+
+        class << self
+          def get_all(options = {})
+            path = "v1/invoicing/templates/"
+            Templates.new(api.get(path, options))
           end
         end
       end
@@ -1559,28 +1714,31 @@ module PayPal::SDK
 
       class InvoiceItem < Base
         def self.load_members
-          object_of :name, String
-          object_of :description, String
-          object_of :quantity, Number
-          object_of :unit_price, Currency
-          object_of :tax, Tax
-          object_of :date, String
-          object_of :discount, Cost
+	        object_of :name, String
+	        object_of :description, String
+	        object_of :quantity, Number
+	        object_of :unit_price, Currency
+	        object_of :tax, Tax
+	        object_of :date, String
+	        object_of :discount, Cost
+	        object_of :image_url, String
+	        object_of :unit_of_measure, String
         end
       end
 
       class MerchantInfo < Base
         def self.load_members
-          object_of :email, String
-          object_of :first_name, String
-          object_of :last_name, String
-          object_of :address, Address
-          object_of :business_name, String
-          object_of :phone, Phone
-          object_of :fax, Phone
-          object_of :website, String
-          object_of :tax_id, String
-          object_of :additional_info, String
+	        object_of :email, String
+	        object_of :first_name, String
+	        object_of :last_name, String
+	        object_of :address, Address
+	        object_of :business_name, String
+	        object_of :phone, Phone
+	        object_of :fax, Phone
+	        object_of :website, String
+	        object_of :tax_id, String
+	        object_of :additional_info_label, String
+	        object_of :additional_info, String
         end
       end
 
@@ -1593,6 +1751,8 @@ module PayPal::SDK
           object_of :address, Address
           object_of :language, String
           object_of :additional_info, String
+          object_of :notification_channel, String
+          object_of :phone, Phone
         end
       end
 
@@ -1611,6 +1771,7 @@ module PayPal::SDK
           object_of :subject, String
           object_of :note, String
           object_of :send_to_merchant, Boolean
+          array_of  :cc_emails, String
         end
       end
 
@@ -1668,6 +1829,7 @@ module PayPal::SDK
           object_of :page, Number
           object_of :page_size, Number
           object_of :total_count_required, Boolean
+          object_of :archived, Boolean
         end
       end
 

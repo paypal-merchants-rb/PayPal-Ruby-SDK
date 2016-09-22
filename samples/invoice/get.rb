@@ -3,7 +3,10 @@ include PayPal::SDK::REST
 include PayPal::SDK::Core::Logging
 
 begin
-  @invoice= Invoice.find("INV2-P6VJ-36HG-BBVT-M2MA")
+  # Create an invoice
+  @invoice = RunSample.run('invoice/create.rb', '@invoice')
+
+  @invoice= Invoice.find(@invoice.id)
   logger.info "Got Invoice Details for Invoice[#{@invoice.id}]"
 
 rescue ResourceNotFound => err

@@ -4,7 +4,7 @@ include PayPal::SDK::Core::Logging
 
 @invoice = Invoice.new({
   "merchant_info" => {
-    "email" => "PPX.DevNet-facilitator@gmail.com",
+    "email" => "jaypatel512-facilitator@hotmail.com",
     "first_name" => "Dennis",
     "last_name" => "Doctor",
     "business_name" => "Medical Professionals, LLC",
