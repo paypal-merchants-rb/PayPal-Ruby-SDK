@@ -229,7 +229,91 @@ class App < Sinatra::Application
       :display_hash => @refund }
   end
 
-  Dir["payment/*", "sale/*", "credit_card/*", "authorization/*", "capture/*", "payouts/*", "notifications/*"].each do |file_name|
+  get "/invoice/create" do
+   @invoice = RunSample.run("invoice/create.rb", "@invoice")
+       haml :display_hash, :locals => {
+         :header => "Created a new invoice: #{@invoice.id}",
+         :display_hash => @invoice }
+  end
+
+  get "/invoice/get" do
+   @invoice = RunSample.run("invoice/get.rb", "@invoice")
+       haml :display_hash, :locals => {
+         :header => "get a new invoice: #{@invoice.id}",
+         :display_hash => @invoice }
+  end
+
+  get "/invoice/get_all" do
+   @invoices = RunSample.run("invoice/get_all.rb", "@invoices")
+       haml :display_hash, :locals => {
+         :header => "Get all Invoices",
+         :display_hash => @invoices }
+  end
+
+  get "/invoice/send" do
+    @invoice = RunSample.run("invoice/send_invoice.rb", "@invoice")
+       haml :display_hash, :locals => {
+         :header => "Sent the invoice: #{@invoice.id}",
+         :display_hash => @invoice }
+  end
+
+  get "/invoice/remind" do
+    @invoice = RunSample.run("invoice/remind.rb", "@invoice")
+       haml :display_hash, :locals => {
+         :header => "Remind already sent invoice: #{@invoice.id}",
+         :display_hash => @invoice }
+  end
+
+  get "/invoice/cancel" do
+    @invoice = RunSample.run("invoice/cancel.rb", "@invoice")
+       haml :display_hash, :locals => {
+         :header => "Cancelled invoice: #{@invoice.id}",
+         :display_hash => @invoice }
+  end
+
+  get "/invoice/third_party" do
+    @invoice = RunSample.run("invoice/third_party_invoice.rb", "@invoice")
+       haml :display_hash, :locals => {
+         :header => "Created third Party invoice: #{@invoice.id}",
+         :display_hash => @invoice }
+  end
+
+  get "/invoice_template/create" do
+   @template = RunSample.run("invoice_template/create.rb", "@template")
+      haml :display_hash, :locals => {
+        :header => "Created invoice template: #{@template.template_id}",
+        :display_hash => @template }
+  end
+
+  get "/invoice_template/get" do
+   @template = RunSample.run("invoice_template/get.rb", "@template")
+      haml :display_hash, :locals => {
+        :header => "Get invoice template: #{@template.template_id}",
+        :display_hash => @template }
+  end
+
+  get "/invoice_template/get_all" do
+   @templates = RunSample.run("invoice_template/get_all.rb", "@templates")
+      haml :display_hash, :locals => {
+        :header => "Get all templates",
+        :display_hash => @templates }
+  end
+
+  get "/invoice_template/update" do
+   @template = RunSample.run("invoice_template/update.rb", "@template")
+      haml :display_hash, :locals => {
+        :header => "Updated template : #{@template.template_id}",
+        :display_hash => @template }
+  end
+
+  get "/invoice_template/delete" do
+   @template = RunSample.run("invoice_template/delete.rb", "@template")
+      haml :display_hash, :locals => {
+        :header => "Deleted template : #{@template.template_id}",
+        :display_hash => @template }
+  end
+
+  Dir["payment/*", "sale/*", "credit_card/*", "authorization/*", "invoice/*", "invoice_template/*", "capture/*", "payouts/*", "notifications/*"].each do |file_name|
     get "/#{file_name.sub(/rb$/, "html")}" do
       CodeRay.scan(File.read(file_name), "ruby").page :title => "Source: #{file_name}"
     end
