@@ -1,5 +1,5 @@
 require 'paypal-sdk-core'
-require 'uuidtools'
+require 'securerandom'
 require 'multi_json'
 require 'open-uri'
 require 'zlib'
@@ -17,7 +17,7 @@ module PayPal::SDK
         end
 
         def request_id
-          @request_id ||= UUIDTools::UUID.random_create.to_s
+          @request_id ||= SecureRandom.uuid
         end
 
         def http_header

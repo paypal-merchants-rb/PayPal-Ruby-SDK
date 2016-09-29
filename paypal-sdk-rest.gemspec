@@ -22,5 +22,4 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('coveralls')
   gem.add_dependency('xml-simple')
   gem.add_dependency('multi_json', '~> 1.0')
-  gem.add_dependency('uuidtools', '~> 2.1')
 end

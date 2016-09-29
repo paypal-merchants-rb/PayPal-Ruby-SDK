@@ -1,11 +1,11 @@
 require 'paypal-sdk-rest'
 include PayPal::SDK::REST
-require 'uuidtools'
+require 'securerandom'
 include PayPal::SDK::Core::Logging
 
 @template = Template.new(
 {
-    "name" => UUIDTools::UUID.random_create.to_s,
+    "name" => SecureRandom.uuid,
     "default"=> true,
     "unit_of_measure"=> "HOURS",
     "template_data"=> {
