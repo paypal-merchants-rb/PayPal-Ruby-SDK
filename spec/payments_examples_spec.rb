@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'json'
+require 'webmock/rspec'
 
 describe "Payments" do
 
@@ -49,6 +51,18 @@ describe "Payments" do
             "currency" =>  "USD" },
           "description" =>  "This is the payment transaction description." } ] }
 
+  ProcessorErrorResponse = {
+    "name" => "INSTRUMENT_DECLINED",
+    "message" => "The instrument presented was either declined by the processor or bank, or it can't be used for this payment.",
+    "information_link" => "https://developer.paypal.com/docs/api/#INSTRUMENT_DECLINED",
+    "debug_id" => "20dcd4f71107c",
+    "another_thing" => {
+      "avs_code" => "Y",
+      "cvv_code" => "N",
+      "response_code" => "0051"
+    }
+  }
+
   it "Validate user-agent", :unit => true do
     expect(PayPal::SDK::REST::API.user_agent).to match "PayPalSDK/PayPal-Ruby-SDK"
   end
@@ -61,6 +75,40 @@ describe "Payments" do
         expect(PayPal::SDK::REST.api.config.client_id).to eql "XYZ"
         PayPal::SDK::REST.set_config(backup_config)
         expect(PayPal::SDK::REST.api.config.client_id).not_to eql "XYZ"
+      end
+
+      it "Create - does not return true when error not provided in response" do
+        oauth_response = {
+            :scope => "https://uri.paypal.com/services/subscriptions https://api.paypal.com/v1/payments/.* https://api.paypal.com/v1/vault/credit-card https://uri.paypal.com/services/applications/webhooks openid https://uri.paypal.com/payments/payouts https://api.paypal.com/v1/vault/credit-card/.*",
+            :nonce => "2016-10-04T18:00:00ZP3PcGAv5XAncoc8Zt4MF5cRLlaEBW3OAoLEhMIFk--g",
+            :access_token => "A101.tp_sF5GHqWnnqEQA13Ua5ABnIhRWgd-G9LhRnJdgOvJHc_L08zlfD9WgPF4I3kre.mShauuOGxWyw8ikViItmxkWmX78",
+            :token_type => "Bearer",
+            :app_id => "APP-80W284485P519543T",
+            :expires_in => 30695
+        }
+
+        response_headers = {
+            "date" => ["Fri, 09 Sep 2016 17:44:23 GMT"],
+            "server" => ["Apache"],
+            "proxy_server_info" => ["host=dcg12javapapi8768.dcg12.slc.paypalinc.com;threadId=1177"],
+            "paypal-debug-id" => ["20dcd4f71107c", "20dcd4f71107c"],
+            "correlation-id" => ["20dcd4f71107c"],
+            "content-language" => ["*"],
+            "connection" => ["close", "close"],
+            "set-cookie" => ["X-PP-SILOVER=name%3DLIVE3.API.1%26silo_version%3D880%26app%3Dplatformapiserv%26TIME%3D4160016983%26HTTP_X_PP_AZ_LOCATOR%3Ddcg12.slc; Expires=Fri, 09 Sep 2016 18:14:25 GMT; domain=.paypal.com; path=/; Secure; HttpOnly", "X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT"],
+            "vary" => ["Authorization"],
+            "content-length" => ["335"],
+            "content-type"=>["application/json"]
+        }
+
+        stub_request(:post, "https://api.sandbox.paypal.com/v1/oauth2/token")
+            .to_return(:body => oauth_response.to_json)
+
+        stub_request(:post, "https://api.sandbox.paypal.com/v1/payments/payment")
+            .to_return(:body => ProcessorErrorResponse.to_json, :status => 400, :headers => response_headers)
+
+        payment = Payment.new(PaymentAttributes)
+        expect(payment.create).to be_falsey
       end
     end
 
@@ -87,7 +135,6 @@ describe "Payments" do
         expect(new_payment.error).to be_nil
 
         expect(payment.id).to eql new_payment.id
-
       end
 
       it "Create with token" do
