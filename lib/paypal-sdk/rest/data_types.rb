@@ -1394,7 +1394,6 @@ module PayPal::SDK
       end
 
       class WebhooksEventType < Base
-
         def self.load_members
           array_of :event_types, EventType
         end
@@ -1425,6 +1424,7 @@ module PayPal::SDK
         def self.load_members
           object_of :name, String
           object_of :description, String
+          object_of :status, String
         end
       end
 
@@ -1441,10 +1441,12 @@ module PayPal::SDK
           object_of :id, String
           object_of :create_time, String
           object_of :resource_type, String
+          object_of :event_version, String
           object_of :event_type, String
           object_of :summary, String
+          object_of :status, String
           object_of :resource, Hash
-          array_of :links, Links
+          array_of  :links, Links
         end
 
         def resend()
@@ -1539,9 +1541,20 @@ module PayPal::SDK
           end
 
           def get(webhook_event_id)
-            raise ArgumentError.new("webhook_event_id required") if webhook_event_id.to_s.strip.empty?
-            path = "v1/notifications/webhooks-events/#{webhook_event_id}"
-            WebhookEvent.new(api.get(path))
+            WebhookEvent.find(webhook_event_id)
+          end
+
+          class << self
+            def find(resource_id)
+              raise ArgumentError.new("webhook_event_id required") if resource_id.to_s.strip.empty?
+              path = "v1/notifications/webhooks-events/#{resource_id}"
+              self.new(api.get(path))
+            end
+
+            def all(options = {})
+              path = "v1/notifications/webhooks-events"
+              WebhookEventList.new(api.get(path, options))
+            end
           end
         end
       end
@@ -1551,8 +1564,8 @@ module PayPal::SDK
         def self.load_members
           object_of :id, String
           object_of :url, String
-          array_of :event_types, EventType
-          array_of :links, Links
+          array_of  :event_types, EventType
+          array_of  :links, Links
         end
 
         include RequestDataType
@@ -1588,11 +1601,13 @@ module PayPal::SDK
             path = "v1/notifications/webhooks/#{webhook_id}"
             Webhook.new(api.get(path))
           end
+
           def get_event_types(webhook_id)
             raise ArgumentError.new("webhook_id required") if webhook_id.to_s.strip.empty?
             path = "v1/notifications/webhooks/#{webhook_id}/event-types"
             EventTypeList.new(api.get(path))
           end
+
           def all(options={})
             path = "v1/notifications/webhooks"
             WebhookList.new(api.get(path))
