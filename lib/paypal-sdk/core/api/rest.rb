@@ -143,12 +143,24 @@ module PayPal::SDK::Core
           if response.code >= "200" and response.code <= "299"
             response.body && response.content_type == "application/json" ? MultiJson.load(response.body) : {}
           elsif response.content_type == "application/json"
-            { "error" => MultiJson.load(response.body) }
+            { "error" => flat_hash(MultiJson.load(response.body)) }
           else
             { "error" => { "name" => response.code, "message" => response.message,
               "developer_msg" => response } }
           end
         payload
+      end
+
+      def flat_hash(h)
+        new_hash = {}
+        h.each_pair do |key, val|
+          if val.is_a?(Hash)
+            new_hash.merge!(flat_hash(val))
+          else
+            new_hash[key] = val
+          end
+        end
+        new_hash
       end
 
       # Log PayPal-Request-Id header
