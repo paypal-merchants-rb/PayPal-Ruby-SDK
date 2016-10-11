@@ -2286,10 +2286,10 @@ module PayPal::SDK
         def self.load_members
           object_of :id, String
           object_of :name, String
+          object_of :temporary, Boolean
           object_of :flow_config, FlowConfig
           object_of :input_fields, InputFields
           object_of :presentation, Presentation
-          object_of :temporary, Boolean
         end
 
         include RequestDataType
@@ -2309,8 +2309,9 @@ module PayPal::SDK
         end
 
         def partial_update(patch_request)
+          patch_request = PatchRequest.new(patch_request) unless patch_request.is_a? PatchRequest
           path = "v1/payment-experience/web-profiles/#{self.id}"
-          response = api.patch(path, patch_request, http_header)
+          response = api.patch(path, patch_request.to_hash, http_header)
           self.merge!(response)
           success?
         end
@@ -2350,6 +2351,8 @@ module PayPal::SDK
         def self.load_members
           object_of :landing_page_type, String
           object_of :bank_txn_pending_url, String
+          object_of :user_action, String
+          object_of :return_uri_http_method, String
         end
       end
 
@@ -2366,12 +2369,8 @@ module PayPal::SDK
           object_of :brand_name, String
           object_of :logo_image, String
           object_of :locale_code, String
-        end
-      end
-
-      class CreateProfileResponse < Base
-        def self.load_members
-          object_of :id, String
+          object_of :return_url_label, String
+          object_of :note_to_seller_label, String
         end
       end
 
