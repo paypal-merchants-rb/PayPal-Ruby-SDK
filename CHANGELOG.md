@@ -1,5 +1,15 @@
 PayPal Ruby SDK release notes
 =============================
+
+v1.5.0
+------
+  * Update Payments Experience API for latest schema [#242](https://github.com/paypal/PayPal-Ruby-SDK/pull/242).
+  * Update Webhooks for latest schema [#238](https://github.com/paypal/PayPal-Ruby-SDK/pull/238).
+  * Flatten error hashes [#240](https://github.com/paypal/PayPal-Ruby-SDK/pull/240).
+  * Use SecureRandom instead of uuidtools [#237](https://github.com/paypal/PayPal-Ruby-SDK/pull/237).
+  * Update Invoicing Templates for latest schema [#235](https://github.com/paypal/PayPal-Ruby-SDK/pull/235).
+  * Update OpenID Connect signin URL [#225](https://github.com/paypal/PayPal-Ruby-SDK/pull/225).
+
 v1.4.9
 ------
   * Use String.force_encoding to force conversion to UTF-8 [#220](https://github.com/paypal/PayPal-Ruby-SDK/pull/220).
