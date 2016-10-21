@@ -136,7 +136,7 @@ module PayPal::SDK::Core
         def set(key, value)
           send("#{key}=", value)
         rescue NoMethodError => error
-          logger.warn error.message
+          logger.debug error.message
         rescue TypeError, ArgumentError => error
           raise TypeError, "#{error.message}(#{value.inspect}) for #{self.class.name}.#{key} member"
         end
