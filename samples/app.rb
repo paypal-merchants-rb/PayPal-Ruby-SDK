@@ -41,7 +41,7 @@ class App < Sinatra::Application
       :display_hash => @payment }
   end
 
-  [ 'create_with_credit_card', 'create_with_credit_card_token' ].each do |name|
+  [ 'create_with_credit_card', 'create_with_credit_card_token', 'create_third_party_with_credit_card' ].each do |name|
     get "/payment/#{name}" do
       @payment = RunSample.run("payment/#{name}.rb", "@payment")
       haml :display_hash, :locals => {
