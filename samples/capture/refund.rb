@@ -6,8 +6,8 @@ include PayPal::SDK::REST
 include PayPal::SDK::Core::Logging
 
 begin
-  @capture = Capture.find("7YR91301C22810733")
-  @refund  = @capture.refund({
+  @capture = Capture.find("9YB06173L6274542A")
+  @refund  = @capture.refund_request({
     :amount => {
       :currency => "USD",
       :total => "0.01" }

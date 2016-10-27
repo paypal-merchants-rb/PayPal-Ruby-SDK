@@ -11,7 +11,7 @@ include PayPal::SDK::Core::Logging
 
 # Make Refund API call
 # Set amount only if the refund is partial
-@refund = @sale.refund({
+@refund = @sale.refund_request({
   :amount => {
     :total => "0.01",
     :currency => "USD" } })
