@@ -41,6 +41,12 @@ class App < Sinatra::Application
       :display_hash => @payment }
   end
 
+  get "/payment/create_third_party_with_paypal" do
+    @payment, @redirect_url = RunSample.run("payment/create_third_party_with_paypal.rb", "[ @payment, @redirect_url ]")
+    session[:payment_id] = @payment.id
+    redirect @redirect_url
+  end
+
   [ 'create_with_credit_card', 'create_with_credit_card_token' ].each do |name|
     get "/payment/#{name}" do
       @payment = RunSample.run("payment/#{name}.rb", "@payment")

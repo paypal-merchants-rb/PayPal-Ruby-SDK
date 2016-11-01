@@ -64,7 +64,9 @@ module PayPal::SDK
           object_of :payment_instruction, PaymentInstruction
           object_of :state, String
           object_of :experience_profile_id, String
+          object_of :note_to_payer, String
           object_of :redirect_urls, RedirectUrls
+          object_of :failure_reason, String
           object_of :create_time, String
           object_of :update_time, String
           array_of  :links, Links
@@ -168,6 +170,7 @@ module PayPal::SDK
       class Billing < Base
         def self.load_members
           object_of :billing_agreement_id, String
+          object_of :selected_installment_option, InstallmentOption
         end
 
         include RequestDataType
@@ -178,13 +181,6 @@ module PayPal::SDK
         end
 
         include RequestDataType
-      end
-
-      class CarrierAccountToken < Base
-        def self.load_members
-          object_of :carrier_account_id, String
-          object_of :external_customer_id, String
-        end
       end
 
       class CountryCode < Base
@@ -214,6 +210,8 @@ module PayPal::SDK
           object_of :code, String
           object_of :funding_account_id, String
           object_of :display_text, String
+          object_of :amount, Currency
+          object_of :funding_instruction, String
         end
 
         include RequestDataType
@@ -295,6 +293,7 @@ module PayPal::SDK
           array_of  :funding_instruments, FundingInstrument
           object_of :funding_option_id, String
           object_of :funding_option, FundingOption
+          object_of :external_selected_funding_instrument_type, String
           object_of :related_funding_option, FundingOption
           object_of :payer_info, PayerInfo
           object_of :billing, Billing
@@ -377,6 +376,7 @@ module PayPal::SDK
           object_of :phone, String
           object_of :normalization_status, String
           object_of :status, String
+          object_of :type, String
         end
       end
 
@@ -413,6 +413,7 @@ module PayPal::SDK
           object_of :billing_address, Address
           object_of :external_customer_id, String
           object_of :status, String
+          object_of :card_product_class, String
           object_of :valid_until, String
           object_of :issue_number, String
         end
@@ -545,7 +546,9 @@ module PayPal::SDK
           object_of :funding_instrument_type, String
           object_of :soft_descriptor, String
           object_of :amount, Currency
+          object_of :negative_balance_amount, Currency
           object_of :legal_text, String
+          object_of :terms, String
           object_of :funding_detail, FundingDetail
           object_of :additional_text, String
           object_of :extends, FundingInstrument
@@ -721,13 +724,13 @@ module PayPal::SDK
 
       class Item < Base
         def self.load_members
-          object_of :quantity, String
+          object_of :sku, String
           object_of :name, String
           object_of :description, String
+          object_of :quantity, String
           object_of :price, String
-          object_of :tax, String
           object_of :currency, String
-          object_of :sku, String
+          object_of :tax, String
           object_of :url, String
           object_of :category, String
           object_of :weight, Measurement
@@ -764,9 +767,9 @@ module PayPal::SDK
 
       class RelatedResources < Base
         def self.load_members
-          object_of :order, Order
           object_of :sale, Sale
           object_of :authorization, Authorization
+          object_of :order, Order
           object_of :capture, Capture
           object_of :refund, Refund
         end
@@ -784,6 +787,7 @@ module PayPal::SDK
           object_of :protection_eligibility_type, String
           object_of :clearing_time, String
           object_of :recipient_fund_status, String
+          object_of :payment_hold_status, String
           object_of :hold_reason, String
           object_of :transaction_fee, Currency
           object_of :receivable_amount, Currency
@@ -794,7 +798,6 @@ module PayPal::SDK
           object_of :create_time, String
           object_of :update_time, String
           array_of  :links, Links
-          object_of :processor_response, ProcessorResponse
           object_of :billing_agreement_id, String
           object_of :payment_hold_reasons, String
           object_of :processor_response, ProcessorResponse
@@ -816,6 +819,14 @@ module PayPal::SDK
           response = api.post(path, refund.to_hash, http_header)
           Refund.new(response)
         end
+
+        def refund_request(refund_request)
+          refund_request = RefundRequest.new(refund_request) unless refund_request.is_a? RefundRequest
+          path = "v1/payments/sale/#{self.id}/refund"
+          response = api.post(path, refund_request.to_hash, http_header)
+          DetailedRefund.new(response)
+        end
+
       end
 
       class AnyOf < Base
@@ -838,6 +849,8 @@ module PayPal::SDK
           object_of :valid_until, String
           object_of :create_time, String
           object_of :update_time, String
+          object_of :reference_id, String
+          object_of :receipt_id, String
           array_of  :links, Links
         end
 
@@ -878,7 +891,8 @@ module PayPal::SDK
       class Order < Base
         def self.load_members
           object_of :id, String
-          object_of :purchase_unit_reference_id, String
+          object_of :purchase_unit_reference_id, String # Deprecated - use :reference_id instead
+          object_of :reference_id, String
           object_of :amount, Amount
           object_of :payment_mode, String
           object_of :state, String
@@ -932,11 +946,12 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :is_final_capture, Boolean
           object_of :state, String
+          object_of :reason_code, String
           object_of :parent_payment, String
+          object_of :invoice_number, String
           object_of :transaction_fee, Currency
           object_of :create_time, String
           object_of :update_time, String
-          object_of :invoice_number, String
           array_of  :links, Links
         end
 
@@ -950,11 +965,19 @@ module PayPal::SDK
           end
         end
 
+        # Deprecated - please use refund_request
         def refund(refund)
           refund = Refund.new(refund) unless refund.is_a? Refund
           path = "v1/payments/capture/#{self.id}/refund"
           response = api.post(path, refund.to_hash, http_header)
           Refund.new(response)
+        end
+
+        def refund_request(refund_request)
+          refund_request = RefundRequest.new(refund_request) unless refund_request.is_a? RefundRequest
+          path = "v1/payments/capture/#{self.id}/refund"
+          response = api.post(path, refund_request.to_hash, http_header)
+          DetailedRefund.new(response)
         end
       end
 
@@ -964,12 +987,14 @@ module PayPal::SDK
           object_of :amount, Amount
           object_of :state, String
           object_of :reason, String
+          object_of :invoice_number, String
           object_of :sale_id, String
           object_of :capture_id, String
           object_of :parent_payment, String
           object_of :description, String
           object_of :create_time, String
           object_of :update_time, String
+          object_of :reason_code, String
           array_of  :links, Links
         end
 
@@ -981,6 +1006,31 @@ module PayPal::SDK
             path = "v1/payments/refund/#{resource_id}"
             self.new(api.get(path))
           end
+        end
+      end
+
+      class RefundRequest < Base
+        def self.load_members
+          object_of :amount, Amount
+          object_of :description, String
+          object_of :refund_type, String
+          object_of :refund_source, String
+          object_of :reason, String
+          object_of :invoice_number, String
+          object_of :refund_advice, Boolean
+          object_of :is_non_platform_transaction, String
+        end
+      end
+
+      class DetailedRefund < Refund
+        def self.load_members
+          object_of :custom, String
+          object_of :invoice_number, String
+          object_of :refund_to_payer, Currency
+          array_of  :refund_to_external_funding, ExternalFunding
+          object_of :refund_from_transaction_fee, Currency
+          object_of :refund_from_received_amount, Currency
+          object_of :total_refunded_amount, Currency
         end
       end
 
@@ -1055,14 +1105,14 @@ module PayPal::SDK
 
       class Patch < Base
         def self.load_members
-              object_of :op, String
-              object_of :path, String
-              object_of :value, Object
-              object_of :from, String
+          object_of :op, String
+          object_of :path, String
+          object_of :value, Object
+          object_of :from, String
         end
       end
-      class PatchRequest < Base
 
+      class PatchRequest < Base
         def self.load_members
               object_of :op, String
               object_of :path, String
@@ -1074,8 +1124,8 @@ module PayPal::SDK
       class PaymentExecution < Base
         def self.load_members
           object_of :payer_id, String
-          array_of  :transactions, CartBase
           object_of :carrier_account_id, String
+          array_of  :transactions, CartBase
         end
       end
 
