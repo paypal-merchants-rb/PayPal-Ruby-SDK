@@ -1,6 +1,11 @@
 PayPal Ruby SDK release notes
 =============================
 
+v1.6.0
+------
+  * Update Payments API for latest schema [#246](https://github.com/paypal/PayPal-Ruby-SDK/pull/246).
+  * Changed no method found log to debug [#245](https://github.com/paypal/PayPal-Ruby-SDK/pull/245).
+
 v1.5.0
 ------
   * Update Payments Experience API for latest schema [#242](https://github.com/paypal/PayPal-Ruby-SDK/pull/242).
