@@ -14,7 +14,6 @@ module PayPal::SDK::Core
       DEFAULT_REST_END_POINTS = {
         :sandbox => "https://api.sandbox.paypal.com",
         :live    => "https://api.paypal.com",
-        :security_test_sandbox   => "https://test-api.sandbox.paypal.com"
       }
       TOKEN_REQUEST_PARAMS = "grant_type=client_credentials"
 
