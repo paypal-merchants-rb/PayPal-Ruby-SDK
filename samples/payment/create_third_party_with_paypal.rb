@@ -55,7 +55,7 @@ include PayPal::SDK::Core::Logging
 # Create Payment and return status
 if @payment.create
   # Redirect the user to given approval url
-  @redirect_url = @payment.links.find{|v| v.method == "REDIRECT" }.href
+  @redirect_url = @payment.links.find{|v| v.rel == "approval_url" }.href
   logger.info "Payment[#{@payment.id}]"
   logger.info "Redirect: #{@redirect_url}"
 else
