@@ -15,6 +15,14 @@ describe "Webhooks" do
     ]
   }
 
+  describe "PayPal::SDK::Core::API::DataTypes::WebhookEvent" do
+    describe "get event by id via .find" do
+      it "exists" do
+        expect(WebhookEvent).to respond_to(:find)
+      end
+    end
+  end
+
   describe "Notifications", :integration => true do
     it "create webhook" do
       $webhook = PayPal::SDK::REST::Webhook.new(webhookAttributes)
