@@ -13,7 +13,7 @@ module PayPal
         def []=(key, value)
           value =
             if value.is_a? Hash
-              ErrorHash.convert(hash)
+              ErrorHash.convert(value)
             elsif value.is_a? Array and value[0].is_a? Hash
               value.map{|array_value| ErrorHash.convert(array_value) }
             else
