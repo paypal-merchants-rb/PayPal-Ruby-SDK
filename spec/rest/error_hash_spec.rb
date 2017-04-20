@@ -24,7 +24,7 @@ module PayPal::SDK::REST
     end
 
     it 'can access string keys as properties, strings, or symbols' do
-      hash = ErrorHash.convert({ 'foo': 5 })
+      hash = ErrorHash.convert({ 'foo' => 5 })
       hash['boo'] = 'grue'
 
       expect(hash.foo).to eq(5)
