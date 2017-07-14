@@ -134,38 +134,25 @@ PayPal::SDK::REST.set_config(
 
 # Build Payment object
 @payment = Payment.new({
-  :intent => "sale",
-  :payer => {
-    :payment_method => "credit_card",
-    :funding_instruments => [{
-      :credit_card => {
-        :type => "visa",
-        :number => "4567516310777851",
-        :expire_month => "11",
-        :expire_year => "2018",
-        :cvv2 => "874",
-        :first_name => "Joe",
-        :last_name => "Shopper",
-        :billing_address => {
-          :line1 => "52 N Main ST",
-          :city => "Johnstown",
-          :state => "OH",
-          :postal_code => "43210",
-          :country_code => "US" }}}]},
-  :transactions => [{
+  :intent =>  "sale",
+  :payer =>  {
+    :payment_method =>  "paypal" },
+  :redirect_urls => {
+    :return_url => "http://localhost:3000/payment/execute",
+    :cancel_url => "http://localhost:3000/" },
+  :transactions =>  [{
     :item_list => {
       :items => [{
         :name => "item",
         :sku => "item",
-        :price => "1",
+        :price => "5",
         :currency => "USD",
         :quantity => 1 }]},
-    :amount => {
-      :total => "1.00",
-      :currency => "USD" },
-    :description => "This is the payment transaction description." }]})
+    :amount =>  {
+      :total =>  "5",
+      :currency =>  "USD" },
+    :description =>  "This is the payment transaction description." }]})
 
-# Create Payment and return the status(true or false)
 if @payment.create
   @payment.id     # Payment Id
 else
@@ -185,8 +172,6 @@ payment_history.payments
 ```
 
 ## Execute Payment
-
-Only for [Payment](https://github.com/paypal/rest-api-sdk-ruby/blob/master/samples/payment/create_with_paypal.rb) with `payment_method` as `"paypal"`
 
 ```ruby
 payment = Payment.find("PAY-57363176S1057143SKE2HO3A")
