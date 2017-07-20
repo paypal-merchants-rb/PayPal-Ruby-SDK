@@ -258,6 +258,10 @@ rescue ResourceNotFound => err
   logger.error @payout.error.inspect
 end
 ```
+
+## Direct Credit Card Support
+[Braintree Direct](https://www.braintreepayments.com/products/braintree-direct) is PayPal's preferred integration solution for accepting direct credit card payments in your mobile app or website. Braintree, a PayPal service, is the easiest way to accept credit cards, PayPal, and many other payment methods.
+
 ## License
 Code released under [SDK LICENSE](LICENSE)  
 
