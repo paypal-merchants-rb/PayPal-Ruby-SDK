@@ -84,6 +84,10 @@ module PayPal::SDK::Core
     class ResourceGone < ClientError # :nodoc:
     end
 
+    # 422 Unprocessable Entity
+    class ResourceInvalid < ClientError # :nodoc:
+    end
+
     # 5xx Server Error
     class ServerError < ConnectionError # :nodoc:
     end
