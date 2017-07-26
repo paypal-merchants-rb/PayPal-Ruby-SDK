@@ -139,7 +139,9 @@ module PayPal::SDK::Core
       def format_response(payload)
         response = payload[:response]
         payload[:data] =
-          if response.code >= "200" and response.code <= "299"
+          if response.body && response.body.strip == ""
+            {}
+          elsif response.code >= "200" and response.code <= "299"
             response.body && response.content_type == "application/json" ? MultiJson.load(response.body) : {}
           elsif response.content_type == "application/json"
             { "error" => flat_hash(MultiJson.load(response.body)) }
