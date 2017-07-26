@@ -195,5 +195,16 @@ describe PayPal::SDK::Core::API::REST do
       expect(formatted_response).to_not be_nil
       expect(formatted_response[:data]).to eq({})
     end
+
+    it "parses with whitespace around JSON correctly" do
+      allow(@response).to receive(:body) { '    { "test": "value"  } ' }
+      payload = {
+        :response => @response
+      }
+
+      formatted_response = @api.format_response(payload)
+      expect(formatted_response).to_not be_nil
+      expect(formatted_response[:data]).to eq({ "test" => "value" })
+    end
   end
 end
