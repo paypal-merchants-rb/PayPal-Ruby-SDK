@@ -8,21 +8,21 @@ include PayPal::SDK::Core::Logging
 # For more information: https://github.com/paypal/PayPal-Ruby-SDK/issues/205#issuecomment-249051953
 # webhook headers required for event verification
 
-#actual_sig = request.headers["HTTP_PAYPAL_TRANSMISSION_SIG"]
-#auth_algo =  request.headers["HTTP_PAYPAL_AUTH_ALGO"]
-#auth_algo.sub!(/withRSA/i, "")
-#cert_url = request.headers["HTTP_PAYPAL_CERT_URL"]
-#transmission_id = request.headers["HTTP_PAYPAL_TRANSMISSION_ID"]
-#timestamp = request.headers["HTTP_PAYPAL_TRANSMISSION_TIME"]
-#webhook_id = ENV['PAYPAL_WEBHOOK_ID'] #The webhook_id provided by PayPal when webhook is created on the PayPal developer site
-#event_body = params["paypal"].to_json
+# actual_signature = request.headers["Paypal-Transmission-Sig"]
+# auth_algo        = request.headers["Paypal-Auth-Algo"]
+# auth_algo.sub!(/withRSA/i, "")
+# cert_url         = request.headers["Paypal-Cert-Url"]
+# transmission_id  = request.headers["Paypal-Transmission-Id"]
+# timestamp        = request.headers["Paypal-Transmission-Time"]
+# webhook_id       = ENV['PAYPAL_WEBHOOK_ID'] #The webhook_id provided by PayPal when webhook is created on the PayPal developer site
+# event_body       = params["paypal"].to_json
 
 # MOCK DATA for Sample purpose only. Please use above code for real use cases.
-# PAYPAL-TRANSMISSION-SIG header
-actual_sig = "thy4/U002quzxFavHPwbfJGcc46E8rc5jzgyeafWm5mICTBdY/8rl7WJpn8JA0GKA+oDTPsSruqusw+XXg5RLAP7ip53Euh9Xu3UbUhQFX7UgwzE2FeYoY6lyRMiiiQLzy9BvHfIzNIVhPad4KnC339dr6y2l+mN8ALgI4GCdIh3/SoJO5wE64Bh/ueWtt8EVuvsvXfda2Le5a2TrOI9vLEzsm9GS79hAR/5oLexNz8UiZr045Mr5ObroH4w4oNfmkTaDk9Rj0G19uvISs5QzgmBpauKr7Nw++JI0pr/v5mFctQkoWJSGfBGzPRXawrvIIVHQ9Wer48GR2g9ZiApWg=="
-# PAYPAL-AUTH-ALGO header
+# Paypal-Transmission-Sig header
+actual_signature = "thy4/U002quzxFavHPwbfJGcc46E8rc5jzgyeafWm5mICTBdY/8rl7WJpn8JA0GKA+oDTPsSruqusw+XXg5RLAP7ip53Euh9Xu3UbUhQFX7UgwzE2FeYoY6lyRMiiiQLzy9BvHfIzNIVhPad4KnC339dr6y2l+mN8ALgI4GCdIh3/SoJO5wE64Bh/ueWtt8EVuvsvXfda2Le5a2TrOI9vLEzsm9GS79hAR/5oLexNz8UiZr045Mr5ObroH4w4oNfmkTaDk9Rj0G19uvISs5QzgmBpauKr7Nw++JI0pr/v5mFctQkoWJSGfBGzPRXawrvIIVHQ9Wer48GR2g9ZiApWg=="
+# Paypal-Auth-Algo header
 auth_algo = "sha256"
-# PAYPAL-CERT-URL header
+# Paypal-Cert-Url header
 cert_url = "https://api.sandbox.paypal.com/v1/notifications/certs/CERT-360caa42-fca2a594-a5cafa77"
 # other required items for event verification
 transmission_id = "dfb3be50-fd74-11e4-8bf3-77339302725b"
