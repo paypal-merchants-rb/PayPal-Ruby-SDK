@@ -1,6 +1,13 @@
 PayPal Ruby SDK release notes
 =============================
 
+v1.6.1
+------
+  * Fix issue with invalid JSON handling. [#302](https://github.com/paypal/PayPal-Ruby-SDK/issues/302).
+  * Fix issue with missing `ResourceInvalid` type [#298](https://github.com/paypal/PayPal-Ruby-SDK/issues/298).
+  * Fix issue with `ErrorHash.convert` for nested hashes [#257](https://github.com/paypal/PayPal-Ruby-SDK/issues/257).
+  * Update code to find PayPal approval redirect URL using relationship identifier instead of by method
+
 v1.6.0
 ------
   * Update Payments API for latest schema [#246](https://github.com/paypal/PayPal-Ruby-SDK/pull/246).
