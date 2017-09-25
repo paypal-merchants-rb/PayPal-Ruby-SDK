@@ -3,6 +3,7 @@ PayPal Ruby SDK release notes
 
 v1.6.1
 ------
+  * Fix issue with wrong method declared for `WebhookEvent.find` and `WebHookEvent.all` [#270](https://github.com/paypal/PayPal-Ruby-SDK/pull/270) and [#306](https://github.com/paypal/PayPal-Ruby-SDK/pull/306).
   * Fix issue with invalid JSON handling. [#302](https://github.com/paypal/PayPal-Ruby-SDK/issues/302).
   * Fix issue with missing `ResourceInvalid` type [#298](https://github.com/paypal/PayPal-Ruby-SDK/issues/298).
   * Fix issue with `ErrorHash.convert` for nested hashes [#257](https://github.com/paypal/PayPal-Ruby-SDK/issues/257).
