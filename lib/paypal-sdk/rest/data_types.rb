@@ -1594,17 +1594,15 @@ module PayPal::SDK
             WebhookEvent.find(webhook_event_id)
           end
 
-          class << self
-            def find(resource_id)
-              raise ArgumentError.new("webhook_event_id required") if resource_id.to_s.strip.empty?
-              path = "v1/notifications/webhooks-events/#{resource_id}"
-              self.new(api.get(path))
-            end
+          def find(resource_id)
+            raise ArgumentError.new("webhook_event_id required") if resource_id.to_s.strip.empty?
+            path = "v1/notifications/webhooks-events/#{resource_id}"
+            self.new(api.get(path))
+          end
 
-            def all(options = {})
-              path = "v1/notifications/webhooks-events"
-              WebhookEventList.new(api.get(path, options))
-            end
+          def all(options = {})
+            path = "v1/notifications/webhooks-events"
+            WebhookEventList.new(api.get(path, options))
           end
         end
       end
