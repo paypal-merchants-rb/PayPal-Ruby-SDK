@@ -2110,7 +2110,7 @@ module PayPal::SDK
           object_of :rel, String
           object_of :targetSchema, HyperSchema
           object_of :method, String
-          object_of :enctype, String
+          object_of :encType, String
           object_of :schema, HyperSchema
         end
       end
