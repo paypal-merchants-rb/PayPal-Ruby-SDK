@@ -380,6 +380,12 @@ module PayPal::SDK
         end
       end
 
+      class InvoiceAddress < Address
+        def self.load_members
+          object_of :phone, Phone
+        end
+      end
+
       class OneOf < Base
         def self.load_members
           object_of :phone, Phone
@@ -1811,7 +1817,7 @@ module PayPal::SDK
           object_of :first_name, String
           object_of :last_name, String
           object_of :business_name, String
-          object_of :address, Address
+          object_of :address, InvoiceAddress
           object_of :language, String
           object_of :additional_info, String
           object_of :notification_channel, String
@@ -1824,7 +1830,7 @@ module PayPal::SDK
           object_of :first_name, String
           object_of :last_name, String
           object_of :business_name, String
-          object_of :address, Address
+          object_of :address, InvoiceAddress
           object_of :email, String
         end
       end
