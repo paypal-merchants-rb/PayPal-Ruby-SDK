@@ -365,7 +365,7 @@ module PayPal::SDK
         raise_on_api_error :create, :update, :delete
       end
 
-      class Address < Base
+      class BaseAddress < Base
         def self.load_members
           object_of :line1, String
           object_of :line2, String
@@ -373,14 +373,19 @@ module PayPal::SDK
           object_of :country_code, String
           object_of :postal_code, String
           object_of :state, String
-          object_of :phone, String
           object_of :normalization_status, String
           object_of :status, String
           object_of :type, String
         end
       end
 
-      class InvoiceAddress < Address
+      class Address < BaseAddress
+        def self.load_members
+          object_of :phone, String
+        end
+      end
+
+      class InvoiceAddress < BaseAddress
         def self.load_members
           object_of :phone, Phone
         end
