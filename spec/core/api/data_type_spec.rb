@@ -68,6 +68,28 @@ describe PayPal::SDK::Core::API::DataTypes::Base do
     expect(invoice_address.phone.extension).to eql "123"
   end
 
+  it "billing info converts an address to invoiceaddress automatically" do
+    address = Address.new(:line1 => "line1", :line2 => "line2", :status => "status" )
+    billingInfo = BillingInfo.new({
+      "first_name" => "Sally",
+      "last_name" => "Patient",
+      "business_name" => "Not applicable"
+    })
+    billingInfo.address = address
+    expect(billingInfo.address).to be_a InvoiceAddress
+  end
+
+  it "shipping info converts an address to invoiceaddress automatically" do
+    address = Address.new(:line1 => "line1", :line2 => "line2", :status => "status" )
+    shippingInfo = ShippingInfo.new({
+      "first_name" => "Sally",
+      "last_name" => "Patient",
+      "business_name" => "Not applicable"
+    })
+    shippingInfo.address = address
+    expect(shippingInfo.address).to be_a InvoiceAddress
+  end
+
   it "should allow block with initializer" do
     test_type = TestType.new do
       fromCurrency do
