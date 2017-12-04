@@ -1845,7 +1845,6 @@ module PayPal::SDK
           object_of :business_name, String
           object_of :address, InvoiceAddress
           object_of :email, String
-          object_of :phone, Phone
 
           define_method "address=" do |value|
             if value.is_a?(Address)
