@@ -56,6 +56,40 @@ describe PayPal::SDK::Core::API::DataTypes::Base do
     expect(test_type.fromCurrency.amount).to  eql "50.0"
   end
 
+  it "invoice address loads all members of default address object" do
+    invoice_address = InvoiceAddress.new(:line1 => "line1", :line2 => "line2", :phone => { :country_code => "123", :national_number => "1231231234", :extension => "123" }, :status => "status" )
+    expect(invoice_address).to be_a InvoiceAddress
+    expect(invoice_address.phone).to be_a Phone
+    expect(invoice_address.line1).to eql "line1"
+    expect(invoice_address.line2).to eql "line2"
+    expect(invoice_address.status).to eql "status"
+    expect(invoice_address.phone.country_code).to eql "123"
+    expect(invoice_address.phone.national_number).to eql "1231231234"
+    expect(invoice_address.phone.extension).to eql "123"
+  end
+
+  it "billing info converts an address to invoiceaddress automatically" do
+    address = Address.new(:line1 => "line1", :line2 => "line2", :status => "status" )
+    billingInfo = BillingInfo.new({
+      "first_name" => "Sally",
+      "last_name" => "Patient",
+      "business_name" => "Not applicable"
+    })
+    billingInfo.address = address
+    expect(billingInfo.address).to be_a InvoiceAddress
+  end
+
+  it "shipping info converts an address to invoiceaddress automatically" do
+    address = Address.new(:line1 => "line1", :line2 => "line2", :status => "status" )
+    shippingInfo = ShippingInfo.new({
+      "first_name" => "Sally",
+      "last_name" => "Patient",
+      "business_name" => "Not applicable"
+    })
+    shippingInfo.address = address
+    expect(shippingInfo.address).to be_a InvoiceAddress
+  end
+
   it "should allow block with initializer" do
     test_type = TestType.new do
       fromCurrency do

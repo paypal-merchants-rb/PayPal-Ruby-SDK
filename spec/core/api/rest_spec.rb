@@ -76,10 +76,11 @@ describe PayPal::SDK::Core::API::REST do
       }.to raise_error PayPal::SDK::Core::Exceptions::UnauthorizedAccess
     end
 
-    xit "Should handle expired token" do
+    it "Should handle expired token" do
       old_token = @api.token
       @api.token_hash[:expires_in] = 0
-      expect(@api.token).not_to eql old_token
+      new_token = @api.token
+      expect(@api.token_hash[:expires_in]).not_to eql 0
     end
 
     it "Get token" do
