@@ -1835,6 +1835,24 @@ module PayPal::SDK
             object = convert_object(value, InvoiceAddress)
             instance_variable_set("@address", object)
           end
+
+          define_method "address" do |&block|
+            default_value = PayPal::SDK::Core::Util::OrderedHash.new
+            value = instance_variable_get("@address") || ( default_value && (send("address=", default_value)))
+            value = convert_object(value.to_hash, Address)
+            value
+          end
+
+          define_method "invoice_address=" do |value|
+            object = convert_object(value, InvoiceAddress)
+            instance_variable_set("@address", object)
+          end
+
+          define_method "invoice_address" do |&block|
+            default_value = PayPal::SDK::Core::Util::OrderedHash.new
+            value = instance_variable_get("@address") || ( default_value && (send("address=", default_value)))
+            value
+          end
         end
       end
 
@@ -1852,6 +1870,24 @@ module PayPal::SDK
             end
             object = convert_object(value, InvoiceAddress)
             instance_variable_set("@address", object)
+          end
+
+          define_method "address" do |&block|
+            default_value = PayPal::SDK::Core::Util::OrderedHash.new
+            value = instance_variable_get("@address") || ( default_value && (send("address=", default_value)))
+            value = convert_object(value.to_hash, Address)
+            value
+          end
+
+          define_method "invoice_address=" do |value|
+            object = convert_object(value, InvoiceAddress)
+            instance_variable_set("@address", object)
+          end
+
+          define_method "invoice_address" do |&block|
+            default_value = PayPal::SDK::Core::Util::OrderedHash.new
+            value = instance_variable_get("@address") || ( default_value && (send("address=", default_value)))
+            value
           end
         end
       end
