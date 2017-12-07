@@ -1,6 +1,11 @@
 PayPal Ruby SDK release notes
 =============================
 
+v1.7.0
+------
+  * Add `invoice_address` field on Invoice's BillingInfo and ShippingInfo types [#322](https://github.com/paypal/PayPal-Ruby-SDK/pull/322) and [#326](https://github.com/paypal/PayPal-Ruby-SDK/pull/326).
+  * Fix issue with capitalization for encType in Links attribute [#314](https://github.com/paypal/PayPal-Ruby-SDK/issues/314).
+
 v1.6.1
 ------
   * Fix issue with wrong method declared for `WebhookEvent.find` and `WebHookEvent.all` [#270](https://github.com/paypal/PayPal-Ruby-SDK/pull/270) and [#306](https://github.com/paypal/PayPal-Ruby-SDK/pull/306).
