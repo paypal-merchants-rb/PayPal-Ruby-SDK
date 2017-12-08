@@ -1,6 +1,10 @@
 PayPal Ruby SDK release notes
 =============================
 
+v1.7.1
+------
+  * Use `NET` library to fetch webhook ceritifcate. Thanks Kramer.
+
 v1.7.0
 ------
   * Add `invoice_address` field on Invoice's BillingInfo and ShippingInfo types [#322](https://github.com/paypal/PayPal-Ruby-SDK/pull/322) and [#326](https://github.com/paypal/PayPal-Ruby-SDK/pull/326).
