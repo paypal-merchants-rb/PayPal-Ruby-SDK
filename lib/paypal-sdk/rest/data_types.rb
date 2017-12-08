@@ -1530,8 +1530,8 @@ module PayPal::SDK
         class << self
 
           def get_cert(cert_url)
-            data = open(cert_url).read()
-            cert = OpenSSL::X509::Certificate.new data
+            data = Net::HTTP.get_response(URI.parse(cert_url))
+            cert = OpenSSL::X509::Certificate.new data.body
           end
 
           def get_cert_chain()
