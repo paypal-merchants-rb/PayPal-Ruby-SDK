@@ -1,7 +1,6 @@
 require 'paypal-sdk-core'
 require 'securerandom'
 require 'multi_json'
-require 'open-uri'
 require 'zlib'
 require "base64"
 
