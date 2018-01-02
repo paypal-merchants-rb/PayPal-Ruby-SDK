@@ -3,6 +3,7 @@ require 'securerandom'
 require 'multi_json'
 require 'zlib'
 require "base64"
+require 'net/http'
 
 module PayPal::SDK
   module REST
