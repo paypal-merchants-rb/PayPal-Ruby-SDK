@@ -1,6 +1,11 @@
 PayPal Ruby SDK release notes
 =============================
 
+v1.7.2
+------
+  * Remove logging of unknown fields.
+  * Fix issue with `require net/http` [#331](https://github.com/paypal/PayPal-Ruby-SDK/pull/331). Thanks Borzik.
+
 v1.7.1
 ------
   * Use `NET` library to fetch webhook ceritifcate. Thanks Kramer.
