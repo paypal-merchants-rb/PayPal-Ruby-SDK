@@ -2495,6 +2495,97 @@ module PayPal::SDK
           object_of :temporary, Boolean
         end
       end
+      
+      class Dispute < Base
+        def self.load_members
+          object_of :dispute_id, String
+          object_of :create_time, String
+          object_of :update_time, String
+          array_of :disputed_transactions, TransactionInfo
+          object_of :reason, String
+          object_of :status, String
+          object_of :dispute_amount, Money
+          object_of :external_reason_code, String
+          object_of :dispute_outcome, DisputeOutcome
+          object_of :dispute_life_cycle_stage, String
+          object_of :dispute_channel, String
+          array_of :messages, Messages
+          object_of :buyer_response_due_date, String
+          object_of :seller_response_due_date, String
+          object_of :offer, Offer
+          array_of  :links, Links
+        end
+      end
+
+      class TransactionInfo < Base
+        def self.load_members
+          object_of :buyer_transaction_id, String
+          object_of :seller_transaction_id, String
+          object_of :create_time, String
+          object_of :transaction_status, String
+          object_of :gross_amount, Money
+          object_of :invoice_number, String
+          object_of :custom, String
+          object_of :buyer, Buyer
+          object_of :seller, Seller
+          array_of  :items, ItemInfo
+        end
+      end
+
+      class Buyer < Base
+        def self.load_members
+          object_of :email, String
+          object_of :name, String
+        end
+      end
+      
+      class Seller < Base
+        def self.load_members
+          object_of :email, String
+          object_of :merchant_id, String
+          object_of :name, String
+        end
+      end
+
+      class ItemInfo < Base
+        def self.load_members
+          object_of :item_id, String
+          object_of :partner_transaction_id, String
+          object_of :reason, String
+          object_of :dispute_amount, Money
+          object_of :notes, String
+        end
+      end
+
+      class Money < Base
+        def self.load_members
+          object_of :currency_code, String
+          object_of :value, String
+        end
+      end
+
+      class DisputeOutcome < Base
+        def self.load_members
+          object_of :outcome_code, String
+          object_of :amount_refunded, Money
+        end
+      end
+      
+      class Messages < Base
+        def self.load_members
+          object_of :posted_by, String
+          object_of :time_posted, String
+          object_of :content, String
+        end
+      end
+
+      class Offer < Base
+        def self.load_members
+          object_of :buyer_requested_amount, Money
+          object_of :seller_offered_amount, Money
+          object_of :offer_type, String
+        end
+      end
 
       constants.each do |data_type_klass|
         data_type_klass = const_get(data_type_klass)
