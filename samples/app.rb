@@ -91,6 +91,13 @@ class App < Sinatra::Application
                           :display_hash => @payout_batch }
   end
 
+  get "/payouts/createVenmo" do
+    @payout_batch = RunSample.run("payouts/createVenmo.rb", "@payout_batch")
+    haml :display_hash, :locals => {
+                          :header => "Created a Venmo Batch Payout: #{@payout_batch.batch_header.payout_batch_id}",
+                          :display_hash => @payout_batch }
+  end
+
   get "/payouts/createSync" do
     @payout_batch = RunSample.run("payouts/createSync.rb", "@payout_batch")
     haml :display_hash, :locals => {

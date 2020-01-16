@@ -1713,6 +1713,7 @@ module PayPal::SDK
               object_of :note, String
               object_of :receiver, String
               object_of :sender_item_id, String
+              object_of :recipient_wallet, String
         end
 
         include RequestDataType
@@ -2495,7 +2496,7 @@ module PayPal::SDK
           object_of :temporary, Boolean
         end
       end
-      
+
       class Dispute < Base
         def self.load_members
           object_of :dispute_id, String
@@ -2538,7 +2539,7 @@ module PayPal::SDK
           object_of :name, String
         end
       end
-      
+
       class Seller < Base
         def self.load_members
           object_of :email, String
@@ -2570,7 +2571,7 @@ module PayPal::SDK
           object_of :amount_refunded, Money
         end
       end
-      
+
       class Messages < Base
         def self.load_members
           object_of :posted_by, String
