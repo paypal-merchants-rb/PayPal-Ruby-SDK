@@ -2,6 +2,25 @@ require "spec_helper"
 
 describe "Payouts", :integration => true do
 
+  PayoutVenmoAttributes = {
+      :sender_batch_header => {
+          :sender_batch_id => SecureRandom.hex(8)
+      },
+      :items => [
+          {
+              :recipient_type => 'PHONE',
+              :amount => {
+                  :value => '1.0',
+                  :currency => 'USD'
+              },
+              :note => 'Thanks for your patronage!',
+              :sender_item_id => '2014031400023',
+              :receiver => '5551232368',
+              :recipient_wallet => 'VENMO'
+          }
+      ]
+  }
+
   PayoutAttributes = {
       :sender_batch_header => {
           :sender_batch_id => SecureRandom.hex(8),
@@ -20,6 +39,12 @@ describe "Payouts", :integration => true do
           }
       ]
   }
+
+  it "create venmo payout" do
+    $payout = PayPal::SDK::REST::Payout.new(PayoutVenmoAttributes)
+    $payout_batch = $payout.create
+    expect($payout_batch).to be_truthy
+  end
 
   it "create payout sync" do
     $payout = PayPal::SDK::REST::Payout.new(PayoutAttributes)
