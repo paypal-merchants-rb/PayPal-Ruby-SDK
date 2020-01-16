@@ -1,6 +1,10 @@
 PayPal Ruby SDK release notes
 =============================
 
+v1.7.4
+------
+  * Update Payouts API for latest schema (https://github.com/paypal/PayPal-Ruby-SDK/pull/388) 
+
 v1.7.3
 ------
   * Adding disputes in data_types.rb
@@ -56,7 +60,7 @@ v1.4.8
 v1.4.7
 ------
   * Enabled third party invoicing for all invoicing API operations [#209](https://github.com/paypal/PayPal-Ruby-SDK/pull/209).
-  
+
 v1.4.6
 ------
   * Enabled Third Party Invoicing [#204](https://github.com/paypal/PayPal-Ruby-SDK/pull/204).
@@ -106,7 +110,7 @@ v1.3.3
   * Removed `payment_details` field in invoice per [API change](https://developer.paypal.com/webapps/developer/docs/api/#invoice-object).
   * Added `payment_options` field to Transaction per [API change](https://developer.paypal.com/webapps/developer/docs/api/#transaction-object).
   * Added secure logging to avoid logging confidential data (e.g., credit card number).
- 
+
 v1.3.2
 ------
   * Fixed webprofile.create().
