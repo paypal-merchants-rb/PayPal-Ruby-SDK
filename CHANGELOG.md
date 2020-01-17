@@ -3,7 +3,7 @@ PayPal Ruby SDK release notes
 
 v1.7.4
 ------
-  * Update Payouts API for latest schema (https://github.com/paypal/PayPal-Ruby-SDK/pull/388) 
+  * Update Payouts API for latest schema [#388](https://github.com/paypal/PayPal-Ruby-SDK/pull/388)
 
 v1.7.3
 ------
