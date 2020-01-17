@@ -3,12 +3,12 @@ PayPal Ruby SDK release notes
 
 v1.7.4
 ------
-  * Update Payouts API for latest schema [#388](https://github.com/paypal/PayPal-Ruby-SDK/pull/388)
+  * Update Payouts API for latest schema [#388](https://github.com/paypal/PayPal-Ruby-SDK/pull/388).
 
 v1.7.3
 ------
-  * Adding disputes in data_types.rb
-  * Fix issue `no implicit conversion of Array into String` [#363](https://github.com/paypal/PayPal-Ruby-SDK/pull/363)
+  * Adding disputes in data_types.rb.
+  * Fix issue `no implicit conversion of Array into String` [#363](https://github.com/paypal/PayPal-Ruby-SDK/pull/363).
 
 v1.7.2
 ------
