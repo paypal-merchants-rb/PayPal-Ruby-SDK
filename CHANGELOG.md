@@ -1,6 +1,10 @@
 PayPal Ruby SDK release notes
 =============================
 
+v1.8.0
+------
+  * Update paypal.crt with DigiCertHighAssuranceEVRootCA.
+
 v1.7.4
 ------
   * Update Payouts API for latest schema [#388](https://github.com/paypal/PayPal-Ruby-SDK/pull/388).

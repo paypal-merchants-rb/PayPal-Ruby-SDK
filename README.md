@@ -3,10 +3,10 @@
 
 The PayPal REST SDK provides Ruby APIs to create, process and manage payment.
 
-## PayPal Checkout v2
-Please note that if you are integrating with PayPal Checkout, this SDK and corresponding API [v1/payments](https://developer.paypal.com/docs/api/payments/v1/) are in the process of being deprecated.
+PayPal has deprecated their [REST SDK](https://developer.paypal.com/docs/api/deprecated-rest-sdks/) and archived the corresponding [GitHub repos](https://github.com/paypal/PayPal-Ruby-SDK/).  The Payments API [v1/payments](https://developer.paypal.com/docs/api/payments/v1/) remains active but merchants are left to maintain their own integration until equivalent [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) functionality becomes available.  Lenny Markus at PayPal has confirmed there are no plans to continue support, feel free to fork it.
 
-We recommend that you integrate with API [v2/checkout/orders](https://developer.paypal.com/docs/api/orders/v2/) and [v2/payments](https://developer.paypal.com/docs/api/payments/v2/). Please refer to the [Checkout Ruby SDK](https://github.com/paypal/Checkout-Ruby-SDK) to continue with the integration.
+## PayPal Checkout v2
+We recommend that you integrate with API [v2/checkout/orders](https://developer.paypal.com/docs/api/orders/v2/) and [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) whenever possible. Please refer to the [Checkout Ruby SDK](https://github.com/paypal/Checkout-Ruby-SDK) to continue with the integration.
 
 ## Prerequisites
 - Ruby 2.0.0 or above
@@ -17,19 +17,13 @@ We recommend that you integrate with API [v2/checkout/orders](https://developer.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'paypal-sdk-rest'
+gem 'paypal-sdk-rest-pmrb'
 ```
 
 And then execute:
 
 ```sh
 $ bundle
-```
-
-Or install it yourself as:
-
-```sh
-$ gem install paypal-sdk-rest
 ```
 
 ## Configuration
@@ -263,9 +257,6 @@ rescue ResourceNotFound => err
   logger.error @payout.error.inspect
 end
 ```
-
-## Direct Credit Card Support
-[Braintree Direct](https://www.braintreepayments.com/products/braintree-direct) is PayPal's preferred integration solution for accepting direct credit card payments in your mobile app or website. Braintree, a PayPal service, is the easiest way to accept credit cards, PayPal, and many other payment methods.
 
 ## License
 Code released under [SDK LICENSE](LICENSE)  
