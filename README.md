@@ -1,9 +1,24 @@
-## PayPal REST API Ruby SDK [![Build Status](https://travis-ci.org/paypal/PayPal-Ruby-SDK.svg?branch=master)](https://travis-ci.org/paypal/PayPal-Ruby-SDK) [![Coverage Status](https://coveralls.io/repos/github/paypal/PayPal-Ruby-SDK/badge.svg?branch=master)](https://coveralls.io/github/paypal/PayPal-Ruby-SDK?branch=master)
-
+## PayPal REST API Ruby SDK
 
 The PayPal REST SDK provides Ruby APIs to create, process and manage payment.
 
-PayPal has deprecated their [REST SDK](https://developer.paypal.com/docs/api/deprecated-rest-sdks/) and archived the corresponding [GitHub repos](https://github.com/paypal/PayPal-Ruby-SDK/).  The Payments API [v1/payments](https://developer.paypal.com/docs/api/payments/v1/) remains active but merchants are left to maintain their own integration until equivalent [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) functionality becomes available.  Lenny Markus at PayPal has confirmed there are no plans to continue support, feel free to fork it.
+[![Version         ][rubygems_badge]][rubygems]
+[![Github Actions  ][actions_badge]][actions]
+[![Coverage        ][coverage_badge]][coverage]
+
+PayPal has deprecated their [REST SDK][restsdk] and archived the corresponding [GitHub repos][sdkrepo].  The Payments API [v1/payments][v1docs] remains active but merchants are left to maintain their own integration until equivalent [v2/payments][v2docs] functionality becomes available.  Lenny Markus at PayPal has confirmed there are no plans to continue support, feel free to fork it.
+
+[rubygems_badge]: http://img.shields.io/gem/v/paypal-sdk-rest-pmrb.svg
+[rubygems]: https://rubygems.org/gems/paypal-sdk-rest-pmrb
+[actions_badge]: https://github.com/paypal-merchants-rb/PayPal-Ruby-SDK/workflows/ci/badge.svg
+[actions]: https://github.com/paypal-merchants-rb/PayPal-Ruby-SDK/actions
+[coverage_badge]: https://coveralls.io/repos/github/paypal/PayPal-Ruby-SDK/badge.svg?branch=master
+[coverage]: https://coveralls.io/github/paypal/PayPal-Ruby-SDK?branch=master
+
+[restsdk]: https://developer.paypal.com/docs/api/deprecated-rest-sdks/
+[sdkrepo]: https://github.com/paypal/PayPal-Ruby-SDK/
+[v1docs]: https://developer.paypal.com/docs/api/payments/v1/
+[v2docs]: https://developer.paypal.com/docs/api/payments/v2/
 
 ## PayPal Checkout v2
 We recommend that you integrate with API [v2/checkout/orders](https://developer.paypal.com/docs/api/orders/v2/) and [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) whenever possible. Please refer to the [Checkout Ruby SDK](https://github.com/paypal/Checkout-Ruby-SDK) to continue with the integration.
