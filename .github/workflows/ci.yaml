@@ -1,0 +1,25 @@
+---
+
+name: ci
+
+on: [push]
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        ruby: [{ name: 3.2, value: 3.2.2 }, { name: 3.0, value: 3.0.1 }]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby.value }}
+          bundler-cache: true
+
+      - name: Run tests
+        run: bundle exec rspec
