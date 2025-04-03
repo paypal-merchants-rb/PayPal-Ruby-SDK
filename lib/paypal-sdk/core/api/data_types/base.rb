@@ -58,7 +58,8 @@ module PayPal::SDK::Core
             end
             default_value = ( options[:array] ? [] : ( klass < Base ? Util::OrderedHash.new : nil ) )
             define_method member_name do |&block|
-              value = instance_variable_get(member_variable_name) || ( default_value && send("#{member_name}=", default_value) )
+              value = instance_variable_get(member_variable_name)
+              value = ( default_value && send("#{member_name}=", default_value) ) if value.nil?
               value.instance_eval(&block) if block
               value
             end

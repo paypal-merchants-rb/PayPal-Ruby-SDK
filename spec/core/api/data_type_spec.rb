@@ -25,6 +25,11 @@ describe PayPal::SDK::Core::API::DataTypes::Base do
     object_of :created_at, DateTime
   end
 
+  class TestBooleanType < DataType
+    include PayPal::SDK::Core::API::DataTypes::SimpleTypes
+    object_of :is_active, Boolean
+  end
+
   class Message < DataType
     object_of :value, String
   end
@@ -283,6 +288,17 @@ describe PayPal::SDK::Core::API::DataTypes::Base do
   it "should allow date with value 0" do
     test_simple_type = TestSimpleType.new( :created_at => "0" )
     expect(test_simple_type.created_at).to be_a DateTime
+  end
+
+  it "should allow boolean true" do
+    test_simple_type = TestBooleanType.new( :is_active => true )
+    expect(test_simple_type.is_active).to be_a TrueClass
+  end
+
+  it "should allow boolean false" do
+    test_simple_type = TestBooleanType.new( :is_active => false )
+    puts "test_simple_type.is_active: #{test_simple_type.is_active.inspect}"
+    expect(test_simple_type.is_active).to be_a FalseClass
   end
 
 end
