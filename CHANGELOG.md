@@ -1,6 +1,21 @@
 PayPal Ruby SDK release notes
 =============================
 
+v1.10
+-----
+  * Fix Ruby 3.4 boolean coercion in `SimpleTypes::Boolean` to avoid `NoMethodError` on non-String values.
+  * Add explicit runtime dependency on `base64` for Ruby 3.4 compatibility.
+  * Update CI workflow to test Ruby `3.2`, `3.3`, and `3.4`.
+  * Refresh GitHub Actions workflow triggers and update `actions/checkout` to `v6`.
+
+v1.9.0
+------
+  * Fork and maintain `paypal-sdk-rest-pmrb` as community-supported package.
+  * Remove abandoned release tooling dependency.
+  * Add compatibility workarounds for Psych 4 (Ruby 3.1) and JSON parser behavior.
+  * Migrate CI from Travis CI to GitHub Actions.
+  * Refresh README badges and links.
+
 v1.8.0
 ------
   * Update paypal.crt with DigiCertHighAssuranceEVRootCA.
