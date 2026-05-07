@@ -37,11 +37,21 @@ module PayPal::SDK::Core
         File.expand_path("../../../../../data/paypal.crt", __FILE__)
       end
 
+      # Build a certificate store with system defaults and bundled PayPal certs.
+      # This avoids pinning trust to only paypal.crt and works in environments
+      # where additional trusted roots are required.
+      def default_cert_store
+        OpenSSL::X509::Store.new.tap do |store|
+          store.set_default_paths
+          store.add_file(default_ca_file) if File.exist?(default_ca_file)
+        end
+      end
+
       # Apply ssl configuration to http object
       def configure_ssl(http)
         http.tap do |https|
           https.use_ssl = true
-          https.ca_file = default_ca_file
+          https.cert_store = default_cert_store
           https.verify_mode = OpenSSL::SSL::VERIFY_PEER
           begin
             https.ssl_version = :TLSv1_2
