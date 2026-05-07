@@ -23,10 +23,6 @@ PayPal has deprecated their [REST SDK][restsdk] and archived the corresponding [
 ## PayPal Checkout v2
 We recommend that you integrate with API [v2/checkout/orders](https://developer.paypal.com/docs/api/orders/v2/) and [v2/payments](https://developer.paypal.com/docs/api/payments/v2/) whenever possible. Please refer to the [Checkout Ruby SDK](https://github.com/paypal/Checkout-Ruby-SDK) to continue with the integration.
 
-## Prerequisites
-- Ruby 2.0.0 or above
-- Bundler
-
 ## Installation
 
 Add this line to your application's Gemfile:

@@ -2,7 +2,12 @@
 
 name: ci
 
-on: [push]
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
 
 jobs:
   test:
@@ -11,14 +16,14 @@ jobs:
 
     strategy:
       matrix:
-        ruby: [{ name: 3.2, value: 3.2.2 }, { name: 3.0, value: 3.0.1 }]
+        ruby: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby.value }}
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
       - name: Run tests
